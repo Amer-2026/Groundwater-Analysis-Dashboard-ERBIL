@@ -125,7 +125,7 @@ def main():
     if not _ee_ok:
         st.error(t("ee_init_failed"))
         st.stop()
-
+            
     # ---- DARK THEME CSS ----
     st.markdown(
         """
