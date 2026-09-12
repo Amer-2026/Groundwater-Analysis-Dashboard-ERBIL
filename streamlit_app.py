@@ -29,7 +29,7 @@ from streamlit_folium import st_folium
 TRANSLATIONS = {
     "en": {
         "page_title": "Groundwater Analysis",
-        "dashboard_header": "💧 Agricultural Groundwater Analysis Dashboard",
+        "dashboard_header": "Groundwater Analysis Dashboard — Erbil Region",
         "country": "Country / Area",
         "ee_init_failed": "Failed to initialize Earth Engine. Please check your credentials.",
         "ee_init_critical": "Critical Error Initializing Earth Engine",
@@ -55,7 +55,7 @@ TRANSLATIONS = {
         "no_data_month": "No data available for selected month and parameter",
         "statistics": "Statistics",
         "time_series_analysis": "Time Series Analysis",
-        "click_map": "Click on the map to view time series data for that location",
+        "click_map": "📌 Click on the map to view time series data for that location",
         "error_map": "Error generating map",
         "welcome_title": "Welcome to the Groundwater Analysis Dashboard",
         "welcome_text": "Select parameters and click 'Generate Map' to begin your analysis",
@@ -95,10 +95,19 @@ For support or more information, please contact the development team.""",
         "summary_title": "Regional mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
+        "nav_abstraction_mm": "Abstraction (mm)",
+        "nav_abstraction_m3": "Abstraction (m³)",
+        "nav_recharge": "Recharge",
+        "data_status": "Data Status",
+        "active_months": "Active Months",
+        "last_update": "Last Update",
+        "select_date": "Select Date",
+        "generate_analysis": "Generate Analysis",
+        "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
-        "dashboard_header": "💧 لوحة تحليل المياه الجوفية الزراعية",
+        "dashboard_header": "لوحة تحليل المياه الجوفية — منطقة أربيل",
         "country": "الدولة / المنطقة",
         "ee_init_failed": "فشل تهيئة محرك الأرض. يرجى التحقق من بيانات الاعتماد.",
         "ee_init_critical": "خطأ حرج في تهيئة محرك الأرض",
@@ -124,7 +133,7 @@ For support or more information, please contact the development team.""",
         "no_data_month": "لا توجد بيانات للشهر والمعامل المحددين",
         "statistics": "الإحصاءات",
         "time_series_analysis": "تحليل السلاسل الزمنية",
-        "click_map": "انقر على الخريطة لعرض بيانات السلاسل الزمنية لذلك الموقع",
+        "click_map": "📌 انقر على الخريطة لعرض بيانات السلاسل الزمنية لذلك الموقع",
         "error_map": "خطأ في إنشاء الخريطة",
         "welcome_title": "مرحباً بكم في لوحة تحليل المياه الجوفية",
         "welcome_text": "اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل",
@@ -164,6 +173,92 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
         "computing": "جارٍ الحساب... قد يستغرق دقيقة",
         "raw_data": "عرض البيانات الخام",
+        "nav_abstraction_mm": "السحب (مم)",
+        "nav_abstraction_m3": "السحب (م³)",
+        "nav_recharge": "التغذية الجوفية",
+        "data_status": "حالة البيانات",
+        "active_months": "الأشهر النشطة",
+        "last_update": "آخر تحديث",
+        "select_date": "اختر التاريخ",
+        "generate_analysis": "إنشاء التحليل",
+        "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
+    },
+    "ku": {
+        "page_title": "شیکردنەوەی ئاوی ژێرزەوی",
+        "dashboard_header": "شیکردنەوەی ئاوی ژێرزەوی — هەرێمی هەولێر",
+        "country": "وڵات / ناوچە",
+        "ee_init_failed": "دەستپێکردنی ئێرث ئینجین شکستی هێنا. تکایە ڕەقمەکانی خۆت بپشکنە.",
+        "ee_init_critical": "هەڵەی گەورە لە دەستپێکردنی ئێرث ئینجین",
+        "ee_init_default": "ئێرث ئینجین بە ڕەقمی بنەڕەتی دەستپێکرا",
+        "ee_verify_failed": "پشکنینی ئێرث ئینجین شکستی هێنا",
+        "ee_init_error": "دەستپێکردنی ئێرث ئینجین شکستی هێنا",
+        "control_panel": "پانێلی کۆنتڕۆڵ",
+        "location_settings": "📍 ڕێکخستنەکانی شوێن",
+        "latitude": "پانی",
+        "longitude": "درێژی",
+        "zoom_level": "ئاستی زووم",
+        "data_selection": "هەڵبژاردنی داتا",
+        "parameter": "پارامەتر",
+        "parameter_help": "پارامەتری خواست بۆ بینین هەڵبژێرە",
+        "no_assets": "هیچ ئەستێک نەدۆزرایەوە لە ڕێڕەوی دیاریکراو. تکایە ڕێڕەوەکە و مۆڵەتەکان بپشکنە.",
+        "no_dates": "هیچ بەروارێکی دروست نەدۆزرایەوە لە ئەستەکاندا",
+        "month": "مانگ",
+        "visual_settings": "🎨 ڕێکخستنەکانی بینین",
+        "layer_opacity": "ڕوونی چین",
+        "generate_map": "دروستکردنی نەخشە",
+        "error_asset": "هەڵە لە بەرکارهێنانی ئەست",
+        "interactive_map": "نەخشەی کارلێک",
+        "no_data_month": "هیچ داتایەک بۆ مانگ و پارامەتری دیاریکراو بوونی نییە",
+        "statistics": "ئامارەکان",
+        "time_series_analysis": "شیکردنەوەی زنجیرەکاتی",
+        "click_map": "📌 کلیک لەسەر نەخشەکە بکە بۆ بینینی داتای زنجیرەکاتی بۆ ئەو شوێنە",
+        "error_map": "هەڵە لە دروستکردنی نەخشە",
+        "welcome_title": "بەخێربێیت بۆ پانێلی شیکردنەوەی ئاوی ژێرزەوی",
+        "welcome_text": "پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت",
+        "about_tool": "ℹ️ دەربارەی ئەم ئامرازە",
+        "about_text": """ئەم پانێلە توانای شیکردنەوەی گشتگیری ئاوی ژێرزەوی دابین دەکات:
+
+- 🌍 **بینینی کارلێک**: داتای ئاوی ژێرزەوی مانگانە لەسەر نەخشەی کارلێک ببینە
+- 📊 **شیکردنەوەی ئاماری**: دەستگەیشتن بە ئامارە سەرەکییەکان بۆ پارامەتری دیاریکراو
+- 📈 **شیکردنەوەی زنجیرەکاتی**: کلیک لەسەر هەر شوێنێک بکە بۆ بینینی ڕەوتە مێژووییەکان
+- 📥 **هەناردنی داتا**: دابەزاندنی زنجیرەکات و پوختەی ناوچەیی وەک CSV
+- 🎨 **پیشاندانی گونجاو**: ڕێکخستنی پارامەترەکانی بینین بەپێی پێویستییەکانی تۆ
+
+سەرچاوەکانی داتا: FAO WaPOR v3، CHIRPS، OpenLandMap، لە Google Earth Engine دا پرسەکراوە.
+
+بۆ پشتیوانی یان زانیاری زیاتر، تکایە پەیوەندی بە تیمی پەرەپێدانەوە بکە.""",
+        "layer_statistics": "ئاماری چین",
+        "minimum": "کەمترین",
+        "maximum": "زۆرترین",
+        "mean": "تێکڕا",
+        "error_statistics": "هەڵە لە ژماردنی ئامارەکان",
+        "no_data_location": "هیچ داتایەک بۆ ئەم شوێنە بوونی نییە",
+        "date": "بەروار",
+        "time_series_title": "زنجیرەکات بۆ {parameter} لە ({lat}, {lon})",
+        "legend": "ڕێنوێنی {parameter}",
+        "layer": "چین",
+        "abstraction_mm": "دەرهێنان (مم)",
+        "abstraction_m3": "دەرهێنان (م³)",
+        "recharge": "پڕبوونەوە",
+        "error_get_assets": "هەڵە لە هێنانی ئەستەکان",
+        "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
+        "value_label": "نرخ",
+        "download_csv": "📥 دابەزاندن وەک CSV",
+        "regional_summary": "📊 پوختەی مانگانەی ناوچەیی",
+        "compute_summary": "ژماردنی پوختەی ناوچەیی",
+        "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
+        "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
+        "computing": "تێژینەوە... لەوانەیە خولەکێک بخایەنێت",
+        "raw_data": "داتای خاو",
+        "nav_abstraction_mm": "دەرهێنان (مم)",
+        "nav_abstraction_m3": "دەرهێنان (م³)",
+        "nav_recharge": "پڕبوونەوە",
+        "data_status": "دۆخی داتا",
+        "active_months": "مانگە چالاکەکان",
+        "last_update": "دوایین نوێکردنەوە",
+        "select_date": "بەروار هەڵبژێرە",
+        "generate_analysis": "دروستکردنی شیکردنەوە",
+        "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
 }
 
@@ -425,7 +520,10 @@ def get_regional_summary(parameter, assets, scale):
     return rows
 
 
-def create_time_series_plot(time_series_data, parameter, lat, lon):
+def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
+    """Create time series plot with optional download button as annotation"""
+    import base64
+    
     df = pd.DataFrame(time_series_data)
     if df.empty:
         fig = go.Figure()
@@ -433,6 +531,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon):
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
+            height=263,
         )
         return fig
 
@@ -446,12 +545,32 @@ def create_time_series_plot(time_series_data, parameter, lat, lon):
             x=x_numeric,
             y=df["value"].tolist(),
             mode="lines+markers",
-            line=dict(color="royalblue", width=2),
-            marker=dict(size=8, color="royalblue"),
+            line=dict(color="#B429F9", width=2),
+            marker=dict(size=8, color="#B429F9"),
             hovertemplate="%{text}: %{y:.2f}<extra></extra>",
             text=months,
         )
     )
+    
+    # Create download button as HTML annotation (overlay on chart)
+    if csv_data and filename:
+        b64 = base64.b64encode(csv_data).decode()
+        download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">📥 Download as CSV</a>'
+        
+        fig.add_annotation(
+            x=0.98,
+            y=0.98,
+            xref="paper",
+            yref="paper",
+            text=download_link,
+            showarrow=False,
+            font=dict(size=13),
+            bgcolor="rgba(0,0,0,0)",
+            borderpad=0,
+            xanchor="right",
+            yanchor="top",
+        )
+    
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -464,7 +583,57 @@ def create_time_series_plot(time_series_data, parameter, lat, lon):
         ),
         yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
         template="plotly_white",
-        height=400,
+        height=263,
+        margin=dict(t=50, b=80, l=50, r=50),
+    )
+    return fig
+
+
+def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+    """Create regional summary bar chart with optional download button as annotation"""
+    import base64
+    
+    df = pd.DataFrame(summary_data)
+    if df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            title=t("no_data_location"),
+            xaxis_title=t("date"),
+            yaxis_title=t(parameter),
+            height=263,
+        )
+        return fig
+    
+    months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
+    
+    fig = go.Figure(
+        go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
+    )
+    
+    # Create download button as HTML annotation (overlay on chart)
+    if csv_data and filename:
+        b64 = base64.b64encode(csv_data).decode()
+        download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
+        
+        fig.add_annotation(
+            x=0.98,
+            y=0.93,
+            xref="paper",
+            yref="paper",
+            text=download_link,
+            showarrow=False,
+            font=dict(size=13),
+            bgcolor="rgba(0,0,0,0)",
+            borderpad=0,
+            xanchor="right",
+            yanchor="top",
+        )
+    
+    fig.update_layout(
+        title=t("summary_title", parameter=t(parameter)),
+        xaxis=dict(tickangle=45),
+        template="plotly_white",
+        height=263,
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
@@ -481,6 +650,15 @@ def to_csv_bytes(rows, value_col="value"):
 def main():
     if "lang" not in st.session_state:
         st.session_state.lang = "en"
+    
+    if "selected_parameter" not in st.session_state:
+        st.session_state.selected_parameter = "abstraction_mm"
+    
+    if "selected_date_str" not in st.session_state:
+        st.session_state.selected_date_str = None
+    
+    if "regional_summary_data" not in st.session_state:
+        st.session_state.regional_summary_data = None
 
     st.set_page_config(
         page_title=t("page_title"),
@@ -489,35 +667,511 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
+    # ---- DARK THEME CSS ----
     st.markdown(
         """
         <style>
-        .main > div { padding: 1rem 0; }
-        .stButton>button {
-            width: 100%; background-color: #0066cc; color: white;
-            border: none; padding: 0.5rem 1rem; border-radius: 4px;
+        /* Hide Streamlit Cloud top bar buttons */
+        .stApp > header button {
+            display: none !important;
+        }
+        header button {
+            display: none !important;
+        }
+        header div:has(button) {
+            display: none !important;
+        }
+        header [data-testid="stHeader"] [data-testid="stToolbar"] {
+            display: none !important;
+        }
+        .st-emotion-cache-1h9usn1 {
+            display: none !important;
+        }
+        .stApp > header {
+            background: transparent !important;
+            box-shadow: none !important;
+            height: 0px !important;
+            min-height: 0px !important;
+            padding: 0px !important;
+        }
+        .stApp {
+            margin-top: 0 !important;
+        }
+        
+        /* Dark background for the entire app */
+        .stApp {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Remove default padding at the top */
+        .main .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
+        }
+        
+        /* Dark background for all containers */
+        div[data-testid="stVerticalBlock"] {
+            background-color: #0e1117 !important;
+        }
+        
+        /* COSMIC BLOOM BANNER - Full-width vibrant space-inspired gradient */
+        .banner {
+            background: linear-gradient(135deg, 
+                #0a0a2e 0%,
+                #1a0533 8%,
+                #2d1b69 16%,
+                #4a1a8a 24%,
+                #7b2fbe 32%,
+                #B429F9 40%,
+                #FF6B9D 48%,
+                #FF9A9E 54%,
+                #26C5F3 62%,
+                #7B2FBE 70%,
+                #B429F9 78%,
+                #4a1a8a 86%,
+                #1a0533 94%,
+                #0a0a2e 100%
+            );
+            background-size: 300% 300%;
+            animation: cosmicBloom 12s ease-in-out infinite alternate;
+            padding: 2rem 4rem 1.5rem 4rem;
+            margin: 0 !important;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 30px rgba(180, 41, 249, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 100% !important;
+            border-radius: 0;
+            display: block;
+        }
+        
+        @keyframes cosmicBloom {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 50% 0%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            75% {
+                background-position: 50% 100%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Cosmic nebula sparkle overlay */
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(180, 41, 249, 0.2) 0%, transparent 35%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 157, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(38, 197, 243, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 30% 70%, rgba(255, 154, 158, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, rgba(123, 47, 190, 0.12) 0%, transparent 30%);
+            pointer-events: none;
+            animation: nebulaPulse 8s ease-in-out infinite alternate;
+        }
+        
+        @keyframes nebulaPulse {
+            0% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0.5;
+            }
+        }
+        
+        /* Cosmic stars */
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 5% 10%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(3px 3px at 15% 40%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 35% 20%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(3px 3px at 55% 15%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 65% 55%, rgba(255,255,255,0.8), transparent),
+                radial-gradient(2px 2px at 75% 90%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(2px 2px at 92% 65%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 50% 45%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 10% 60%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 80% 5%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 40% 95%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 95% 45%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2px 2px at 20% 5%, rgba(255,255,255,0.7), transparent);
+            pointer-events: none;
+            animation: starTwinkle 5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes starTwinkle {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0.4;
+            }
+        }
+        
+        .banner-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Title aligned to LEFT */
+        .banner-title {
+            flex: 1;
+            min-width: 200px;
+            text-align: left;
+        }
+        
+        .banner-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
+            text-align: left;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
+            }
+            100% {
+                text-shadow: 0 2px 40px rgba(180, 41, 249, 0.7), 0 0 80px rgba(255, 107, 157, 0.4), 0 0 100px rgba(38, 197, 243, 0.3);
+            }
+        }
+        
+        .banner-title .subtitle {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.85);
+            margin: 0.25rem 0 0 0;
+            padding: 0;
+            text-align: left;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+        }
+        
+        .banner-title .welcome {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+            margin: 0.5rem 0 0 0;
+            padding: 0;
+            text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
+            text-align: left;
+        }
+        
+        /* Language selector in banner - right side */
+        .banner-language {
+            flex-shrink: 0;
+            min-width: 130px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 0.2rem 0.2rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        .banner-language .stSelectbox > div > div {
+            background: transparent !important;
+            border: none !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 0.3rem 1rem !important;
+            min-height: 34px !important;
+            height: 34px !important;
+            font-size: 0.9rem !important;
+            box-shadow: none !important;
+        }
+        
+        .banner-language .stSelectbox > div > div:hover {
+            background: rgba(255,255,255,0.1) !important;
+        }
+        
+        .banner-language .stSelectbox > div > div > div {
+            color: white !important;
+        }
+        
+        .banner-language .stSelectbox svg {
+            fill: white !important;
+            color: white !important;
+        }
+        
+        .banner-language .stSelectbox > label {
+            display: none !important;
+        }
+        
+        /* Dark background for all containers */
+        div[data-testid="stVerticalBlock"] {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Light text for headers and labels */
+        h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Set h3 headers to 22px */
+        h3 {
+            font-size: 22px !important;
+        }
+        
+        /* Set click message to 16px with metric label color (#26C5F3) */
+        .click-message {
+            font-size: 16px !important;
+            color: #26C5F3 !important;
+            font-weight: 400 !important;
+        }
+        
+        /* Parameter buttons - color #a8f368 (GREEN) */
+        .stButton > button:not([kind="primary"]) {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .stButton > button:not([kind="primary"]):hover {
+            background-color: #8fd154 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            box-shadow: 0 2px 15px rgba(168, 243, 104, 0.4) !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        .stButton > button:not([kind="primary"]):active {
+            transform: translateY(0px) !important;
+        }
+        
+        .stButton {
+            display: block !important;
+            width: 100% !important;
+        }
+        
+        /* Generate Analysis buttons - color #696eff (PURPLE/BLUE) */
+        .stButton > button[kind="primary"] {
+            background-color: #696eff !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .stButton > button[kind="primary"]:hover {
+            background-color: #4f54d4 !important;
+            color: white !important;
+            box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        .stButton > button[kind="primary"]:active {
+            transform: translateY(0px) !important;
+        }
+        
+        /* Hide Streamlit's default download button (now embedded in chart) */
+        .stDownloadButton {
+            display: none !important;
+        }
+        
+        /* Add spacing between sections - using h3 tags inside divs */
+        .stats-section h3 {
+            margin-bottom: 1px !important;
+        }
+        
+        .time-series-section h3 {
+            margin-top: 25px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        .regional-summary-section h3 {
+            margin-top: 25px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        /* LANGUAGE SELECTOR - color #a8f368 */
+        .stSelectbox > div > div {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
+            border: none !important;
+            padding: 0.5rem 1rem !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+        }
+        
+        .stSelectbox > div > div:hover {
+            background-color: #8fd154 !important;
+        }
+        
+        .stSelectbox > div > div > div {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox > div > div > div[data-baseweb="select"] {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox > div > div > div[data-baseweb="select"] > div {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox > div > div > div[data-baseweb="select"] > div > div {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox [data-testid="stMarkdownContainer"] p {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox > label {
+            color: #1a0a2e !important;
+        }
+        
+        .stSelectbox svg {
+            fill: #1a0a2e !important;
+            color: #1a0a2e !important;
+        }
+        
+        /* Dropdown menu items */
+        .stSelectbox > div > div ul {
+            background-color: #1a0a2e !important;
+        }
+        
+        .stSelectbox > div > div ul li {
+            color: white !important;
+        }
+        
+        .stSelectbox > div > div ul li:hover {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+        }
+        
+        /* Dark background for metric cards */
+        div[data-testid="stMetric"] {
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
+            padding: 10px !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(180, 41, 249, 0.2) !important;
+        }
+        
+        div[data-testid="stMetric"] label {
+            color: #26C5F3 !important;
+        }
+        
+        div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for info boxes */
+        .stAlert {
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for expanders */
+        .streamlit-expanderHeader {
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
+            color: #e0e0e0 !important;
+        }
+        
+        .streamlit-expanderContent {
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Hide map attribution */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+        
+        .folium-map .leaflet-control-attribution {
+            display: none !important;
+        }
+        
+        /* Dark background for dataframes */
+        .stDataFrame {
+            background-color: #1a0a2e !important;
+        }
+        
+        /* Dark background for sidebar */
+        .stSidebar {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Divider color */
+        hr {
+            border-color: rgba(180, 41, 249, 0.3) !important;
+        }
+        
+        /* Caption text */
+        .stCaption {
+            color: #9ca3af !important;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # RTL support for Arabic
-    if st.session_state.lang == "ar":
-        st.markdown(
-            """
-            <style>
-            .main .block-container { direction: rtl; text-align: right; }
-            .stSelectbox label, .stNumberInput label, .stSlider label,
-            .stButton button, .stExpander summary, .stMetric label,
-            .stMarkdown, .stAlert { direction: rtl; text-align: right; }
-            h1, h2, h3, h4, h5, h6 { direction: rtl; text-align: right; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # ---- Top bar: language + country ----
+    # ---- TOP BAR: language + country ----
     configs = load_country_configs()
 
     if not configs:
@@ -531,51 +1185,118 @@ def main():
         )
         st.stop()
 
-    top_col1, top_col2, top_col3 = st.columns([3, 1.5, 1])
-    with top_col3:
-        lang_options = {"English": "en", "العربية": "ar"}
+    country_keys = list(configs.keys())
+    if len(country_keys) == 1:
+        selected_country = country_keys[0]
+    else:
+        try:
+            default_key = st.query_params.get("country", country_keys[0])
+        except AttributeError:
+            default_key = st.experimental_get_query_params().get("country", [country_keys[0]])[0]
+        if default_key not in configs:
+            default_key = country_keys[0]
+        selected_country = st.selectbox(
+            t("country"),
+            options=country_keys,
+            index=country_keys.index(default_key),
+            format_func=lambda k: country_label(configs[k]),
+            label_visibility="collapsed",
+        )
+    cfg = configs[selected_country]
+
+    # ---- RTL support ----
+    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
+
+    # ---- COSMIC BLOOM BANNER - Full Width with Title Left ----
+    st.markdown(
+        f"""
+        <div class="banner">
+            <div class="banner-inner">
+                <div class="banner-title">
+                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                    <div class="welcome">{t('welcome_subtitle')}</div>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    # Place language selector in the top-right of the banner using columns
+    lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
+    with lang_col3:
+        lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
             "🌐",
             options=list(lang_options.keys()),
             index=list(lang_options.keys()).index(current_label),
-            key="lang_selector",
+            key="lang_selector_banner",
             label_visibility="collapsed",
         )
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
-
-    country_keys = list(configs.keys())
-    if len(country_keys) == 1:
-        # Single-country deployment (a fork with one config file):
-        # no selector — the app IS that country's dashboard.
-        selected_country = country_keys[0]
-    else:
-        with top_col2:
-            # allow ?country=jordan in the URL to preselect a country
-            try:
-                default_key = st.query_params.get("country", country_keys[0])
-            except AttributeError:  # older Streamlit versions
-                default_key = st.experimental_get_query_params().get("country", [country_keys[0]])[0]
-            if default_key not in configs:
-                default_key = country_keys[0]
-            selected_country = st.selectbox(
-                t("country"),
-                options=country_keys,
-                index=country_keys.index(default_key),
-                format_func=lambda k: country_label(configs[k]),
-                label_visibility="collapsed",
-            )
-    cfg = configs[selected_country]
-
-    dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
-    with top_col1:
-        st.markdown(
-            f"<h1 style='font-size:1.8rem; margin:0; direction:{dir_attr};'>"
-            f"{t('dashboard_header')} — {country_label(cfg)}</h1>",
-            unsafe_allow_html=True,
-        )
+    
+    # ---- Navigation Buttons (5 columns with date selector) ----
+    st.markdown("---")
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
+    
+    with nav_col1:
+        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
+            st.session_state.selected_parameter = "abstraction_mm"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
+    
+    with nav_col2:
+        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
+            st.session_state.selected_parameter = "abstraction_m3"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
+    
+    with nav_col3:
+        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
+            st.session_state.selected_parameter = "recharge"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
+    
+    # Date selector
+    with nav_col4:
+        try:
+            asset_path = cfg["asset_path"]
+            assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    min_date, max_date = min(asset_dates), max(asset_dates)
+                    months = pd.date_range(start=min_date, end=max_date, freq="MS")
+                    date_options = [date.strftime("%Y-%m") for date in months]
+                    
+                    selected_date_str = st.selectbox(
+                        t("select_date"),
+                        options=date_options,
+                        index=len(date_options) - 1,
+                        key="top_date_selector",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state.selected_date_str = selected_date_str
+        except Exception as e:
+            st.warning("Could not load dates")
+    
+    # Generate Analysis button - type="primary" so it gets the purple/blue color
+    with nav_col5:
+        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
+            st.session_state.map_generated = True
+            st.session_state.current_parameter = st.session_state.selected_parameter
+            st.session_state.current_date = st.session_state.selected_date_str
+            st.session_state.regional_summary_data = None
+            st.rerun()
+    
+    st.markdown("---")
 
     # ---- Earth Engine ----
     try:
@@ -591,10 +1312,11 @@ def main():
     defaults = {
         "last_clicked": None,
         "map_generated": False,
-        "current_parameter": None,
+        "current_parameter": "abstraction_mm",
         "current_date": None,
         "time_series_data": None,
         "current_country": selected_country,
+        "regional_summary_data": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
@@ -606,212 +1328,196 @@ def main():
         st.session_state.map_generated = False
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
+        st.session_state.regional_summary_data = None
 
-    left_col, right_col = st.columns([1, 3])
-
-    # ---- Left column: controls ----
-    with left_col:
-        st.markdown(f"### {t('control_panel')}")
-
-        with st.expander(t("location_settings"), expanded=False):
-            center_lat = st.number_input(
-                t("latitude"), value=float(cfg["center_lat"]), min_value=-90.0, max_value=90.0
-            )
-            center_lon = st.number_input(
-                t("longitude"), value=float(cfg["center_lon"]), min_value=-180.0, max_value=180.0
-            )
-            zoom = st.slider(t("zoom_level"), min_value=5, max_value=15, value=int(cfg["zoom"]))
-
-        st.markdown(f"#### {t('data_selection')}")
-        parameters = ["abstraction_mm", "abstraction_m3", "recharge"]
-        selected_parameter = st.selectbox(
-            t("parameter"), parameters, format_func=lambda x: t(x), help=t("parameter_help")
-        )
-
+    # ---- If no date is selected, set to latest available ----
+    if st.session_state.selected_date_str is None:
         try:
             asset_path = cfg["asset_path"]
             assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    latest_date = max(asset_dates)
+                    st.session_state.selected_date_str = latest_date.strftime("%Y-%m")
+        except:
+            pass
 
-            if not assets:
-                st.warning(t("no_assets"))
-                return
-
-            asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-            if not asset_dates:
-                st.error(t("no_dates"))
-                return
-
-            min_date, max_date = min(asset_dates), max(asset_dates)
-            months = pd.date_range(start=min_date, end=max_date, freq="MS")
-            date_options = [date.strftime("%Y-%m") for date in months]
-
-            selected_date_str = st.selectbox(
-                t("month"), options=date_options, index=len(date_options) - 1
-            )
-
-            with st.expander(t("visual_settings"), expanded=False):
-                opacity = st.slider(t("layer_opacity"), 0.0, 1.0, 0.7)
-
-            st.markdown("---")
-            if st.button(t("generate_map"), type="primary"):
-                st.session_state.map_generated = True
-                st.session_state.current_parameter = selected_parameter
-                st.session_state.current_date = selected_date_str
-                st.rerun()
-
-        except Exception as e:
-            st.error(f"{t('error_asset')}: {str(e)}")
-            st.error(traceback.format_exc())
-            return
-
-    # ---- Right column: map + analysis ----
-    with right_col:
+    # ---- Main content ----
+    with st.container():
         if not st.session_state.map_generated:
-            st.markdown(
-                f"""
-                <div style='text-align:center; padding:2rem; background-color:#f8f9fa;
-                            border-radius:8px; direction:{dir_attr};'>
-                    <h3 style='color:#666;'>{t('welcome_title')}</h3>
-                    <p style='color:#888;'>{t('welcome_text')}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            st.markdown(f"### 📊 {t('statistics')}")
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(t('minimum'), "—")
+            with col2:
+                st.metric(t('maximum'), "—")
+            with col3:
+                st.metric(t('mean'), "—")
         else:
             try:
-                st.markdown(f"### {t('interactive_map')}")
+                # 50% / 50% split
+                map_col, stats_col = st.columns([1, 1])
 
-                selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y_%m")
+                # ---- LEFT COLUMN: MAP ----
+                with map_col:
+                    st.markdown(f"### 🗺️ {t('interactive_map')}")
 
-                selected_asset = next(
-                    (
-                        a
-                        for a in assets
-                        if st.session_state.current_parameter in a and selected_year_month in a
-                    ),
-                    None,
-                )
-                if not selected_asset:
-                    st.error(t("no_data_month"))
-                    return
+                    selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+                    selected_year_month = selected_date.strftime("%Y_%m")
 
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = opacity
-
-                add_ee_layer(
-                    m,
-                    ee_image,
-                    vis_params,
-                    f"{t(st.session_state.current_parameter)} {t('layer')}",
-                )
-                add_colormap(m, vis_params, st.session_state.current_parameter)
-                folium.LayerControl().add_to(m)
-
-                map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
-
-                if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
-                    st.session_state.last_clicked = map_data["last_clicked"]
-                    st.session_state.time_series_data = get_time_series_data(
-                        point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
-                        parameter=st.session_state.current_parameter,
-                        assets=tuple(assets),
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if st.session_state.current_parameter in a and selected_year_month in a
+                        ),
+                        None,
                     )
+                    if not selected_asset:
+                        st.error(t("no_data_month"))
+                        return
 
-                # ---- Statistics ----
-                st.markdown(f"### {t('statistics')}")
-                try:
-                    stats = ee_image.reduceRegion(
-                        reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
-                        geometry=ee_image.geometry(),
-                        scale=1000,
-                        maxPixels=1e9,
-                    ).getInfo()
-                    # band name varies between assets (b1, constant, abstraction_mm...)
-                    prefix = next(
-                        (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    zoom = int(cfg["zoom"])
+                    
+                    m = create_base_map(center_lat, center_lon, zoom)
+                    ee_image = ee.Image(selected_asset)
+                    
+                    opacity = st.session_state.get("opacity", 0.7)
+                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                    vis_params["opacity"] = opacity
+
+                    add_ee_layer(
+                        m,
+                        ee_image,
+                        vis_params,
+                        f"{t(st.session_state.current_parameter)} {t('layer')}",
                     )
-                    cols = st.columns(3)
-                    for col, stat_key, label in zip(
-                        cols, ["min", "max", "mean"], ["minimum", "maximum", "mean"]
-                    ):
-                        with col:
-                            val = stats.get(f"{prefix}_{stat_key}")
+                    add_colormap(m, vis_params, st.session_state.current_parameter)
+                    folium.LayerControl().add_to(m)
+
+                    map_data = st_folium(m, width=None, height=850, returned_objects=["last_clicked"])
+
+                    if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
+                        st.session_state.last_clicked = map_data["last_clicked"]
+                        st.session_state.time_series_data = get_time_series_data(
+                            point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
+                            parameter=st.session_state.current_parameter,
+                            assets=tuple(assets),
+                        )
+
+                # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
+                with stats_col:
+                    # Statistics
+                    st.markdown(f'<div class="stats-section"><h3>📊 {t("statistics")}</h3></div>', unsafe_allow_html=True)
+                    try:
+                        stats = ee_image.reduceRegion(
+                            reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                            geometry=ee_image.geometry(),
+                            scale=1000,
+                            maxPixels=1e9,
+                        ).getInfo()
+                        prefix = next(
+                            (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                        )
+                        
+                        min_val = stats.get(f"{prefix}_min")
+                        max_val = stats.get(f"{prefix}_max")
+                        mean_val = stats.get(f"{prefix}_mean")
+                        
+                        stat_cols = st.columns(3)
+                        with stat_cols[0]:
                             st.metric(
-                                t(label),
-                                f"{val:.2f}" if isinstance(val, (int, float)) else "N/A",
+                                t('minimum'),
+                                f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
                             )
-                except Exception as e:
-                    st.error(f"{t('error_statistics')}: {str(e)}")
+                        with stat_cols[1]:
+                            st.metric(
+                                t('maximum'),
+                                f"{max_val:.2f}" if isinstance(max_val, (int, float)) else "N/A",
+                            )
+                        with stat_cols[2]:
+                            st.metric(
+                                t('mean'),
+                                f"{mean_val:.2f}" if isinstance(mean_val, (int, float)) else "N/A",
+                            )
+                    except Exception as e:
+                        st.error(f"{t('error_statistics')}: {str(e)}")
 
-                # ---- Time series (point) ----
-                st.markdown(f"### {t('time_series_analysis')}")
-                if st.session_state.time_series_data:
-                    clicked_lat = st.session_state.last_clicked["lat"]
-                    clicked_lng = st.session_state.last_clicked["lng"]
+                    # ---- Time Series Analysis ----
+                    st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
+                    
+                    if st.session_state.time_series_data:
+                        clicked_lat = st.session_state.last_clicked["lat"]
+                        clicked_lng = st.session_state.last_clicked["lng"]
 
-                    fig = create_time_series_plot(
-                        st.session_state.time_series_data,
-                        st.session_state.current_parameter,
-                        clicked_lat,
-                        clicked_lng,
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
-
-                    st.download_button(
-                        t("download_csv"),
-                        data=to_csv_bytes(st.session_state.time_series_data),
-                        file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                        f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
-                        mime="text/csv",
-                    )
-                    with st.expander(t("raw_data")):
-                        st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                else:
-                    st.info(t("click_map"))
-
-                # ---- Regional monthly summary ----
-                st.markdown(f"### {t('regional_summary')}")
-                if st.button(t("compute_summary"), help=t("summary_help")):
-                    with st.spinner(t("computing")):
-                        summary = get_regional_summary(
+                        csv_data = to_csv_bytes(st.session_state.time_series_data)
+                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
+                        
+                        fig = create_time_series_plot(
+                            st.session_state.time_series_data,
                             st.session_state.current_parameter,
-                            tuple(assets),
-                            int(cfg.get("native_scale_m", 20)),
+                            clicked_lat,
+                            clicked_lng,
+                            csv_data=csv_data,
+                            filename=filename,
                         )
-                    if summary:
-                        df = pd.DataFrame(summary)
-                        months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-                        fig = go.Figure(
-                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#0066cc")
-                        )
-                        fig.update_layout(
-                            title=t(
-                                "summary_title",
-                                parameter=t(st.session_state.current_parameter),
-                            ),
-                            xaxis=dict(tickangle=45),
-                            template="plotly_white",
-                            height=350,
+                        
+                        st.plotly_chart(fig, use_container_width=True)
+                        
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+
+                    # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
+                    st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
+                    
+                    # Automatically compute regional summary when map is generated
+                    if st.session_state.regional_summary_data is None:
+                        with st.spinner(t("computing")):
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                            if summary:
+                                st.session_state.regional_summary_data = summary
+                    
+                    # Display the chart if we have data
+                    if st.session_state.regional_summary_data:
+                        summary = st.session_state.regional_summary_data
+                        csv_data = to_csv_bytes(summary, value_col="mean")
+                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+                        
+                        fig = create_regional_summary_plot(
+                            summary,
+                            st.session_state.current_parameter,
+                            csv_data=csv_data,
+                            filename=filename,
+                            button_text="📥 Download as CSV",
                         )
                         st.plotly_chart(fig, use_container_width=True)
-                        st.download_button(
-                            t("download_csv"),
-                            data=to_csv_bytes(summary, value_col="mean"),
-                            file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                            f"_regional_summary.csv",
-                            mime="text/csv",
-                            key="dl_summary",
-                        )
+                        
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(summary))
+                    
+                    # ---- COMMENTED OUT: Compute regional summary button ----
+                    # if st.button(t("compute_summary"), help=t("summary_help"), key="compute_summary_btn"):
+                    #     with st.spinner(t("computing")):
+                    #         summary = get_regional_summary(
+                    #             st.session_state.current_parameter,
+                    #             tuple(assets),
+                    #             int(cfg.get("native_scale_m", 20)),
+                    #         )
+                    #         if summary:
+                    #             st.session_state.regional_summary_data = summary
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
                 st.error(traceback.format_exc())
 
     # ---- Footer ----
-    st.markdown("---")
     with st.expander(t("about_tool")):
         st.markdown(t("about_text"))
 
