@@ -701,6 +701,9 @@ def main():
     if "selected_date_str" not in st.session_state:
         st.session_state.selected_date_str = None
 
+        if "date_range" not in st.session_state:
+        st.session_state.date_range = None
+
     if "regional_summary_data" not in st.session_state:
         st.session_state.regional_summary_data = None
 
@@ -1233,28 +1236,55 @@ def main():
             st.session_state.regional_summary_data = None
             st.rerun()
 
-    # Date selector
+    # Date range selector — dual-calendar picker + view-month dropdown
     with nav_col4:
         try:
             asset_path = cfg["asset_path"]
-            assets = get_ee_assets(asset_path)   # ✅ now safe — EE is initialized
+            assets = get_ee_assets(asset_path)   # ✅ EE already initialized
             if assets:
                 asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
                 if asset_dates:
                     min_date, max_date = min(asset_dates), max(asset_dates)
-                    months = pd.date_range(start=min_date, end=max_date, freq="MS")
-                    date_options = [date.strftime("%Y-%m") for date in months]
 
-                    selected_date_str = st.selectbox(
-                        t("select_date"),
-                        options=date_options,
-                        index=len(date_options) - 1,
-                        key="top_date_selector",
+                    # Initialize session range to full span on first load
+                    if st.session_state.date_range is None:
+                        st.session_state.date_range = (min_date.date(), max_date.date())
+
+                    picked = st.date_input(
+                        t("select_date_range"),
+                        value=st.session_state.date_range,
+                        min_value=min_date.date(),
+                        max_value=max_date.date(),
+                        key="top_date_range_selector",
                         label_visibility="collapsed",
                     )
-                    st.session_state.selected_date_str = selected_date_str
+
+                    # Streamlit returns a single date until both ends are picked
+                    if isinstance(picked, (tuple, list)) and len(picked) == 2:
+                        st.session_state.date_range = (picked[0], picked[1])
+
+                        # Narrow `assets` so all downstream code respects the range
+                        start_ym = picked[0].strftime("%Y_%m")
+                        end_ym = picked[1].strftime("%Y_%m")
+                        assets = [
+                            a for a in assets
+                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                        ]
+
+                        # Build month options from the ranged assets, pick "view month"
+                        ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+                        ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
+
+                        if ranged_months_disp:
+                            view_month = st.selectbox(
+                                "📅 " + t("view_month"),
+                                options=ranged_months_disp,
+                                index=len(ranged_months_disp) - 1,
+                                key="view_month_selector",
+                            )
+                            st.session_state.selected_date_str = view_month
         except Exception as e:
-            st.warning("Could not load dates")
+            st.warning(f"Could not load dates: {e}")
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col5:
