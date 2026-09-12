@@ -182,6 +182,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
         "select_date": "اختر التاريخ",
+        "select_date_range": "اختر نطاق التاريخ",
         "generate_analysis": "إنشاء التحليل",
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
         "click_to_view": "انقر على الخريطة لعرض بيانات السلاسل الزمنية",
