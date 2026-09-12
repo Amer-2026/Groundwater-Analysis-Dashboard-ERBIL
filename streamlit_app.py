@@ -701,8 +701,8 @@ def main():
     if "selected_date_str" not in st.session_state:
         st.session_state.selected_date_str = None
 
-        if "date_range" not in st.session_state:
-        st.session_state.selected_date_str = None
+    if "date_range" not in st.session_state:
+        st.session_state.date_range = None
 
     if "regional_summary_data" not in st.session_state:
         st.session_state.regional_summary_data = None
