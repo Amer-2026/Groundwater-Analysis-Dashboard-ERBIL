@@ -104,6 +104,7 @@ For support or more information, please contact the development team.""",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
+        "click_to_view": "Click on the map to view time series data",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
@@ -182,6 +183,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
+        "click_to_view": "انقر على الخريطة لعرض بيانات السلاسل الزمنية",
     },
     "ku": {
         "page_title": "شیکردنەوەی ئاوی ژێرزەوی",
@@ -259,6 +261,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
+        "click_to_view": "کلیک لەسەر نەخشەکە بکە بۆ بینینی داتای زنجیرەکاتی",
     },
 }
 
@@ -520,20 +523,58 @@ def get_regional_summary(parameter, assets, scale):
     return rows
 
 
+def create_empty_time_series_plot(parameter, lat, lon):
+    """Create an empty time series plot with a message to click on the map"""
+    fig = go.Figure()
+
+    # Add a trace with no data to show the chart
+    fig.add_trace(
+        go.Scatter(
+            x=[],
+            y=[],
+            mode="lines+markers",
+            line=dict(color="#B429F9", width=2),
+            marker=dict(size=8, color="#B429F9"),
+        )
+    )
+
+    # Create a message annotation in the center
+    fig.add_annotation(
+        x=0.5,
+        y=0.5,
+        xref="paper",
+        yref="paper",
+        text=t("click_to_view"),
+        showarrow=False,
+        font=dict(size=16, color="#888888"),
+        align="center",
+    )
+
+    fig.update_layout(
+        title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
+        xaxis=dict(
+            title=t("date"),
+            tickmode="array",
+            tickvals=[],
+            ticktext=[],
+            tickangle=45,
+            showgrid=True,
+        ),
+        yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
+        template="plotly_white",
+        height=263,
+        margin=dict(t=50, b=80, l=50, r=50),
+    )
+    return fig
+
+
 def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
     """Create time series plot with optional download button as annotation"""
     import base64
-    
+
     df = pd.DataFrame(time_series_data)
     if df.empty:
-        fig = go.Figure()
-        fig.update_layout(
-            title=t("no_data_location"),
-            xaxis_title=t("date"),
-            yaxis_title=t(parameter),
-            height=263,
-        )
-        return fig
+        return create_empty_time_series_plot(parameter, lat, lon)
 
     df = df.sort_values("date")
     months = [d.strftime("%Y-%m") for d in df["date"]]
@@ -551,12 +592,12 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             text=months,
         )
     )
-    
+
     # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">📥 Download as CSV</a>'
-        
+
         fig.add_annotation(
             x=0.98,
             y=0.98,
@@ -570,7 +611,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             xanchor="right",
             yanchor="top",
         )
-    
+
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -592,7 +633,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
     """Create regional summary bar chart with optional download button as annotation"""
     import base64
-    
+
     df = pd.DataFrame(summary_data)
     if df.empty:
         fig = go.Figure()
@@ -603,18 +644,18 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             height=263,
         )
         return fig
-    
+
     months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-    
+
     fig = go.Figure(
         go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
     )
-    
+
     # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
-        
+
         fig.add_annotation(
             x=0.98,
             y=0.93,
@@ -628,7 +669,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             xanchor="right",
             yanchor="top",
         )
-    
+
     fig.update_layout(
         title=t("summary_title", parameter=t(parameter)),
         xaxis=dict(tickangle=45),
@@ -650,13 +691,13 @@ def to_csv_bytes(rows, value_col="value"):
 def main():
     if "lang" not in st.session_state:
         st.session_state.lang = "en"
-    
+
     if "selected_parameter" not in st.session_state:
         st.session_state.selected_parameter = "abstraction_mm"
-    
+
     if "selected_date_str" not in st.session_state:
         st.session_state.selected_date_str = None
-    
+
     if "regional_summary_data" not in st.session_state:
         st.session_state.regional_summary_data = None
 
@@ -666,6 +707,21 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
+
+    # ============================================================
+    # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
+    # calls get_ee_assets(). Previously this was further down inside
+    # main(), which caused:
+    #   "Error in get_ee_assets: Earth Engine client library not initialized"
+    # ============================================================
+    try:
+        if not initialize_ee():
+            st.error(t("ee_init_failed"))
+            st.stop()
+    except Exception as e:
+        st.error(f"{t('ee_init_critical')}: {str(e)}")
+        st.error(traceback.format_exc())
+        st.stop()
 
     # ---- DARK THEME CSS ----
     st.markdown(
@@ -697,43 +753,38 @@ def main():
         .stApp {
             margin-top: 0 !important;
         }
-        
+
         /* Dark background for the entire app */
         .stApp {
             background-color: #0e1117 !important;
         }
-        
+
         /* Remove default padding at the top */
         .main .block-container {
             padding-top: 0rem !important;
             padding-bottom: 1rem !important;
         }
-        
+
         /* Dark background for all containers */
         div[data-testid="stVerticalBlock"] {
             background-color: #0e1117 !important;
         }
-        
-        /* COSMIC BLOOM BANNER - Full-width vibrant space-inspired gradient */
+
+        /* COSMIC BLOOM BANNER - Static vibrant gradient */
         .banner {
             background: linear-gradient(135deg, 
                 #0a0a2e 0%,
-                #1a0533 8%,
-                #2d1b69 16%,
-                #4a1a8a 24%,
-                #7b2fbe 32%,
-                #B429F9 40%,
-                #FF6B9D 48%,
-                #FF9A9E 54%,
-                #26C5F3 62%,
-                #7B2FBE 70%,
-                #B429F9 78%,
-                #4a1a8a 86%,
-                #1a0533 94%,
-                #0a0a2e 100%
+                #1a0533 10%,
+                #2d1b69 20%,
+                #4a1a8a 30%,
+                #7b2fbe 40%,
+                #B429F9 50%,
+                #FF6B9D 60%,
+                #FF9A9E 70%,
+                #26C5F3 80%,
+                #7B2FBE 90%,
+                #4a1a8a 100%
             );
-            background-size: 300% 300%;
-            animation: cosmicBloom 12s ease-in-out infinite alternate;
             padding: 2rem 4rem 1.5rem 4rem;
             margin: 0 !important;
             color: white;
@@ -745,26 +796,8 @@ def main():
             border-radius: 0;
             display: block;
         }
-        
-        @keyframes cosmicBloom {
-            0% {
-                background-position: 0% 50%;
-            }
-            25% {
-                background-position: 50% 0%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            75% {
-                background-position: 50% 100%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        
-        /* Cosmic nebula sparkle overlay */
+
+        /* Simple sparkle overlay - static */
         .banner::before {
             content: '';
             position: absolute;
@@ -773,68 +806,12 @@ def main():
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(180, 41, 249, 0.2) 0%, transparent 35%),
-                radial-gradient(circle at 90% 80%, rgba(255, 107, 157, 0.15) 0%, transparent 30%),
-                radial-gradient(circle at 50% 50%, rgba(38, 197, 243, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 30% 70%, rgba(255, 154, 158, 0.1) 0%, transparent 25%),
-                radial-gradient(circle at 70% 30%, rgba(123, 47, 190, 0.12) 0%, transparent 30%);
+                radial-gradient(circle at 15% 25%, rgba(180, 41, 249, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(255, 107, 157, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 45% 50%, rgba(38, 197, 243, 0.06) 0%, transparent 50%);
             pointer-events: none;
-            animation: nebulaPulse 8s ease-in-out infinite alternate;
         }
-        
-        @keyframes nebulaPulse {
-            0% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0.5;
-            }
-        }
-        
-        /* Cosmic stars */
-        .banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(2px 2px at 5% 10%, rgba(255,255,255,0.8), transparent),
-                radial-gradient(3px 3px at 15% 40%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.9), transparent),
-                radial-gradient(2px 2px at 35% 20%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.7), transparent),
-                radial-gradient(3px 3px at 55% 15%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 65% 55%, rgba(255,255,255,0.8), transparent),
-                radial-gradient(2px 2px at 75% 90%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,0.7), transparent),
-                radial-gradient(2px 2px at 92% 65%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 50% 45%, rgba(255,255,255,0.4), transparent),
-                radial-gradient(2px 2px at 10% 60%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 80% 5%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 40% 95%, rgba(255,255,255,0.4), transparent),
-                radial-gradient(1px 1px at 95% 45%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(2px 2px at 20% 5%, rgba(255,255,255,0.7), transparent);
-            pointer-events: none;
-            animation: starTwinkle 5s ease-in-out infinite alternate;
-        }
-        
-        @keyframes starTwinkle {
-            0% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0.4;
-            }
-        }
-        
+
         .banner-inner {
             display: flex;
             align-items: center;
@@ -846,43 +823,32 @@ def main():
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         /* Title aligned to LEFT */
         .banner-title {
             flex: 1;
             min-width: 200px;
             text-align: left;
         }
-        
+
         .banner-title h1 {
             font-size: 2rem;
             font-weight: 700;
             margin: 0;
             padding: 0;
             color: white;
-            text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
+            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
             text-align: left;
-            animation: titleGlow 4s ease-in-out infinite alternate;
         }
-        
-        @keyframes titleGlow {
-            0% {
-                text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
-            }
-            100% {
-                text-shadow: 0 2px 40px rgba(180, 41, 249, 0.7), 0 0 80px rgba(255, 107, 157, 0.4), 0 0 100px rgba(38, 197, 243, 0.3);
-            }
-        }
-        
+
         .banner-title .subtitle {
             font-size: 0.95rem;
             color: rgba(255,255,255,0.85);
             margin: 0.25rem 0 0 0;
             padding: 0;
             text-align: left;
-            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
         }
-        
+
         .banner-title .welcome {
             font-size: 0.9rem;
             font-weight: 500;
@@ -892,7 +858,7 @@ def main():
             text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
             text-align: left;
         }
-        
+
         /* Language selector in banner - right side */
         .banner-language {
             flex-shrink: 0;
@@ -903,7 +869,7 @@ def main():
             border: 1px solid rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
         }
-        
+
         .banner-language .stSelectbox > div > div {
             background: transparent !important;
             border: none !important;
@@ -915,46 +881,46 @@ def main():
             font-size: 0.9rem !important;
             box-shadow: none !important;
         }
-        
+
         .banner-language .stSelectbox > div > div:hover {
             background: rgba(255,255,255,0.1) !important;
         }
-        
+
         .banner-language .stSelectbox > div > div > div {
             color: white !important;
         }
-        
+
         .banner-language .stSelectbox svg {
             fill: white !important;
             color: white !important;
         }
-        
+
         .banner-language .stSelectbox > label {
             display: none !important;
         }
-        
+
         /* Dark background for all containers */
         div[data-testid="stVerticalBlock"] {
             background-color: #0e1117 !important;
         }
-        
+
         /* Light text for headers and labels */
         h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText {
             color: #e0e0e0 !important;
         }
-        
+
         /* Set h3 headers to 22px */
         h3 {
             font-size: 22px !important;
         }
-        
+
         /* Set click message to 16px with metric label color (#26C5F3) */
         .click-message {
             font-size: 16px !important;
             color: #26C5F3 !important;
             font-weight: 400 !important;
         }
-        
+
         /* Parameter buttons - color #a8f368 (GREEN) */
         .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
@@ -974,7 +940,7 @@ def main():
             height: 38px !important;
             line-height: 1.2 !important;
         }
-        
+
         .stButton > button:not([kind="primary"]):hover {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
@@ -982,16 +948,16 @@ def main():
             box-shadow: 0 2px 15px rgba(168, 243, 104, 0.4) !important;
             transform: translateY(-1px) !important;
         }
-        
+
         .stButton > button:not([kind="primary"]):active {
             transform: translateY(0px) !important;
         }
-        
+
         .stButton {
             display: block !important;
             width: 100% !important;
         }
-        
+
         /* Generate Analysis buttons - color #696eff (PURPLE/BLUE) */
         .stButton > button[kind="primary"] {
             background-color: #696eff !important;
@@ -1011,38 +977,38 @@ def main():
             height: 38px !important;
             line-height: 1.2 !important;
         }
-        
+
         .stButton > button[kind="primary"]:hover {
             background-color: #4f54d4 !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
             transform: translateY(-1px) !important;
         }
-        
+
         .stButton > button[kind="primary"]:active {
             transform: translateY(0px) !important;
         }
-        
+
         /* Hide Streamlit's default download button (now embedded in chart) */
         .stDownloadButton {
             display: none !important;
         }
-        
+
         /* Add spacing between sections - using h3 tags inside divs */
         .stats-section h3 {
             margin-bottom: 1px !important;
         }
-        
+
         .time-series-section h3 {
             margin-top: 25px !important;
             margin-bottom: 10px !important;
         }
-        
+
         .regional-summary-section h3 {
             margin-top: 25px !important;
             margin-bottom: 10px !important;
         }
-        
+
         /* LANGUAGE SELECTOR - color #a8f368 */
         .stSelectbox > div > div {
             background-color: #a8f368 !important;
@@ -1057,54 +1023,54 @@ def main():
             font-size: 1rem !important;
             font-weight: 600 !important;
         }
-        
+
         .stSelectbox > div > div:hover {
             background-color: #8fd154 !important;
         }
-        
+
         .stSelectbox > div > div > div {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox > div > div > div[data-baseweb="select"] {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox > div > div > div[data-baseweb="select"] > div {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox > div > div > div[data-baseweb="select"] > div > div {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox [data-testid="stMarkdownContainer"] p {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox > label {
             color: #1a0a2e !important;
         }
-        
+
         .stSelectbox svg {
             fill: #1a0a2e !important;
             color: #1a0a2e !important;
         }
-        
+
         /* Dropdown menu items */
         .stSelectbox > div > div ul {
             background-color: #1a0a2e !important;
         }
-        
+
         .stSelectbox > div > div ul li {
             color: white !important;
         }
-        
+
         .stSelectbox > div > div ul li:hover {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
         }
-        
+
         /* Dark background for metric cards */
         div[data-testid="stMetric"] {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
@@ -1112,56 +1078,56 @@ def main():
             border-radius: 8px !important;
             border: 1px solid rgba(180, 41, 249, 0.2) !important;
         }
-        
+
         div[data-testid="stMetric"] label {
             color: #26C5F3 !important;
         }
-        
+
         div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
             color: #e0e0e0 !important;
         }
-        
+
         /* Dark background for info boxes */
         .stAlert {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
-        
+
         /* Dark background for expanders */
         .streamlit-expanderHeader {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
-        
+
         .streamlit-expanderContent {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
-        
+
         /* Hide map attribution */
         .leaflet-control-attribution {
             display: none !important;
         }
-        
+
         .folium-map .leaflet-control-attribution {
             display: none !important;
         }
-        
+
         /* Dark background for dataframes */
         .stDataFrame {
             background-color: #1a0a2e !important;
         }
-        
+
         /* Dark background for sidebar */
         .stSidebar {
             background-color: #0e1117 !important;
         }
-        
+
         /* Divider color */
         hr {
             border-color: rgba(180, 41, 249, 0.3) !important;
         }
-        
+
         /* Caption text */
         .stCaption {
             color: #9ca3af !important;
@@ -1222,7 +1188,7 @@ def main():
         """,
         unsafe_allow_html=True,
     )
-    
+
     # Place language selector in the top-right of the banner using columns
     lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
     with lang_col3:
@@ -1238,44 +1204,44 @@ def main():
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
-    
+
     # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
-    
+
     with nav_col1:
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_mm"
             st.session_state.map_generated = False
             st.session_state.regional_summary_data = None
             st.rerun()
-    
+
     with nav_col2:
         if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_m3"
             st.session_state.map_generated = False
             st.session_state.regional_summary_data = None
             st.rerun()
-    
+
     with nav_col3:
         if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
             st.session_state.selected_parameter = "recharge"
             st.session_state.map_generated = False
             st.session_state.regional_summary_data = None
             st.rerun()
-    
+
     # Date selector
     with nav_col4:
         try:
             asset_path = cfg["asset_path"]
-            assets = get_ee_assets(asset_path)
+            assets = get_ee_assets(asset_path)   # ✅ now safe — EE is initialized
             if assets:
                 asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
                 if asset_dates:
                     min_date, max_date = min(asset_dates), max(asset_dates)
                     months = pd.date_range(start=min_date, end=max_date, freq="MS")
                     date_options = [date.strftime("%Y-%m") for date in months]
-                    
+
                     selected_date_str = st.selectbox(
                         t("select_date"),
                         options=date_options,
@@ -1286,7 +1252,7 @@ def main():
                     st.session_state.selected_date_str = selected_date_str
         except Exception as e:
             st.warning("Could not load dates")
-    
+
     # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
@@ -1295,18 +1261,11 @@ def main():
             st.session_state.current_date = st.session_state.selected_date_str
             st.session_state.regional_summary_data = None
             st.rerun()
-    
+
     st.markdown("---")
 
-    # ---- Earth Engine ----
-    try:
-        if not initialize_ee():
-            st.error(t("ee_init_failed"))
-            return
-    except Exception as e:
-        st.error(f"{t('ee_init_critical')}: {str(e)}")
-        st.error(traceback.format_exc())
-        return
+    # NOTE: The old "# ---- Earth Engine ----" block that used to live here
+    # has been REMOVED — EE initialization now happens at the very top of main().
 
     # ---- Session state ----
     defaults = {
@@ -1381,10 +1340,10 @@ def main():
                     center_lat = float(cfg["center_lat"])
                     center_lon = float(cfg["center_lon"])
                     zoom = int(cfg["zoom"])
-                    
+
                     m = create_base_map(center_lat, center_lon, zoom)
                     ee_image = ee.Image(selected_asset)
-                    
+
                     opacity = st.session_state.get("opacity", 0.7)
                     vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
                     vis_params["opacity"] = opacity
@@ -1422,11 +1381,11 @@ def main():
                         prefix = next(
                             (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
                         )
-                        
+
                         min_val = stats.get(f"{prefix}_min")
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
-                        
+
                         stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
@@ -1446,16 +1405,21 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # ---- Time Series Analysis ----
+                    # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
-                    
+
+                    # Get the current center coordinates for the empty chart
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+
+                    # Always show the time series chart
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
 
                         csv_data = to_csv_bytes(st.session_state.time_series_data)
                         filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
-                        
+
                         fig = create_time_series_plot(
                             st.session_state.time_series_data,
                             st.session_state.current_parameter,
@@ -1464,15 +1428,23 @@ def main():
                             csv_data=csv_data,
                             filename=filename,
                         )
-                        
+
                         st.plotly_chart(fig, use_container_width=True)
-                        
+
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                    else:
+                        # Show empty chart with click message
+                        fig = create_empty_time_series_plot(
+                            st.session_state.current_parameter,
+                            center_lat,
+                            center_lon
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
 
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
-                    
+
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
@@ -1483,13 +1455,13 @@ def main():
                             )
                             if summary:
                                 st.session_state.regional_summary_data = summary
-                    
+
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
                         summary = st.session_state.regional_summary_data
                         csv_data = to_csv_bytes(summary, value_col="mean")
                         filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
-                        
+
                         fig = create_regional_summary_plot(
                             summary,
                             st.session_state.current_parameter,
@@ -1498,20 +1470,9 @@ def main():
                             button_text="📥 Download as CSV",
                         )
                         st.plotly_chart(fig, use_container_width=True)
-                        
+
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(summary))
-                    
-                    # ---- COMMENTED OUT: Compute regional summary button ----
-                    # if st.button(t("compute_summary"), help=t("summary_help"), key="compute_summary_btn"):
-                    #     with st.spinner(t("computing")):
-                    #         summary = get_regional_summary(
-                    #             st.session_state.current_parameter,
-                    #             tuple(assets),
-                    #             int(cfg.get("native_scale_m", 20)),
-                    #         )
-                    #         if summary:
-                    #             st.session_state.regional_summary_data = summary
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
