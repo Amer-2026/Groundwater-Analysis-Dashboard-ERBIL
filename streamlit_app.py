@@ -1173,6 +1173,36 @@ def main():
             background-color: #B429F9 !important;
             color: white !important;
         }
+                /* ========== SCHEME A: GROUPED CONTROLS ========== */
+        /* Date range picker → CYAN */
+        div[data-testid="stDateInput"] > div > div {
+            background-color: #26C5F3 !important;
+            color: #0e1117 !important;
+        }
+        div[data-testid="stDateInput"] input {
+            color: #0e1117 !important;
+        }
+        div[data-testid="stDateInput"] svg {
+            fill: #0e1117 !important;
+        }
+
+        /* View month dropdown → CYAN */
+        div[data-testid="stSelectbox"]:has([aria-label="view_month_selector"]) > div > div {
+            background-color: #26C5F3 !important;
+            color: #0e1117 !important;
+        }
+        div[data-testid="stSelectbox"]:has([aria-label="view_month_selector"]) svg {
+            fill: #0e1117 !important;
+        }
+
+        /* Language selector → SOFT PURPLE */
+        div[data-testid="stSelectbox"]:has([aria-label="lang_selector_banner"]) > div > div {
+            background-color: #B429F9 !important;
+            color: #ffffff !important;
+        }
+        div[data-testid="stSelectbox"]:has([aria-label="lang_selector_banner"]) svg {
+            fill: #ffffff !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
