@@ -1277,7 +1277,7 @@ def main():
 
                         if ranged_months_disp:
                             view_month = st.selectbox(
-                                "📅 " + t("view_month"),
+                                " " + t("view_month"),
                                 options=ranged_months_disp,
                                 index=len(ranged_months_disp) - 1,
                                 key="view_month_selector",
