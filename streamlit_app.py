@@ -1248,7 +1248,7 @@ def main():
 
     # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
+       nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
 
     with nav_col1:
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
@@ -1271,8 +1271,9 @@ def main():
             st.session_state.regional_summary_data = None
             st.rerun()
 
-    # Date range selector — dual-calendar picker + view-month dropdown
-    with nav_col4:
+    # --- Date range picker (right column) + View month dropdown (left column) ---
+    # The range is read first, then the month options are rendered in the LEFT column.
+    with nav_col_range:
         try:
             asset_path = cfg["asset_path"]
             assets = get_ee_assets(asset_path)   # ✅ EE already initialized
@@ -1306,23 +1307,35 @@ def main():
                             if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
                         ]
 
-                        # Build month options from the ranged assets, pick "view month"
+                        # Build month options from the ranged assets
                         ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-                        ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
-
-                        if ranged_months_disp:
-                            view_month = st.selectbox(
-                                " " + t("view_month"),
-                                options=ranged_months_disp,
-                                index=len(ranged_months_disp) - 1,
-                                key="view_month_selector",
-                            )
-                            st.session_state.selected_date_str = view_month
+                        st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
         except Exception as e:
             st.warning(f"Could not load dates: {e}")
 
+    # View month dropdown — visually to the LEFT of the date range,
+    # but depends on the range picked above (hence the placeholder pattern).
+    with nav_col_month:
+        months_for_view = st.session_state.get("ranged_months_disp") or []
+        if months_for_view:
+            view_month = st.selectbox(
+                t("view_month"),
+                options=months_for_view,
+                index=len(months_for_view) - 1,
+                key="view_month_selector",
+            )
+            st.session_state.selected_date_str = view_month
+        else:
+            st.text_input(
+                t("view_month"),
+                value="—",
+                disabled=True,
+                key="view_month_placeholder",
+                label_visibility="collapsed",
+            )
+
     # Generate Analysis button - type="primary" so it gets the purple/blue color
-    with nav_col5:
+    with nav_col6:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
