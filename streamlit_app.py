@@ -1246,10 +1246,10 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
 
-    # ---- Navigation Buttons (5 columns with date selector) ----
+    # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
-       nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
-
+    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
+    
     with nav_col1:
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_mm"
