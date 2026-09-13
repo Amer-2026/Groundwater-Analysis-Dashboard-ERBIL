@@ -1324,7 +1324,7 @@ def main():
                 key="view_month_selector",
                 label_visibility="collapsed",
             )
-            st.session_state.selected_date_str = view_month
+st.session_state.selected_date_str = view_month
        
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
