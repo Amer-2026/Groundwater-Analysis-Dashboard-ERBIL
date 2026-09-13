@@ -1138,6 +1138,41 @@ def main():
         .stCaption {
             color: #9ca3af !important;
         }
+        
+               /* ========== DATE RANGE PICKER STYLING ========== */
+        div[data-testid="stDateInput"] > div > div {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
+            border: none !important;
+        }
+        div[data-testid="stDateInput"] input {
+            color: #1a0a2e !important;
+            font-weight: 600 !important;
+        }
+        div[data-testid="stDateInput"] svg {
+            fill: #1a0a2e !important;
+        }
+        div[data-testid="stDateInput"] label {
+            color: #e0e0e0 !important;
+        }
+
+        /* Calendar popup dark theme */
+        div[data-baseweb="calendar"] {
+            background-color: #1a0a2e !important;
+            border: 1px solid rgba(180, 41, 249, 0.4) !important;
+        }
+        div[data-baseweb="calendar"] button {
+            color: #e0e0e0 !important;
+        }
+        div[data-baseweb="calendar"] button:hover {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+        }
+        div[data-baseweb="calendar"] [aria-selected="true"] {
+            background-color: #B429F9 !important;
+            color: white !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
