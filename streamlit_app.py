@@ -1313,8 +1313,7 @@ def main():
         except Exception as e:
             st.warning(f"Could not load dates: {e}")
 
-    # View month dropdown — visually to the LEFT of the date range,
-    # but depends on the range picked above (hence the placeholder pattern).
+    # View month dropdown — positioned to the left of the date range
     with nav_col_month:
         months_for_view = st.session_state.get("ranged_months_disp") or []
         if months_for_view:
@@ -1325,14 +1324,7 @@ def main():
                 key="view_month_selector",
             )
             st.session_state.selected_date_str = view_month
-        else:
-            st.text_input(
-                t("view_month"),
-                value="—",
-                disabled=True,
-                key="view_month_placeholder",
-                label_visibility="collapsed",
-            )
+       
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col6:
