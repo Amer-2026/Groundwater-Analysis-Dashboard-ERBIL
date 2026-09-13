@@ -1317,14 +1317,14 @@ def main():
     with nav_col_month:
         months_for_view = st.session_state.get("ranged_months_disp") or []
         if months_for_view:
-                        view_month = st.selectbox(
+            view_month = st.selectbox(
                 t("view_month"),
                 options=months_for_view,
                 index=len(months_for_view) - 1,
                 key="view_month_selector",
                 label_visibility="collapsed",
             )
-st.session_state.selected_date_str = view_month
+        st.session_state.selected_date_str = view_month
        
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
