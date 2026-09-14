@@ -1223,9 +1223,7 @@ def main():
             fill: #0e1117 !important;
 
         }
-        .st-key-lang_wrap svg {
-            fill: #ffffff !important;
-        }
+
         </style>
         """,
         unsafe_allow_html=True,
