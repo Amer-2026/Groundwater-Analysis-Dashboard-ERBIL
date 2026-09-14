@@ -1173,34 +1173,51 @@ def main():
             background-color: #B429F9 !important;
             color: white !important;
         }
-                /* ========== SCHEME A: GROUPED CONTROLS ========== */
-        /* Date range picker → CYAN */
+        /* ========== SCHEME A: GROUPED CONTROLS ========== */
+        /* Date range picker → GOLDEN */
         div[data-testid="stDateInput"] > div > div {
-            background-color: #26C5F3 !important;
+            background-color: #fcbf49 !important;
             color: #0e1117 !important;
+            border-radius: 8px !important;
+            border: none !important;
         }
         div[data-testid="stDateInput"] input {
             color: #0e1117 !important;
+            font-weight: 600 !important;
         }
         div[data-testid="stDateInput"] svg {
             fill: #0e1117 !important;
         }
 
-        /* View month dropdown → CYAN */
-        div[data-testid="stSelectbox"]:has([aria-label="view_month_selector"]) > div > div {
-            background-color: #26C5F3 !important;
+        /* View month dropdown → GOLDEN */
+        .st-key-view_month_wrap div[data-baseweb="select"] > div {
+            background-color: #fcbf49 !important;
             color: #0e1117 !important;
+            border-radius: 8px !important;
+            border: none !important;
         }
-        div[data-testid="stSelectbox"]:has([aria-label="view_month_selector"]) svg {
+        .st-key-view_month_wrap [data-testid="stMarkdownContainer"] p,
+        .st-key-view_month_wrap input {
+            color: #0e1117 !important;
+            font-weight: 600 !important;
+        }
+        .st-key-view_month_wrap svg {
             fill: #0e1117 !important;
         }
 
         /* Language selector → SOFT PURPLE */
-        div[data-testid="stSelectbox"]:has([aria-label="lang_selector_banner"]) > div > div {
+        .st-key-lang_wrap div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             color: #ffffff !important;
+            border-radius: 8px !important;
+            border: none !important;
         }
-        div[data-testid="stSelectbox"]:has([aria-label="lang_selector_banner"]) svg {
+        .st-key-lang_wrap [data-testid="stMarkdownContainer"] p,
+        .st-key-lang_wrap input {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        .st-key-lang_wrap svg {
             fill: #ffffff !important;
         }
         </style>
@@ -1265,13 +1282,14 @@ def main():
     with lang_col3:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
-        selected_label = st.selectbox(
-            "🌐",
-            options=list(lang_options.keys()),
-            index=list(lang_options.keys()).index(current_label),
-            key="lang_selector_banner",
-            label_visibility="collapsed",
-        )
+        with st.container(key="lang_wrap"):
+            selected_label = st.selectbox(
+                "🌐",
+                options=list(lang_options.keys()),
+                index=list(lang_options.keys()).index(current_label),
+                key="lang_selector_banner",
+                label_visibility="collapsed",
+            )
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
@@ -1347,14 +1365,15 @@ def main():
     with nav_col_month:
         months_for_view = st.session_state.get("ranged_months_disp") or []
         if months_for_view:
-            view_month = st.selectbox(
-                t("view_month"),
-                options=months_for_view,
-                index=len(months_for_view) - 1,
-                key="view_month_selector",
-                label_visibility="collapsed",
-            )
-        st.session_state.selected_date_str = view_month
+            with st.container(key="view_month_wrap"):
+                view_month = st.selectbox(
+                    t("view_month"),
+                    options=months_for_view,
+                    index=len(months_for_view) - 1,
+                    key="view_month_selector",
+                    label_visibility="collapsed",
+                )
+            st.session_state.selected_date_str = view_month
        
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
