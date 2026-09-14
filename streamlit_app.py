@@ -1223,6 +1223,36 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
             fill: #ffffff !important;
             color: #ffffff !important;
+                /* ===== Parameter button selected/unselected state ===== */
+
+        /* SELECTED parameter button → deep blue with white text */
+        div[class*="st-key-param_mm_active"] button,
+        div[class*="st-key-param_m3_active"] button,
+        div[class*="st-key-param_recharge_active"] button {
+            background-color: #696eff !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 12px rgba(105, 110, 255, 0.5) !important;
+        }
+        div[class*="st-key-param_mm_active"] button:hover,
+        div[class*="st-key-param_m3_active"] button:hover,
+        div[class*="st-key-param_recharge_active"] button:hover {
+            background-color: #4f54d4 !important;
+            color: #ffffff !important;
+        }
+
+        /* UNSELECTED parameter buttons → green with dark text */
+        div[class*="st-key-param_mm_inactive"] button,
+        div[class*="st-key-param_m3_inactive"] button,
+        div[class*="st-key-param_recharge_inactive"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            box-shadow: none !important;
+        }
+        div[class*="st-key-param_mm_inactive"] button:hover,
+        div[class*="st-key-param_m3_inactive"] button:hover,
+        div[class*="st-key-param_recharge_inactive"] button:hover {
+            background-color: #8fd154 !important;
+            color: #1a0a2e !important;
         }
         </style>
         """,
@@ -1303,25 +1333,31 @@ def main():
     nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
     
     with nav_col1:
-        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
-            st.session_state.selected_parameter = "abstraction_mm"
-            st.session_state.map_generated = False
-            st.session_state.regional_summary_data = None
-            st.rerun()
+        _active = "active" if st.session_state.selected_parameter == "abstraction_mm" else "inactive"
+        with st.container(key=f"param_mm_{_active}"):
+            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
+                st.session_state.selected_parameter = "abstraction_mm"
+                st.session_state.map_generated = False
+                st.session_state.regional_summary_data = None
+                st.rerun()
 
     with nav_col2:
-        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
-            st.session_state.selected_parameter = "abstraction_m3"
-            st.session_state.map_generated = False
-            st.session_state.regional_summary_data = None
-            st.rerun()
+        _active = "active" if st.session_state.selected_parameter == "abstraction_m3" else "inactive"
+        with st.container(key=f"param_m3_{_active}"):
+            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
+                st.session_state.selected_parameter = "abstraction_m3"
+                st.session_state.map_generated = False
+                st.session_state.regional_summary_data = None
+                st.rerun()
 
     with nav_col3:
-        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
-            st.session_state.selected_parameter = "recharge"
-            st.session_state.map_generated = False
-            st.session_state.regional_summary_data = None
-            st.rerun()
+        _active = "active" if st.session_state.selected_parameter == "recharge" else "inactive"
+        with st.container(key=f"param_recharge_{_active}"):
+            if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
+                st.session_state.selected_parameter = "recharge"
+                st.session_state.map_generated = False
+                st.session_state.regional_summary_data = None
+                st.rerun()
 
     # --- Date range picker (right column) + View month dropdown (left column) ---
     # The range is read first, then the month options are rendered in the LEFT column.
