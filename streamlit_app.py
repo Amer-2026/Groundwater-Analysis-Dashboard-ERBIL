@@ -1221,9 +1221,7 @@ def main():
         }
         div[data-testid="stSelectbox"]:last-of-type svg {
             fill: #0e1117 !important;
-        }
-            color: #ffffff !important;
-            font-weight: 600 !important;
+
         }
         .st-key-lang_wrap svg {
             fill: #ffffff !important;
