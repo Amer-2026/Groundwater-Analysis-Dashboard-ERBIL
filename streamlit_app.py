@@ -1174,9 +1174,9 @@ def main():
             color: white !important;
         }
         /* ========== SCHEME A: GROUPED CONTROLS ========== */
-        /* Date range picker → GOLDEN */
+        /* Date range picker → LIGHT BLUE */
         div[data-testid="stDateInput"] > div > div {
-            background-color: #fcbf49 !important;
+            background-color: #cae9ff !important;
             color: #0e1117 !important;
             border-radius: 8px !important;
             border: none !important;
@@ -1189,9 +1189,9 @@ def main():
             fill: #0e1117 !important;
         }
 
-        /* View month dropdown → GOLDEN */
+        /* View month dropdown → LIGHT BLUE */
         .st-key-view_month_wrap div[data-baseweb="select"] > div {
-            background-color: #fcbf49 !important;
+            background-color: #cae9ff !important;
             color: #0e1117 !important;
             border-radius: 8px !important;
             border: none !important;
