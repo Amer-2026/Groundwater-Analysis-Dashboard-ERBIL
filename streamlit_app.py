@@ -1192,28 +1192,28 @@ def main():
         /* ===== Selectbox color overrides (aria-label based) ===== */
 
         /* View month dropdown → LIGHT BLUE */
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) div[data-baseweb="select"] > div {
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [role="combobox"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] {
             background-color: #cae9ff !important;
             color: #0e1117 !important;
-            border-radius: 8px !important;
-            border: none !important;
+            border-color: #cae9ff !important;
         }
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
         div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) svg {
-            color: #0e1117 !important;
             fill: #0e1117 !important;
         }
 
         /* Language selector → SOFT PURPLE */
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) div[data-baseweb="select"] > div {
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [role="combobox"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] {
             background-color: #B429F9 !important;
             color: #ffffff !important;
-            border-radius: 8px !important;
-            border: none !important;
+            border-color: #B429F9 !important;
         }
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
-            color: #ffffff !important;
             fill: #ffffff !important;
         }
         </style>
