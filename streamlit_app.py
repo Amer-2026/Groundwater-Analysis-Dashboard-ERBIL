@@ -1332,32 +1332,39 @@ def main():
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
     
+    _mm_active = st.session_state.selected_parameter == "abstraction_mm"
+    _m3_active = st.session_state.selected_parameter == "abstraction_m3"
+    _rc_active = st.session_state.selected_parameter == "recharge"
+
     with nav_col1:
-        _active = "active" if st.session_state.selected_parameter == "abstraction_mm" else "inactive"
-        with st.container(key=f"param_mm_{_active}"):
-            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_mm"
-                st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+        if st.button(
+            t("nav_abstraction_mm"), key="nav_mm", use_container_width=True,
+            type="primary" if _mm_active else "secondary",
+        ):
+            st.session_state.selected_parameter = "abstraction_mm"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
 
     with nav_col2:
-        _active = "active" if st.session_state.selected_parameter == "abstraction_m3" else "inactive"
-        with st.container(key=f"param_m3_{_active}"):
-            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_m3"
-                st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+        if st.button(
+            t("nav_abstraction_m3"), key="nav_m3", use_container_width=True,
+            type="primary" if _m3_active else "secondary",
+        ):
+            st.session_state.selected_parameter = "abstraction_m3"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
 
     with nav_col3:
-        _active = "active" if st.session_state.selected_parameter == "recharge" else "inactive"
-        with st.container(key=f"param_recharge_{_active}"):
-            if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
-                st.session_state.selected_parameter = "recharge"
-                st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+        if st.button(
+            t("nav_recharge"), key="nav_recharge", use_container_width=True,
+            type="primary" if _rc_active else "secondary",
+        ):
+            st.session_state.selected_parameter = "recharge"
+            st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
+            st.rerun()
 
     # --- Date range picker (right column) + View month dropdown (left column) ---
     # The range is read first, then the month options are rendered in the LEFT column.
