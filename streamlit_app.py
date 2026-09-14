@@ -1189,39 +1189,32 @@ def main():
             fill: #0e1117 !important;
         }
 
-        /* ===== Selectbox color overrides (positional) ===== */
+        /* ===== Selectbox color overrides (aria-label based) ===== */
 
-        /* Language selector = FIRST selectbox on the page → PURPLE */
-        div[data-testid="stSelectbox"]:first-of-type div[data-baseweb="select"] > div {
-            background-color: #B429F9 !important;
-            color: #ffffff !important;
-            border-radius: 8px !important;
-            border: none !important;
-        }
-        div[data-testid="stSelectbox"]:first-of-type [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stSelectbox"]:first-of-type input {
-            color: #ffffff !important;
-            font-weight: 600 !important;
-        }
-        div[data-testid="stSelectbox"]:first-of-type svg {
-            fill: #ffffff !important;
-        }
-
-        /* View month = LAST selectbox on the page → LIGHT BLUE */
-        div[data-testid="stSelectbox"]:last-of-type div[data-baseweb="select"] > div {
+        /* View month dropdown → LIGHT BLUE */
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) div[data-baseweb="select"] > div {
             background-color: #cae9ff !important;
             color: #0e1117 !important;
             border-radius: 8px !important;
             border: none !important;
         }
-        div[data-testid="stSelectbox"]:last-of-type [data-testid="stMarkdownContainer"] p,
-        div[data-testid="stSelectbox"]:last-of-type input {
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) svg {
             color: #0e1117 !important;
-            font-weight: 600 !important;
-        }
-        div[data-testid="stSelectbox"]:last-of-type svg {
             fill: #0e1117 !important;
+        }
 
+        /* Language selector → SOFT PURPLE */
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) div[data-baseweb="select"] > div {
+            background-color: #B429F9 !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            border: none !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
+            color: #ffffff !important;
+            fill: #ffffff !important;
         }
         </style>
         """,
