@@ -1190,30 +1190,36 @@ def main():
         }
 
         /* View month dropdown → LIGHT BLUE */
-        .st-key-view_month_wrap div[data-baseweb="select"] > div {
+        div[class*="st-key-view_month_wrap"] div[data-baseweb="select"] > div {
             background-color: #cae9ff !important;
             color: #0e1117 !important;
             border-radius: 8px !important;
             border: none !important;
         }
-        .st-key-view_month_wrap [data-testid="stMarkdownContainer"] p,
-        .st-key-view_month_wrap input {
+        div[class*="st-key-view_month_wrap"] [data-testid="stMarkdownContainer"] p,
+        div[class*="st-key-view_month_wrap"] input {
             color: #0e1117 !important;
             font-weight: 600 !important;
         }
-        .st-key-view_month_wrap svg {
+        div[class*="st-key-view_month_wrap"] svg {
             fill: #0e1117 !important;
         }
 
         /* Language selector → SOFT PURPLE */
-        .st-key-lang_wrap div[data-baseweb="select"] > div {
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             color: #ffffff !important;
             border-radius: 8px !important;
             border: none !important;
         }
-        .st-key-lang_wrap [data-testid="stMarkdownContainer"] p,
-        .st-key-lang_wrap input {
+        div[class*="st-key-lang_wrap"] [data-testid="stMarkdownContainer"] p,
+        div[class*="st-key-lang_wrap"] input {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        div[class*="st-key-lang_wrap"] svg {
+            fill: #ffffff !important;
+        }
             color: #ffffff !important;
             font-weight: 600 !important;
         }
