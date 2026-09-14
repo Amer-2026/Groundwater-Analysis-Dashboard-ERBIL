@@ -1191,30 +1191,38 @@ def main():
 
         /* ===== Selectbox color overrides (aria-label based) ===== */
 
-        /* View month dropdown → LIGHT BLUE */
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
+        /* View month dropdown → LIGHT BLUE (full width) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [role="combobox"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] {
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [role="combobox"] > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] > div {
             background-color: #cae9ff !important;
             color: #0e1117 !important;
             border-color: #cae9ff !important;
         }
         div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) svg {
             fill: #0e1117 !important;
+            color: #0e1117 !important;
         }
 
-        /* Language selector → SOFT PURPLE */
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
+        /* Language selector → SOFT PURPLE (full width) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [role="combobox"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] {
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [role="combobox"] > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             color: #ffffff !important;
             border-color: #B429F9 !important;
         }
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
             fill: #ffffff !important;
+            color: #ffffff !important;
         }
         </style>
         """,
