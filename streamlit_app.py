@@ -1223,21 +1223,22 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
             fill: #ffffff !important;
             color: #ffffff !important;
-                /* ===== Parameter button selected/unselected state ===== */
+        /* ===== Parameter button selected/unselected state ===== */
 
-        /* SELECTED parameter button → deep blue with white text */
+        /* SELECTED parameter button → WHITE with dark text and blue border */
         div[class*="st-key-param_mm_active"] button,
         div[class*="st-key-param_m3_active"] button,
         div[class*="st-key-param_recharge_active"] button {
-            background-color: #696eff !important;
-            color: #ffffff !important;
-            box-shadow: 0 2px 12px rgba(105, 110, 255, 0.5) !important;
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 2px solid #696eff !important;
+            box-shadow: 0 2px 12px rgba(255, 255, 255, 0.3) !important;
         }
         div[class*="st-key-param_mm_active"] button:hover,
         div[class*="st-key-param_m3_active"] button:hover,
         div[class*="st-key-param_recharge_active"] button:hover {
-            background-color: #4f54d4 !important;
-            color: #ffffff !important;
+            background-color: #f0f0f0 !important;
+            color: #1a0a2e !important;
         }
 
         /* UNSELECTED parameter buttons → green with dark text */
