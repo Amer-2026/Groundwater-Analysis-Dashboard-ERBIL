@@ -1223,7 +1223,6 @@ def main():
             fill: #0e1117 !important;
 
         }
-
         </style>
         """,
         unsafe_allow_html=True,
