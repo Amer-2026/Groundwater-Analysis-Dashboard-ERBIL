@@ -1225,43 +1225,32 @@ def main():
             color: #ffffff !important;
         /* ===== Parameter button selected/unselected state ===== */
 
-        /* SELECTED — WHITE with dark text and blue border */
-        div[class*="st-key-param_mm_active"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_m3_active"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_recharge_active"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_mm_active"] button,
-        div[class*="st-key-param_m3_active"] button,
-        div[class*="st-key-param_recharge_active"] button {
+        /* SELECTED — WHITE with blue border (higher specificity than .stButton rule) */
+        div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]),
+        div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]),
+        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]) {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 2px solid #696eff !important;
+            box-shadow: 0 2px 12px rgba(255, 255, 255, 0.3) !important;
         }
-        div[class*="st-key-param_mm_active"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_m3_active"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_recharge_active"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_mm_active"] button:hover,
-        div[class*="st-key-param_m3_active"] button:hover,
-        div[class*="st-key-param_recharge_active"] button:hover {
+        div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]):hover,
+        div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]):hover,
+        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
         }
 
         /* UNSELECTED — green with dark text */
-        div[class*="st-key-param_mm_inactive"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_m3_inactive"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_recharge_inactive"] button[data-testid="stBaseButton-secondary"],
-        div[class*="st-key-param_mm_inactive"] button,
-        div[class*="st-key-param_m3_inactive"] button,
-        div[class*="st-key-param_recharge_inactive"] button {
+        div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]),
+        div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]),
+        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
         }
-        div[class*="st-key-param_mm_inactive"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_m3_inactive"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_recharge_inactive"] button[data-testid="stBaseButton-secondary"]:hover,
-        div[class*="st-key-param_mm_inactive"] button:hover,
-        div[class*="st-key-param_m3_inactive"] button:hover,
-        div[class*="st-key-param_recharge_inactive"] button:hover {
+        div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]):hover,
+        div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]):hover,
+        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]):hover {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
