@@ -1336,9 +1336,9 @@ def main():
     _m3_active = st.session_state.selected_parameter == "abstraction_m3"
     _rc_active = st.session_state.selected_parameter == "recharge"
 
-    _mm_label = ("✅ " if _mm_active else "") + t("nav_abstraction_mm")
-    _m3_label = ("✅ " if _m3_active else "") + t("nav_abstraction_m3")
-    _rc_label = ("✅ " if _rc_active else "") + t("nav_recharge")
+    _mm_label = ("🟢 " if _mm_active else "⚪ ") + t("nav_abstraction_mm")
+    _m3_label = ("🟢 " if _m3_active else "⚪ ") + t("nav_abstraction_m3")
+    _rc_label = ("🟢 " if _rc_active else "⚪ ") + t("nav_recharge")
 
     with nav_col1:
         with st.container(key=f"param_mm_{'active' if _mm_active else 'inactive'}"):
