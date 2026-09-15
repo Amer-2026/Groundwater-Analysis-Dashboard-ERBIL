@@ -1336,9 +1336,13 @@ def main():
     _m3_active = st.session_state.selected_parameter == "abstraction_m3"
     _rc_active = st.session_state.selected_parameter == "recharge"
 
+    _mm_label = ("✅ " if _mm_active else "") + t("nav_abstraction_mm")
+    _m3_label = ("✅ " if _m3_active else "") + t("nav_abstraction_m3")
+    _rc_label = ("✅ " if _rc_active else "") + t("nav_recharge")
+
     with nav_col1:
         with st.container(key=f"param_mm_{'active' if _mm_active else 'inactive'}"):
-            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
+            if st.button(_mm_label, key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
@@ -1346,7 +1350,7 @@ def main():
 
     with nav_col2:
         with st.container(key=f"param_m3_{'active' if _m3_active else 'inactive'}"):
-            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
+            if st.button(_m3_label, key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
@@ -1354,7 +1358,7 @@ def main():
 
     with nav_col3:
         with st.container(key=f"param_recharge_{'active' if _rc_active else 'inactive'}"):
-            if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
+            if st.button(_rc_label, key="nav_recharge", use_container_width=True):
                 st.session_state.selected_parameter = "recharge"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
