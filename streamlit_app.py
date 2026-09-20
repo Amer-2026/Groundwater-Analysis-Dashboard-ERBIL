@@ -1573,6 +1573,38 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
+                    # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
+                    st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
+
+                    # Automatically compute regional summary when map is generated
+                    if st.session_state.regional_summary_data is None:
+                        with st.spinner(t("computing")):
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                            if summary:
+                                st.session_state.regional_summary_data = summary
+
+                    # Display the chart if we have data
+                    if st.session_state.regional_summary_data:
+                        summary = st.session_state.regional_summary_data
+                        csv_data = to_csv_bytes(summary, value_col="mean")
+                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+
+                        fig = create_regional_summary_plot(
+                            summary,
+                            st.session_state.current_parameter,
+                            csv_data=csv_data,
+                            filename=filename,
+                            button_text="📥 Download as CSV",
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(summary))
+
                     # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
 
@@ -1609,38 +1641,6 @@ def main():
                             center_lon
                         )
                         st.plotly_chart(fig, use_container_width=True)
-
-                    # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
-                    st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
-
-                    # Automatically compute regional summary when map is generated
-                    if st.session_state.regional_summary_data is None:
-                        with st.spinner(t("computing")):
-                            summary = get_regional_summary(
-                                st.session_state.current_parameter,
-                                tuple(assets),
-                                int(cfg.get("native_scale_m", 20)),
-                            )
-                            if summary:
-                                st.session_state.regional_summary_data = summary
-
-                    # Display the chart if we have data
-                    if st.session_state.regional_summary_data:
-                        summary = st.session_state.regional_summary_data
-                        csv_data = to_csv_bytes(summary, value_col="mean")
-                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
-
-                        fig = create_regional_summary_plot(
-                            summary,
-                            st.session_state.current_parameter,
-                            csv_data=csv_data,
-                            filename=filename,
-                            button_text="📥 Download as CSV",
-                        )
-                        st.plotly_chart(fig, use_container_width=True)
-
-                        with st.expander(t("raw_data")):
-                            st.dataframe(pd.DataFrame(summary))
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
