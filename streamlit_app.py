@@ -859,8 +859,8 @@ def main():
             font-size: 1rem;
             font-weight: 600;
             color: #1a0a2e;
-            background: rgba(255, 224, 102, 0.35);
-            border: 1px solid rgba(255, 224, 102, 0.7);
+            background: rgba(255, 154, 158, 0.35);
+            border: 1px solid rgba(255, 154, 158, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 0.55rem 1rem;
@@ -868,7 +868,7 @@ def main():
             margin: 0.75rem 0 0 0;
             display: inline-block;
             text-shadow: 0 1px 6px rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 16px rgba(255, 224, 102, 0.35);
+            box-shadow: 0 4px 16px rgba(255, 154, 158, 0.35);
             text-align: left;
         }
 
