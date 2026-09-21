@@ -858,17 +858,17 @@ def main():
         .banner-title .welcome {
             font-size: 1rem;
             font-weight: 600;
-            color: #0e1117;
-            background: rgba(38, 197, 243, 0.30);
-            border: 1px solid rgba(38, 197, 243, 0.65);
+            color: #ffffff;
+            background: rgba(241, 81, 94, 0.85);
+            border: 1px solid rgba(241, 81, 94, 1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 0.55rem 1rem;
             border-radius: 10px;
             margin: 0.75rem 0 0 0;
             display: inline-block;
-            text-shadow: 0 1px 6px rgba(255, 255, 255, 0.35);
-            box-shadow: 0 4px 16px rgba(38, 197, 243, 0.35);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(241, 81, 94, 0.5);
             text-align: left;
         }
 
