@@ -417,6 +417,12 @@ PALETTES = {
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
 }
 
+UNITS = {
+    "abstraction_mm": "mm/month",
+    "abstraction_m3": "m³/month",
+    "recharge": "mm/month",
+}
+
 
 @st.cache_data(ttl=3600)
 def get_image_min_max(asset_id):
