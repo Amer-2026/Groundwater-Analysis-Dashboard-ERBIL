@@ -856,17 +856,19 @@ def main():
         }
 
         .banner-title .welcome {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #ffffff;
             background: rgba(241, 81, 94, 0.85);
             border: 1px solid rgba(241, 81, 94, 1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 0.55rem 1rem;
-            border-radius: 10px;
-            margin: 0.75rem 0 0 0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            margin: 0.6rem 0 0 0;
             display: inline-block;
+            width: fit-content;
+            max-width: fit-content;
             text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
             box-shadow: 0 4px 16px rgba(241, 81, 94, 0.5);
             text-align: left;
