@@ -472,17 +472,19 @@ def add_colormap(m, vis_params, parameter):
     legend_html = f"""
     <div style="
         position: absolute;
-        top: 20px;
-        right: 20px;
-        background: rgba(14, 17, 23, 0.95);
-        border: 2px solid rgba(180, 41, 249, 0.6);
+        bottom: 30px;
+        left: 20px;
+        background: rgba(14, 17, 23, 0.98);
+        border: 2px solid rgba(180, 41, 249, 0.8);
         border-radius: 10px;
         padding: 12px 16px;
         min-width: 260px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-        font-family: 'Source Sans Pro', sans-serif;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        z-index: 999;
+        font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
     ">
         <div style="
             color: #ffffff;
@@ -490,13 +492,14 @@ def add_colormap(m, vis_params, parameter):
             font-size: 14px;
             margin-bottom: 10px;
             text-align: left;
+            letter-spacing: 0.2px;
         ">{title}</div>
         <div style="
             height: 14px;
             border-radius: 3px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             background: linear-gradient(to right, {stops});
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         "></div>
         <div style="
             display: flex;
@@ -504,6 +507,7 @@ def add_colormap(m, vis_params, parameter):
             color: #ffffff;
             font-size: 11px;
             font-weight: 600;
+            letter-spacing: 0.1px;
         ">{tick_labels}</div>
     </div>
     """
