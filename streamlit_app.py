@@ -473,7 +473,7 @@ def add_colormap(m, vis_params, parameter):
     <div style="
         position: absolute;
         bottom: 30px;
-        left: 20px;
+        right: 20px;
         background: rgba(14, 17, 23, 0.98);
         border: 2px solid rgba(180, 41, 249, 0.8);
         border-radius: 10px;
