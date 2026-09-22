@@ -1351,6 +1351,17 @@ def main():
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
+        /* ===== Map border to match Statistics cards ===== */
+        iframe[title="streamlit_folium.st_folium"] {
+            border: 1px solid rgba(180, 41, 249, 0.35) !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+        }
+        div[data-testid="stIFrame"] {
+            border: 1px solid rgba(180, 41, 249, 0.35) !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
