@@ -362,7 +362,8 @@ def parse_asset_date(asset_id):
 # ==================== Map helpers ====================
 def create_base_map(center_lat, center_lon, zoom):
     """Base map with 5 options: Satellite (default), Streets, Terrain, Dark, Humanitarian."""
-    m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, control_scale=True)
+    m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom,
+                   control_scale=True, tiles=None)
 
     # 1) Satellite — DEFAULT (first added shows on load)
     folium.TileLayer(
