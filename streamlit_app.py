@@ -467,27 +467,7 @@ def add_colormap(m, vis_params, parameter):
         padding: 12px 16px !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
         backdrop-filter: blur(10px) !important;
-    }
-    .legend .legend-title {
-        color: #ffffff !important;
-        font-weight: 700 !important;
-        font-size: 13px !important;
-        margin-bottom: 6px !important;
-        text-transform: none !important;
-    }
-    .legend .legend-scale ul li {
-        color: #e0e0e0 !important;
-        font-size: 11px !important;
-    }
-    .legend .legend-scale ul {
-        margin: 0 !important;
-    }
-    .legend .legend-scale ul li span {
-        border-radius: 3px !important;
-        min-width: 30px !important;
-    }
-    </style>
-    """
+
     m.get_root().html.add_child(folium.Element(legend_css))
 
     # Enhance the legend styling via injected CSS
