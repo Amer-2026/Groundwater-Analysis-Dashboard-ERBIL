@@ -444,6 +444,73 @@ def get_vis_params(parameter, asset_id):
     palette = PALETTES.get(parameter, PALETTES["recharge"])
     return {"min": min_val, "max": max_val, "palette": palette}
 
+
+def add_colormap(m, vis_params, parameter):
+    """Render a custom HTML legend with title on top, units, and clean styling."""
+    unit = UNITS.get(parameter, "")
+    title = f"{t(parameter)}" + (f" ({unit})" if unit else "")
+
+    palette = vis_params["palette"]
+    vmin = vis_params["min"]
+    vmax = vis_params["max"]
+
+    # Build a linear-gradient across the palette for the color bar
+    n = len(palette)
+    stops = ", ".join(
+        f"{color} {int(i * 100 / (n - 1))}%"
+        for i, color in enumerate(palette)
+    )
+
+    # Tick labels: vmin → vmax, evenly spaced
+    num_ticks = 5
+    tick_values = [vmin + (vmax - vmin) * i / (num_ticks - 1) for i in range(num_ticks)]
+    tick_labels = "".join(
+        f'<span style="flex:1; text-align:center;">{v:,.0f}</span>'
+        for v in tick_values
+    )
+
+    legend_html = f"""
+    <div style="
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(14, 17, 23, 0.95);
+        border: 2px solid rgba(180, 41, 249, 0.6);
+        border-radius: 10px;
+        padding: 12px 16px;
+        min-width: 260px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        font-family: 'Source Sans Pro', sans-serif;
+    ">
+        <div style="
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: left;
+        ">{title}</div>
+        <div style="
+            height: 14px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(to right, {stops});
+            margin-bottom: 4px;
+        "></div>
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+        ">{tick_labels}</div>
+    </div>
+    """
+
+    m.get_root().html.add_child(folium.Element(legend_html))
+
+
 # ==================== Analysis ====================
 def _collection_with_dates(assets, parameter):
     """ImageCollection of one parameter with time_start parsed from asset names"""
