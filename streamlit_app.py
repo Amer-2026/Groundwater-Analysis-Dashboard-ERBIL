@@ -390,15 +390,7 @@ def create_base_map(center_lat, center_lon, zoom):
         overlay=False,
         control=True,
     ).add_to(m)
-
-    # 4) Dark minimalist (matches the dashboard theme)
-    folium.TileLayer(
-        tiles="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-        attr="CartoDB",
-        name="🌑 Dark",
-        overlay=False,
-        control=True,
-    ).add_to(m)
+    
 
     # 5) Humanitarian (borders + labels — good for reports)
     folium.TileLayer(
