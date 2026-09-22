@@ -461,19 +461,6 @@ def add_colormap(m, vis_params, parameter):
     legend_css = """
     <style>
     .legend.leaflet-control {
-        background: rgba(14, 17, 23, 0.9) !important;
-        border: 2px solid rgba(180, 41, 249, 0.5) !important;
-        border-radius: 10px !important;
-        padding: 12px 16px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(10px) !important;
-
-    m.get_root().html.add_child(folium.Element(legend_css))
-
-    # Enhance the legend styling via injected CSS
-    legend_css = """
-    <style>
-    .legend.leaflet-control {
         background: rgba(14, 17, 23, 0.95) !important;
         border: 2px solid rgba(180, 41, 249, 0.6) !important;
         border-radius: 10px !important;
