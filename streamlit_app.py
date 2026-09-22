@@ -494,30 +494,61 @@ def add_colormap(m, vis_params, parameter):
     legend_css = """
     <style>
     .legend.leaflet-control {
-        background: rgba(14, 17, 23, 0.9) !important;
-        border: 2px solid rgba(180, 41, 249, 0.5) !important;
+        background: rgba(14, 17, 23, 0.95) !important;
+        border: 2px solid rgba(180, 41, 249, 0.6) !important;
         border-radius: 10px !important;
-        padding: 12px 16px !important;
+        padding: 14px 18px !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
         backdrop-filter: blur(10px) !important;
+        min-width: 240px !important;
     }
+    /* Legend title — move to TOP and make it prominent */
     .legend .legend-title {
         color: #ffffff !important;
         font-weight: 700 !important;
-        font-size: 13px !important;
-        margin-bottom: 6px !important;
+        font-size: 14px !important;
+        margin-bottom: 10px !important;
+        margin-top: 0 !important;
         text-transform: none !important;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
+        order: -1 !important;
     }
-    .legend .legend-scale ul li {
-        color: #e0e0e0 !important;
-        font-size: 11px !important;
+    /* Legend container: title FIRST, then scale */
+    .legend .legend-content {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    /* The gradient scale itself */
+    .legend .legend-scale {
+        margin-top: 4px !important;
     }
     .legend .legend-scale ul {
         margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
     }
+    /* The tick numbers (1, 105, 210...) */
+    .legend .legend-scale ul li {
+        color: #ffffff !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+        list-style: none !important;
+    }
+    /* The colored blocks */
     .legend .legend-scale ul li span {
-        border-radius: 3px !important;
-        min-width: 30px !important;
+        border-radius: 2px !important;
+        min-width: 36px !important;
+        height: 14px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    }
+    /* The min/max values shown under the gradient */
+    .legend .legend-scale ul li span + span {
+        display: inline-block !important;
+        color: #ffffff !important;
+        font-size: 11px !important;
     }
     </style>
     """
