@@ -402,7 +402,7 @@ def create_base_map(center_lat, center_lon, zoom):
     ).add_to(m)
 
     Fullscreen(position="topleft", force_separate_button=True).add_to(m)
-        # Drawing tools: Marker, Circle, Rectangle, Polygon, Polyline + Hand pan
+    # Drawing tools: Marker, Circle, Rectangle, Polygon, Polyline + Hand pan
     Draw(
         export=False,
         position="topleft",
@@ -437,9 +437,7 @@ def create_base_map(center_lat, center_lon, zoom):
                     "weight": 3,
                 }
             },
-            "marker": {
-                "icon": folium.Icon(color="red", icon="map-marker", prefix="fa")
-            },
+            "marker": {},
         },
         edit_options={
             "edit": True,
