@@ -463,6 +463,53 @@ def create_base_map(center_lat, center_lon, zoom):
         border-radius: 12px !important;
         box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
     }
+
+    /* Draw toolbar — dark buttons with purple borders */
+    .leaflet-draw-toolbar a {
+        background-color: rgba(14, 17, 23, 0.95) !important;
+        border: 1px solid rgba(232, 28, 255, 0.6) !important;
+        border-radius: 6px !important;
+        margin-bottom: 4px !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        filter: none !important;
+    }
+    .leaflet-draw-toolbar a:hover {
+        background-color: rgba(232, 28, 255, 0.25) !important;
+        border-color: #e81cff !important;
+    }
+    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled {
+        background-color: rgba(232, 28, 255, 0.35) !important;
+        border-color: #e81cff !important;
+    }
+
+    /* ---- Colored icons (base64 SVG) ---- */
+
+    /* Marker — red */
+    a.leaflet-draw-draw-marker {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2YxNTE1ZSI+PHBhdGggZD0iTTEyIDJDOC4xIDIgNSA1LjEgNSA5YzAgNS4zIDcgMTMgNyAxM3M3LTcuNyA3LTEzYzAtMy45LTMuMS03LTctN3ptMCA5LjVjLTEuNCAwLTIuNS0xLjEtMi41LTIuNVMxMC42IDYuNSAxMiA2LjVzMi41IDEuMSAyLjUgMi41UzEzLjQgMTEuNSAxMiAxMS41eiIvPjwvc3ZnPg==") !important;
+    }
+
+    /* Circle — pink */
+    a.leaflet-draw-draw-circle {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkY2QjlEIiBzdHJva2Utd2lkdGg9IjIuNSI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iOCIvPjwvc3ZnPg==") !important;
+    }
+
+    /* Rectangle — dark grey */
+    a.leaflet-draw-draw-rectangle {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzJiMmIyYiI+PHJlY3QgeD0iNCIgeT0iNiIgd2lkdGg9IjE2IiBoZWlnaHQ9IjEyIi8+PC9zdmc+") !important;
+    }
+
+    /* Polygon — blue */
+    a.leaflet-draw-draw-polygon {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzQyNjNFQiI+PHBvbHlnb24gcG9pbnRzPSIxMiwzIDIxLDkgMTcsMjAgNywyMCAzLDkiLz48L3N2Zz4=") !important;
+    }
+
+    /* Polyline — light grey */
+    a.leaflet-draw-draw-polyline {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQURCNUJEIiBzdHJva2Utd2lkdGg9IjIuNSI+PHBvbHlsaW5lIHBvaW50cz0iMywxOCA5LDggMTUsMTQgMjEsNyIvPjwvc3ZnPg==") !important;
+    }
     </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
