@@ -1361,8 +1361,8 @@ def main():
             box-shadow: 0 0 20px rgba(232, 28, 255, 0.4) !important;
         }
 
-        /* ===== Purple border on the map iframe ===== */
-        iframe[title="streamlit_folium.st_folium"] {
+        /* ===== Purple border on the map container ===== */
+        div[data-testid="stCustomComponentV1"] {
             border: 4px solid #e81cff !important;
             border-radius: 12px !important;
             overflow: hidden !important;
