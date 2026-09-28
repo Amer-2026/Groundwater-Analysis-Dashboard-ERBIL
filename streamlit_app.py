@@ -1353,23 +1353,26 @@ def main():
         }
         /* ===== Header border around "🗺️ Interactive Map" ===== */
         div[data-testid="stMarkdownContainer"]:has(h3:contains("Interactive Map")) {
-            border: 3px solid rgba(180, 41, 249, 0.6) !important;
-            border-radius: 10px !important;
-            padding: 6px 14px !important;
+            border: 4px solid #e81cff !important;
+            border-radius: 12px !important;
+            padding: 8px 18px !important;
             display: inline-block !important;
-            background: rgba(180, 41, 249, 0.08) !important;
+            background: rgba(232, 28, 255, 0.12) !important;
+            box-shadow: 0 0 20px rgba(232, 28, 255, 0.4) !important;
         }
 
         /* ===== Purple border on the map iframe itself ===== */
         iframe[title="streamlit_folium.st_folium"] {
-            border: 3px solid rgba(180, 41, 249, 0.5) !important;
-            border-radius: 10px !important;
+            border: 4px solid #e81cff !important;
+            border-radius: 12px !important;
             overflow: hidden !important;
+            box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
         div[data-testid="stIFrame"] {
-            border: 3px solid rgba(180, 41, 249, 0.5) !important;
-            border-radius: 10px !important;
+            border: 4px solid #e81cff !important;
+            border-radius: 12px !important;
             overflow: hidden !important;
+            box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
         </style>
         """,
