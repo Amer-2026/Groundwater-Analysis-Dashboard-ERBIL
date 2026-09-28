@@ -22,7 +22,7 @@ import folium
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-from folium.plugins import Fullscreen, MousePosition
+from folium.plugins import Fullscreen, MousePosition, Draw
 from streamlit_folium import st_folium
 
 # ==================== Translations ====================
@@ -402,6 +402,50 @@ def create_base_map(center_lat, center_lon, zoom):
     ).add_to(m)
 
     Fullscreen(position="topleft", force_separate_button=True).add_to(m)
+        # Drawing tools: Marker, Circle, Rectangle, Polygon, Polyline + Hand pan
+    Draw(
+        export=False,
+        position="topleft",
+        draw_options={
+            "polyline": {
+                "shapeOptions": {
+                    "color": "#e81cff",
+                    "weight": 3,
+                }
+            },
+            "polygon": {
+                "shapeOptions": {
+                    "color": "#e81cff",
+                    "fillColor": "#e81cff",
+                    "fillOpacity": 0.2,
+                    "weight": 3,
+                }
+            },
+            "rectangle": {
+                "shapeOptions": {
+                    "color": "#e81cff",
+                    "fillColor": "#e81cff",
+                    "fillOpacity": 0.2,
+                    "weight": 3,
+                }
+            },
+            "circle": {
+                "shapeOptions": {
+                    "color": "#e81cff",
+                    "fillColor": "#e81cff",
+                    "fillOpacity": 0.2,
+                    "weight": 3,
+                }
+            },
+            "marker": {
+                "icon": folium.Icon(color="red", icon="map-marker", prefix="fa")
+            },
+        },
+        edit_options={
+            "edit": True,
+            "remove": True,
+        },
+    ).add_to(m)
 
     formatter = "function(num) {return L.Util.formatNum(num, 4) + '°';};"
     MousePosition(
