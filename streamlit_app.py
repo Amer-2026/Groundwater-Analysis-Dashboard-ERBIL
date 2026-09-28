@@ -361,7 +361,7 @@ def parse_asset_date(asset_id):
 
 # ==================== Map helpers ====================
 def create_base_map(center_lat, center_lon, zoom):
-    """Base map with 5 options: Satellite (default), Streets, Terrain, Dark, Humanitarian."""
+    """Base map with 4 options: Satellite (default), Streets, Terrain, Humanitarian."""
     m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom,
                    control_scale=True, tiles=None)
 
@@ -391,9 +391,8 @@ def create_base_map(center_lat, center_lon, zoom):
         overlay=False,
         control=True,
     ).add_to(m)
-    
 
-    # 5) Humanitarian (borders + labels — good for reports)
+    # 4) Humanitarian (borders + labels — good for reports)
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
         attr="Humanitarian OSM",
@@ -414,9 +413,19 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
+    # ===== Inject border CSS INSIDE the map (bypasses iframe restriction) =====
+    border_css = """
+    <style>
+    .folium-map {
+        border: 4px solid #e81cff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
+    }
+    </style>
+    """
+    m.get_root().html.add_child(folium.Element(border_css))
+
     return m
-
-
 def add_ee_layer(map_obj, ee_image, vis_params, name):
     """Add an Earth Engine image as a tile layer on a folium map"""
     map_id_dict = ee_image.getMapId(vis_params)
