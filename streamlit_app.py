@@ -1665,7 +1665,7 @@ def main():
                             popup="Selected location",
                             tooltip="Click location for time series",
                             icon=folium.Icon(
-                                color="purple",
+                                color="red",
                                 icon="map-marker",
                                 prefix="fa",
                             ),
