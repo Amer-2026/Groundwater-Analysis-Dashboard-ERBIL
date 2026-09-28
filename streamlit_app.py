@@ -1701,31 +1701,35 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
-                    # If the user has clicked before, show a pin at that location
-                    if st.session_state.last_clicked:
-                        folium.Marker(
-                            location=[
-                                st.session_state.last_clicked["lat"],
-                                st.session_state.last_clicked["lng"],
-                            ],
-                            popup="Selected location",
-                            tooltip="Click location for time series",
-                            icon=folium.Icon(
-                                color="red",
-                                icon="map-marker",
-                                prefix="fa",
-                            ),
-                        ).add_to(m)
+                    # Read all drawings from the map (Marker only for now)
+                    map_data = st_folium(
+                        m,
+                        width=None,
+                        height=850,
+                        returned_objects=["all_drawings"],
+                    )
 
-                    map_data = st_folium(m, width=None, height=850, returned_objects=["last_clicked"])
+                    # Process the most recent drawn Marker to trigger time series
+                    drawings = map_data.get("all_drawings") or []
+                    latest_marker = None
+                    for d in reversed(drawings):  # newest first
+                        geom = (d or {}).get("geometry") or {}
+                        if geom.get("type") == "Point":
+                            latest_marker = d
+                            break
 
-                    if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
-                        st.session_state.last_clicked = map_data["last_clicked"]
-                        st.session_state.time_series_data = get_time_series_data(
-                            point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
-                            parameter=st.session_state.current_parameter,
-                            assets=tuple(assets),
-                        )
+                    if latest_marker:
+                        coords = latest_marker["geometry"]["coordinates"]  # [lng, lat]
+                        lng, lat = coords[0], coords[1]
+
+                        prev = st.session_state.get("last_clicked") or {}
+                        if prev.get("lat") != lat or prev.get("lng") != lng:
+                            st.session_state.last_clicked = {"lat": lat, "lng": lng}
+                            st.session_state.time_series_data = get_time_series_data(
+                                point=[lat, lng],
+                                parameter=st.session_state.current_parameter,
+                                assets=tuple(assets),
+                            )
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
