@@ -1519,14 +1519,14 @@ def main():
                     )
 
                     # Streamlit returns a single date until both ends are picked
-    if isinstance(picked, (tuple, list)) and len(picked) == 2:
-                    st.session_state.date_range = (picked[0], picked[1])
+                    if isinstance(picked, (tuple, list)) and len(picked) == 2:
+                        st.session_state.date_range = (picked[0], picked[1])
 
-                    # Clear stale cached data so charts recompute for the new range
-                    st.session_state.regional_summary_data = None
-                    st.session_state.time_series_data = None
-                    
-                    # Narrow `assets` so all downstream code respects the range
+                        # Clear stale cached data so charts recompute for the new range
+                        st.session_state.regional_summary_data = None
+                        st.session_state.time_series_data = None
+
+                        # Narrow `assets` so all downstream code respects the range
                         start_ym = picked[0].strftime("%Y_%m")
                         end_ym = picked[1].strftime("%Y_%m")
                         assets = [
