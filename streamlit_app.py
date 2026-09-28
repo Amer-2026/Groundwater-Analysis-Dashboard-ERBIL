@@ -1351,15 +1351,24 @@ def main():
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
-        /* ===== Map border to match Statistics cards ===== */
+        /* ===== Header border around "🗺️ Interactive Map" ===== */
+        div[data-testid="stMarkdownContainer"]:has(h3:contains("Interactive Map")) {
+            border: 3px solid rgba(180, 41, 249, 0.6) !important;
+            border-radius: 10px !important;
+            padding: 6px 14px !important;
+            display: inline-block !important;
+            background: rgba(180, 41, 249, 0.08) !important;
+        }
+
+        /* ===== Purple border on the map iframe itself ===== */
         iframe[title="streamlit_folium.st_folium"] {
-            border: 1px solid rgba(180, 41, 249, 0.35) !important;
-            border-radius: 8px !important;
+            border: 3px solid rgba(180, 41, 249, 0.5) !important;
+            border-radius: 10px !important;
             overflow: hidden !important;
         }
         div[data-testid="stIFrame"] {
-            border: 1px solid rgba(180, 41, 249, 0.35) !important;
-            border-radius: 8px !important;
+            border: 3px solid rgba(180, 41, 249, 0.5) !important;
+            border-radius: 10px !important;
             overflow: hidden !important;
         }
         </style>
