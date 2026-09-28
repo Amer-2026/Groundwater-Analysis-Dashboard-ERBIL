@@ -1520,9 +1520,13 @@ def main():
 
                     # Streamlit returns a single date until both ends are picked
                     if isinstance(picked, (tuple, list)) and len(picked) == 2:
-                        st.session_state.date_range = (picked[0], picked[1])
+                    st.session_state.date_range = (picked[0], picked[1])
 
-                        # Narrow `assets` so all downstream code respects the range
+                    # Clear stale cached data so charts recompute for the new range
+                    st.session_state.regional_summary_data = None
+                    st.session_state.time_series_data = None
+                    
+                    # Narrow `assets` so all downstream code respects the range
                         start_ym = picked[0].strftime("%Y_%m")
                         end_ym = picked[1].strftime("%Y_%m")
                         assets = [
@@ -1725,9 +1729,20 @@ def main():
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
+                            # Filter assets by the selected date range
+                            if st.session_state.date_range:
+                                start_ym = st.session_state.date_range[0].strftime("%Y_%m")
+                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                                ranged_assets = [
+                                    a for a in assets
+                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                                ]
+                            else:
+                                ranged_assets = assets
+
                             summary = get_regional_summary(
                                 st.session_state.current_parameter,
-                                tuple(assets),
+                                tuple(ranged_assets),
                                 int(cfg.get("native_scale_m", 20)),
                             )
                             if summary:
