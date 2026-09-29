@@ -464,26 +464,65 @@ def create_base_map(center_lat, center_lon, zoom):
         box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
     }
 
-    /* ===== Draw toolbar buttons — clean dark style ===== */
+    /* ===== Draw toolbar — clean light buttons (native look) ===== */
     .leaflet-draw-toolbar a {
-        background-color: rgba(14, 17, 23, 0.95) !important;
-        border: 1px solid rgba(232, 28, 255, 0.6) !important;
         border-radius: 6px !important;
-        margin-bottom: 4px !important;
+        margin-bottom: 3px !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
     }
     .leaflet-draw-toolbar a:hover {
-        background-color: rgba(232, 28, 255, 0.35) !important;
-        border-color: #e81cff !important;
+        box-shadow: 0 0 10px rgba(232, 28, 255, 0.7) !important;
     }
     .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled {
-        background-color: rgba(232, 28, 255, 0.55) !important;
-        border-color: #e81cff !important;
-        box-shadow: 0 0 8px rgba(232, 28, 255, 0.6) !important;
+        box-shadow: 0 0 12px rgba(232, 28, 255, 0.9) !important;
+        outline: 2px solid #e81cff !important;
     }
 
-    /* Make the black icon visible on the dark background */
-    .leaflet-draw-toolbar a {
-        filter: invert(1) brightness(1.5) !important;
+    /* ===== Colored icons — override Folium's default sprites ===== */
+
+    /* Marker tool — RED */
+    a.leaflet-draw-draw-marker {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1515e'><path d='M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'/></svg>") !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Circle tool — PINK */
+    a.leaflet-draw-draw-circle {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B9D' stroke-width='2.5'><circle cx='12' cy='12' r='8'/></svg>") !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Rectangle tool — DARK GREY */
+    a.leaflet-draw-draw-rectangle {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b2b2b'><rect x='4' y='6' width='16' height='12'/></svg>") !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Polygon tool — BLUE */
+    a.leaflet-draw-draw-polygon {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234263EB'><polygon points='12,3 21,9 17,20 7,20 3,9'/></svg>") !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Polyline tool — LIGHT GREY */
+    a.leaflet-draw-draw-polyline {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ADB5BD' stroke-width='2.5'><polyline points='3,18 9,8 15,14 21,7'/></svg>") !important;
+        background-size: 22px 22px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-color: #ffffff !important;
     }
     </style>
     """
