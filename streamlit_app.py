@@ -464,7 +464,7 @@ def create_base_map(center_lat, center_lon, zoom):
         box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
     }
 
-    /* ===== Draw toolbar buttons — dark with purple borders ===== */
+    /* ===== Draw toolbar buttons — clean dark style ===== */
     .leaflet-draw-toolbar a {
         background-color: rgba(14, 17, 23, 0.95) !important;
         border: 1px solid rgba(232, 28, 255, 0.6) !important;
@@ -472,49 +472,18 @@ def create_base_map(center_lat, center_lon, zoom):
         margin-bottom: 4px !important;
     }
     .leaflet-draw-toolbar a:hover {
-        background-color: rgba(232, 28, 255, 0.25) !important;
+        background-color: rgba(232, 28, 255, 0.35) !important;
         border-color: #e81cff !important;
     }
     .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled {
-        background-color: rgba(232, 28, 255, 0.4) !important;
+        background-color: rgba(232, 28, 255, 0.55) !important;
         border-color: #e81cff !important;
+        box-shadow: 0 0 8px rgba(232, 28, 255, 0.6) !important;
     }
 
-    /* ===== Colored icons via CSS filter ===== */
-
-    /* Marker tool — RED */
-    a.leaflet-draw-draw-marker {
-        filter: invert(27%) sepia(96%) saturate(3000%) hue-rotate(340deg) brightness(95%) contrast(95%) !important;
-    }
-
-    /* Circle tool — PINK */
-    a.leaflet-draw-draw-circle {
-        filter: invert(60%) sepia(50%) saturate(2000%) hue-rotate(300deg) brightness(105%) contrast(90%) !important;
-    }
-
-    /* Rectangle tool — dark grey (keep as-is, but lighter) */
-    a.leaflet-draw-draw-rectangle {
-        filter: invert(30%) brightness(1.5) !important;
-    }
-
-    /* Polygon tool — BLUE */
-    a.leaflet-draw-draw-polygon {
-        filter: invert(30%) sepia(95%) saturate(2000%) hue-rotate(220deg) brightness(100%) contrast(95%) !important;
-    }
-
-    /* Line tool — light grey */
-    a.leaflet-draw-draw-polyline {
-        filter: invert(80%) brightness(1.2) !important;
-    }
-
-    /* Edit button — yellow */
-    a.leaflet-draw-edit-edit {
-        filter: invert(80%) sepia(70%) saturate(1000%) hue-rotate(10deg) brightness(105%) !important;
-    }
-
-    /* Delete button — red */
-    a.leaflet-draw-edit-remove {
-        filter: invert(30%) sepia(96%) saturate(3000%) hue-rotate(340deg) brightness(95%) contrast(95%) !important;
+    /* Make the black icon visible on the dark background */
+    .leaflet-draw-toolbar a {
+        filter: invert(1) brightness(1.5) !important;
     }
     </style>
     """
