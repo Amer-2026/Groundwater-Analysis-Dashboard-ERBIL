@@ -1762,7 +1762,7 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
-                    # Read all drawings from the map (Marker only for now)
+                    # Read all drawings from the map
                     map_data = st_folium(
                         m,
                         width=None,
@@ -1770,27 +1770,45 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # Process the most recent drawn Marker to trigger time series
+                    # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                     drawings = map_data.get("all_drawings") or []
-                    latest_marker = None
+                    latest = None
                     for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
-                        if geom.get("type") == "Point":
-                            latest_marker = d
+                        if geom.get("type") in ("Point", "LineString", "Polygon"):
+                            latest = d
                             break
 
-                    if latest_marker:
-                        coords = latest_marker["geometry"]["coordinates"]  # [lng, lat]
-                        lng, lat = coords[0], coords[1]
+                    if latest:
+                        geom = latest["geometry"]
+                        geom_type = geom["type"]
+                        coords = geom["coordinates"]
 
-                        prev = st.session_state.get("last_clicked") or {}
-                        if prev.get("lat") != lat or prev.get("lng") != lng:
-                            st.session_state.last_clicked = {"lat": lat, "lng": lng}
-                            st.session_state.time_series_data = get_time_series_data(
-                                point=[lat, lng],
-                                parameter=st.session_state.current_parameter,
-                                assets=tuple(assets),
-                            )
+                        # Build a stable signature to detect changes
+                        signature = f"{geom_type}:{str(coords)[:200]}"
+
+                        if st.session_state.get("_selection_signature") != signature:
+                            st.session_state["_selection_signature"] = signature
+
+                            # Store the current selection
+                            st.session_state["current_selection"] = {
+                                "type": geom_type,
+                                "coordinates": coords,
+                            }
+
+                            # Reset downstream data — will be filled in the next steps
+                            st.session_state.time_series_data = None
+                            st.session_state.regional_summary_data = None
+
+                            # For a Point, keep the old behavior (immediate time series)
+                            if geom_type == "Point":
+                                lng, lat = coords[0], coords[1]
+                                st.session_state.last_clicked = {"lat": lat, "lng": lng}
+                                st.session_state.time_series_data = get_time_series_data(
+                                    point=[lat, lng],
+                                    parameter=st.session_state.current_parameter,
+                                    assets=tuple(assets),
+                                )
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
