@@ -576,10 +576,45 @@ def get_image_min_max(asset_id):
 def get_vis_params(parameter, asset_id):
     min_val, max_val = get_image_min_max(asset_id)
     palette = PALETTES.get(parameter, PALETTES["recharge"])
-    return {"min": min_val, "max": max_val, "palette": palette}
+        return {"min": min_val, "max": max_val, "palette": palette}
+
+
+def selection_to_ee_geometry(selection):
+    """Convert a stored drawing (session state) to an Earth Engine Geometry."""
+    if not selection:
+        return None
+
+    geom_type = selection.get("type")
+    coords = selection.get("coordinates")
+    if not geom_type or not coords:
+        return None
+
+    try:
+        if geom_type == "Point":
+            lng, lat = coords[0], coords[1]
+            return ee.Geometry.Point([lng, lat]).buffer(100).bounds()
+
+        if geom_type == "LineString":
+            return ee.Geometry.LineString(coords).buffer(50).bounds()
+
+        if geom_type == "Polygon":
+            return ee.Geometry.Polygon(coords)
+
+        if geom_type == "Rectangle":
+            return ee.Geometry.Polygon(coords)
+
+        if geom_type == "Circle":
+            return ee.Geometry.Polygon(coords)
+
+    except Exception as e:
+        st.warning(f"Could not convert selection to geometry: {e}")
+        return None
+
+    return None
 
 
 def add_colormap(m, vis_params, parameter):
+
     """Render a custom HTML legend with title on top, units, and clean styling."""
     unit = UNITS.get(parameter, "")
     title = f"{t(parameter)}" + (f" ({unit})" if unit else "")
@@ -1815,9 +1850,15 @@ def main():
                     # Statistics
                     st.markdown(f'<div class="stats-section"><h3>📊 {t("statistics")}</h3></div>', unsafe_allow_html=True)
                     try:
+                        # Use the drawn shape if there is one; otherwise the whole image
+                        selection_geom = selection_to_ee_geometry(
+                            st.session_state.get("current_selection")
+                        )
+                        geom_to_use = selection_geom if selection_geom else ee_image.geometry()
+
                         stats = ee_image.reduceRegion(
                             reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
-                            geometry=ee_image.geometry(),
+                            geometry=geom_to_use,
                             scale=1000,
                             maxPixels=1e9,
                         ).getInfo()
