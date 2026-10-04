@@ -700,22 +700,38 @@ def _collection_with_dates(assets, parameter):
 
 @st.cache_data(ttl=3600)
 def get_time_series_data(point, parameter, assets):
-    """Monthly values of `parameter` at a clicked point. point = [lat, lon]"""
-    ee_point = ee.Geometry.Point([point[1], point[0]])
+    """Monthly values of `parameter` at a clicked point. point = [lat, lon]
+
+    Kept for backwards compatibility with Point selections.
+    """
+    ee_geom = ee.Geometry.Point([point[1], point[0]])
+    return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
+
+
+@st.cache_data(ttl=3600)
+def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
+    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
+
+    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
+    Larger `scale` (100 m) keeps it fast for areas/lines.
+    """
     images = _collection_with_dates(assets, parameter)
 
-    time_series = images.map(
-        lambda img: ee.Feature(
+    def compute_mean(img):
+        return ee.Feature(
             None,
             {
                 "date": img.get("system:time_start"),
                 "value": img.reduceRegion(
-                    reducer=ee.Reducer.first(), geometry=ee_point, scale=30
+                    reducer=ee.Reducer.mean(),
+                    geometry=ee_geom,
+                    scale=scale,
+                    maxPixels=1e9,
                 ).values().get(0),
             },
         )
-    )
-    results = time_series.getInfo()
+
+    results = images.map(compute_mean).getInfo()
 
     processed = []
     for feature in results["features"]:
