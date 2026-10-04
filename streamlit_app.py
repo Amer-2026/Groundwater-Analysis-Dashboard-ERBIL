@@ -576,8 +576,7 @@ def get_image_min_max(asset_id):
 def get_vis_params(parameter, asset_id):
     min_val, max_val = get_image_min_max(asset_id)
     palette = PALETTES.get(parameter, PALETTES["recharge"])
-        return {"min": min_val, "max": max_val, "palette": palette}
-
+    return {"min": min_val, "max": max_val, "palette": palette}
 
 def selection_to_ee_geometry(selection):
     """Convert a stored drawing (session state) to an Earth Engine Geometry."""
