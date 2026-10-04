@@ -1846,19 +1846,37 @@ def main():
                                 "coordinates": coords,
                             }
 
-                            # Reset downstream data — will be filled in the next steps
+                            # Reset downstream data — will be filled right below
                             st.session_state.time_series_data = None
                             st.session_state.regional_summary_data = None
 
-                            # For a Point, keep the old behavior (immediate time series)
-                            if geom_type == "Point":
-                                lng, lat = coords[0], coords[1]
-                                st.session_state.last_clicked = {"lat": lat, "lng": lng}
-                                st.session_state.time_series_data = get_time_series_data(
-                                    point=[lat, lng],
-                                    parameter=st.session_state.current_parameter,
-                                    assets=tuple(assets),
+                            # Compute time series for the drawn shape (any type)
+                            sel_geom = selection_to_ee_geometry({
+                                "type": geom_type,
+                                "coordinates": coords,
+                            })
+
+                            if sel_geom is not None:
+                                st.session_state.time_series_data = _time_series_for_geometry(
+                                    sel_geom,
+                                    st.session_state.current_parameter,
+                                    tuple(assets),
+                                    scale=100,
                                 )
+
+                                # Store the "clicked" location for compatibility
+                                if geom_type == "Point":
+                                    lng, lat = coords[0], coords[1]
+                                    st.session_state.last_clicked = {"lat": lat, "lng": lng}
+                                else:
+                                    # For non-point shapes, use the first coordinate as a reference
+                                    if geom_type == "LineString":
+                                        first = coords[0]
+                                    elif geom_type == "Polygon":
+                                        first = coords[0][0]
+                                    else:
+                                        first = coords[0]
+                                    st.session_state.last_clicked = {"lat": first[1], "lng": first[0]}
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
