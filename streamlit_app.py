@@ -516,13 +516,23 @@ def create_base_map(center_lat, center_lon, zoom):
         background-color: #ffffff !important;
     }
 
-    /* Polyline tool — LIGHT GREY */
-    a.leaflet-draw-draw-polyline {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ADB5BD' stroke-width='2.5'><polyline points='3,18 9,8 15,14 21,7'/></svg>") !important;
+    /* ===== Hand (pan) icon — YELLOW ===== */
+    /* The Hand state has no fixed class — we style the first <a> in the toolbar
+       (which is where Folium swaps in the Hand icon when no tool is active). */
+    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled,
+    .leaflet-draw-toolbar a[title*="Cancel"],
+    .leaflet-draw-toolbar a[title*="Finish"] {
+        background-color: #ffffff !important;
+    }
+
+    /* First button — this is where the Hand appears when idle */
+    .leaflet-draw-toolbar a:first-child {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD43B'><path d='M9 11.5a1.5 1.5 0 013 0v4.5h.2l2-4.4a1.2 1.2 0 012.2 1l-2.5 5.5c-.4.9-1.3 1.5-2.3 1.5H10c-1 0-1.9-.5-2.5-1.3L5 15c-.5-.8-.3-1.8.4-2.3.8-.5 1.8-.3 2.3.4L9 15V11.5z'/></svg>") !important;
         background-size: 22px 22px !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
         background-color: #ffffff !important;
+        border: 2px solid #FFD43B !important;
     }
     </style>
     """
