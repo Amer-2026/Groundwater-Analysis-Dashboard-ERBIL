@@ -1896,11 +1896,17 @@ def main():
 
                             if sel_geom is not None:
                                 try:
-                                    st.session_state.time_series_data = _time_series_for_geometry(
+                                    _ts = _time_series_for_geometry(
                                         sel_geom,
                                         st.session_state.current_parameter,
                                         tuple(assets),
                                         scale=100,
+                                    )
+                                    st.session_state.time_series_data = _ts
+                                    st.info(
+                                        f"🔧 DEBUG — Shape: {geom_type} | "
+                                        f"Time series points: {len(_ts)} | "
+                                        f"Assets: {len(assets)}"
                                     )
                                 except Exception as e:
                                     st.warning(f"Could not compute time series for shape: {e}")
