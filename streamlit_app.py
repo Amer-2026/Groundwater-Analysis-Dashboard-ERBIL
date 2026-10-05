@@ -558,8 +558,46 @@ UNITS = {
 }
 
 
-@st.cache_data(ttl=3600)
+def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
+    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
+
+    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
+    Larger `scale` (100 m) keeps it fast for areas/lines.
+    """
+    images = _collection_with_dates(assets, parameter)
+
+    def compute_mean(img):
+        return ee.Feature(
+            None,
+            {
+                "date": img.get("system:time_start"),
+                "value": img.reduceRegion(
+                    reducer=ee.Reducer.mean(),
+                    geometry=ee_geom,
+                    scale=scale,
+                    maxPixels=1e9,
+                ).values().get(0),
+            },
+        )
+
+    results = images.map(compute_mean).getInfo()
+
+    processed = []
+    for feature in results["features"]:
+        props = feature["properties"]
+        if props["value"] is not None:
+            processed.append(
+                {
+                    "date": datetime.fromtimestamp(props["date"] / 1000),
+                    "value": float(props["value"]),
+                }
+            )
+    processed.sort(key=lambda x: x["date"])
+    return processed 
+    
 def get_image_min_max(asset_id):
+
+    
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
     minmax = img.reduceRegion(
@@ -1857,12 +1895,16 @@ def main():
                             })
 
                             if sel_geom is not None:
-                                st.session_state.time_series_data = _time_series_for_geometry(
-                                    sel_geom,
-                                    st.session_state.current_parameter,
-                                    tuple(assets),
-                                    scale=100,
-                                )
+                                try:
+                                    st.session_state.time_series_data = _time_series_for_geometry(
+                                        sel_geom,
+                                        st.session_state.current_parameter,
+                                        tuple(assets),
+                                        scale=100,
+                                    )
+                                except Exception as e:
+                                    st.warning(f"Could not compute time series for shape: {e}")
+                                    st.session_state.time_series_data = None
 
                                 # Store the "clicked" location for compatibility
                                 if geom_type == "Point":
