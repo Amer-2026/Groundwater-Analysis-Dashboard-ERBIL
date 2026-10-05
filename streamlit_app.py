@@ -558,6 +558,21 @@ UNITS = {
 }
 
 
+@st.cache_data(ttl=3600)
+def get_image_min_max(asset_id):
+    """Min/max of an image asset (cached — one server call per asset)"""
+    img = ee.Image(asset_id)
+    minmax = img.reduceRegion(
+        reducer=ee.Reducer.minMax(),
+        geometry=img.geometry(),
+        scale=1000,
+        maxPixels=1e9,
+    ).getInfo()
+    min_key = next(key for key in minmax if key.endswith("_min"))
+    max_key = next(key for key in minmax if key.endswith("_max"))
+    return minmax[min_key], minmax[max_key]
+
+
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
     """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
 
@@ -1872,8 +1887,10 @@ def main():
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
 
-                        # Build a stable signature to detect changes
-                        signature = f"{geom_type}:{str(coords)[:200]}"
+                        # Build a stable signature from the full coordinates
+                        import hashlib as _hashlib
+                        _sig_input = f"{geom_type}:{coords}"
+                        signature = _hashlib.md5(_sig_input.encode("utf-8")).hexdigest()
 
                         if st.session_state.get("_selection_signature") != signature:
                             st.session_state["_selection_signature"] = signature
@@ -1903,11 +1920,7 @@ def main():
                                         scale=100,
                                     )
                                     st.session_state.time_series_data = _ts
-                                    st.info(
-                                        f"🔧 DEBUG — Shape: {geom_type} | "
-                                        f"Time series points: {len(_ts)} | "
-                                        f"Assets: {len(assets)}"
-                                    )
+
                                 except Exception as e:
                                     st.warning(f"Could not compute time series for shape: {e}")
                                     st.session_state.time_series_data = None
