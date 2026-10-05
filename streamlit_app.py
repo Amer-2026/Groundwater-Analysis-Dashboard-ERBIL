@@ -761,7 +761,6 @@ def get_time_series_data(point, parameter, assets):
     return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
 
 
-@st.cache_data(ttl=3600)
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
     """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
 
