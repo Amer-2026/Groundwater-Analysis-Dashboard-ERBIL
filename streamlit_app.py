@@ -516,23 +516,18 @@ def create_base_map(center_lat, center_lon, zoom):
         background-color: #ffffff !important;
     }
 
-    /* ===== Hand (pan) icon — YELLOW ===== */
-    /* The Hand state has no fixed class — we style the first <a> in the toolbar
-       (which is where Folium swaps in the Hand icon when no tool is active). */
-    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled,
-    .leaflet-draw-toolbar a[title*="Cancel"],
-    .leaflet-draw-toolbar a[title*="Finish"] {
-        background-color: #ffffff !important;
+    /* Map cursor — hand (grab) style */
+    .leaflet-container {
+        cursor: grab !important;
     }
-
-    /* First button — this is where the Hand appears when idle */
-    .leaflet-draw-toolbar a:first-child {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD43B'><path d='...'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-        border: 2px solid #FFD43B !important;
+    .leaflet-container.leaflet-dragging {
+        cursor: grabbing !important;
+    }
+    .leaflet-container.leaflet-grab {
+        cursor: grab !important;
+    }
+    .leaflet-container.leaflet-grabbing {
+        cursor: grabbing !important;
     }
     </style>
     """
