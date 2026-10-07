@@ -528,6 +528,16 @@ def create_base_map(center_lat, center_lon, zoom):
     }
     .leaflet-container.leaflet-grabbing {
         cursor: grabbing !important;
+     /* Delete / Edit tool — use default arrow cursor over shapes */
+    .leaflet-container.leaflet-crosshair,
+    .leaflet-container.leaflet-crosshair .leaflet-interactive,
+    .leaflet-touch .leaflet-bar a,
+    .leaflet-draw-edit-remove + .leaflet-draw-toolbar a,
+    .leaflet-container.leaflet-draw-edit-remove-active,
+    .leaflet-container.leaflet-draw-edit-edit-active,
+    .leaflet-container.leaflet-draw-edit-remove-active .leaflet-interactive,
+    .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
+        cursor: default !important;
     }
     </style>
     """
