@@ -527,7 +527,7 @@ def create_base_map(center_lat, center_lon, zoom):
 
     /* First button — this is where the Hand appears when idle */
     .leaflet-draw-toolbar a:first-child {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD43B'><path d='M9 11.5a1.5 1.5 0 013 0v4.5h.2l2-4.4a1.2 1.2 0 012.2 1l-2.5 5.5c-.4.9-1.3 1.5-2.3 1.5H10c-1 0-1.9-.5-2.5-1.3L5 15c-.5-.8-.3-1.8.4-2.3.8-.5 1.8-.3 2.3.4L9 15V11.5z'/></svg>") !important;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD43B'><path d='...'/></svg>") !important;
         background-size: 22px 22px !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
