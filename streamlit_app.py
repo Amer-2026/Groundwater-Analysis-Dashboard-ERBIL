@@ -1007,6 +1007,43 @@ def to_csv_bytes(rows, value_col="value"):
     return df.to_csv(index=False).encode("utf-8")
 
 
+@st.dialog("📍 Specify Location")
+def specify_location_dialog():
+    """Modal dialog for entering Latitude and Longitude."""
+    st.markdown("Enter coordinates (decimal degrees):")
+    col1, col2 = st.columns(2)
+    with col1:
+        lat_input = st.number_input(
+            "Latitude",
+            min_value=-90.0,
+            max_value=90.0,
+            value=float(st.session_state.get("search_lat") or 36.19),
+            step=0.0001,
+            format="%.5f",
+            key="dialog_lat",
+        )
+    with col2:
+        lng_input = st.number_input(
+            "Longitude",
+            min_value=-180.0,
+            max_value=180.0,
+            value=float(st.session_state.get("search_lng") or 44.01),
+            step=0.0001,
+            format="%.5f",
+            key="dialog_lng",
+        )
+
+    st.markdown("---")
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("✅ OK", use_container_width=True, type="primary", key="dialog_ok"):
+            st.session_state["search_lat"] = lat_input
+            st.session_state["search_lng"] = lng_input
+            st.session_state["search_pending"] = True
+            st.rerun()
+    with c2:
+        if st.button("❌ Cancel", use_container_width=True, key="dialog_cancel"):
+            st.rerun()
 # ==================== Main app ====================
 def main():
     if "lang" not in st.session_state:
@@ -1021,8 +1058,14 @@ def main():
     if "date_range" not in st.session_state:
         st.session_state.date_range = None
 
-    if "regional_summary_data" not in st.session_state:
-        st.session_state.regional_summary_data = None
+    if "search_lat" not in st.session_state:
+        st.session_state.search_lat = None
+
+    if "search_lng" not in st.session_state:
+        st.session_state.search_lng = None
+
+    if "search_pending" not in st.session_state:
+        st.session_state.search_pending = False
 
     st.set_page_config(
         page_title=t("page_title"),
@@ -1863,6 +1906,14 @@ def main():
                     center_lon = float(cfg["center_lon"])
                     zoom = int(cfg["zoom"])
 
+                    # If the user searched for a location, override the center
+                    if st.session_state.get("search_pending"):
+                        _search_lat = st.session_state.get("search_lat", center_lat)
+                        _search_lng = st.session_state.get("search_lng", center_lon)
+                        center_lat = float(_search_lat)
+                        center_lon = float(_search_lng)
+                        zoom = 15
+
                     m = create_base_map(center_lat, center_lon, zoom)
                     ee_image = ee.Image(selected_asset)
 
@@ -1877,6 +1928,19 @@ def main():
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
                     )
                     add_colormap(m, vis_params, st.session_state.current_parameter)
+                    
+                                        # If the user searched, place a red marker at the location
+                    if st.session_state.get("search_pending"):
+                        folium.Marker(
+                            location=[
+                                st.session_state.get("search_lat"),
+                                st.session_state.get("search_lng"),
+                            ],
+                            popup=f"Searched: {st.session_state.get('search_lat'):.5f}, {st.session_state.get('search_lng'):.5f}",
+                            tooltip="Searched location",
+                            icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
+                        ).add_to(m)
+                        st.session_state["search_pending"] = False
                     folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
@@ -1886,6 +1950,14 @@ def main():
                         height=850,
                         returned_objects=["all_drawings"],
                     )
+
+                    # ---- Specify Location button ----
+                    if st.button(
+                        "📍 Specify Location",
+                        key="open_specify_location",
+                        use_container_width=True,
+                    ):
+                        specify_location_dialog()
 
                     # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                     drawings = map_data.get("all_drawings") or []
