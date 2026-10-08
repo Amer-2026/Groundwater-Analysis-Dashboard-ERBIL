@@ -542,6 +542,41 @@ def create_base_map(center_lat, center_lon, zoom):
     </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
+        # ===== Custom "Specify Location" button inside the map =====
+    search_btn_html = """
+    <style>
+    #custom-search-btn {
+        position: absolute;
+        top: 10px;
+        right: 60px;
+        z-index: 1000;
+        background: rgba(14, 17, 23, 0.95);
+        border: 2px solid #e81cff;
+        border-radius: 8px;
+        padding: 8px 14px;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+        font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
+        white-space: nowrap;
+        pointer-events: auto;
+    }
+    #custom-search-btn:hover {
+        background: rgba(232, 28, 255, 0.25);
+        box-shadow: 0 0 12px rgba(232, 28, 255, 0.6);
+    }
+    </style>
+    <div id="custom-search-btn">
+        📍 Specify Location
+    </div>
+    """
+    m.get_root().html.add_child(folium.Element(search_btn_html))
 
     return m
 def add_ee_layer(map_obj, ee_image, vis_params, name):
