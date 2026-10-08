@@ -1699,6 +1699,23 @@ def main():
             overflow: hidden !important;
             box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
+                /* ===== Specify Location button — white with purple border ===== */
+        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]) {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 2px solid #e81cff !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            padding: 0.5rem 1rem !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+            transition: all 0.2s ease !important;
+        }
+        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]):hover {
+            background-color: #f0f0f0 !important;
+            color: #1a0a2e !important;
+            border-color: #e81cff !important;
+            box-shadow: 0 0 12px rgba(232, 28, 255, 0.6) !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
