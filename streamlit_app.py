@@ -2004,12 +2004,13 @@ def main():
                     )
 
                     # ---- Specify Location button ----
-                    if st.button(
-                        "📍 Specify Location",
-                        key="open_specify_location",
-                        use_container_width=True,
-                    ):
-                        specify_location_dialog()
+                    with st.container(key="specify_location_wrap"):
+                        if st.button(
+                            "📍 Specify Location",
+                            key="open_specify_location",
+                            use_container_width=True,
+                        ):
+                            specify_location_dialog()
 
                     # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                     drawings = map_data.get("all_drawings") or []
