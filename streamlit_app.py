@@ -2023,12 +2023,12 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # ---- Specify Location button ----
-                    with st.container(key="specify_location_wrap"):
+                    # ---- Hidden Specify Location trigger ----
+                    # Hidden button — the in-map "Specify Location" button triggers it via JS
+                    with st.container(key="hidden_specify_trigger"):
                         if st.button(
-                            "📍 Specify Location",
+                            "trigger_specify_dialog",
                             key="open_specify_location",
-                            use_container_width=True,
                         ):
                             specify_location_dialog()
 
