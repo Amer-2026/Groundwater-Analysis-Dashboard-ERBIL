@@ -1699,8 +1699,13 @@ def main():
             overflow: hidden !important;
             box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
-                /* ===== Specify Location button — white with purple border ===== */
-        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]) {
+        /* ===== Specify Location button — white with purple border ===== */
+        /* Target by key (primary) */
+        div[class*="st-key-specify_location_wrap"] button,
+        /* Fallback: target by data-testid + key attribute */
+        div[data-testid="stButton"]:has(button[key="open_specify_location"]) button,
+        /* Fallback: any button whose text contains "Specify Location" */
+        div[data-testid="stButton"]:has(button:contains("Specify Location")) button {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 2px solid #e81cff !important;
@@ -1710,7 +1715,8 @@ def main():
             box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
             transition: all 0.2s ease !important;
         }
-        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]):hover {
+        div[class*="st-key-specify_location_wrap"] button:hover,
+        div[data-testid="stButton"]:has(button[key="open_specify_location"]) button:hover {
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
             border-color: #e81cff !important;
