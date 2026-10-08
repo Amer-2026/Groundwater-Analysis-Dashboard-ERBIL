@@ -550,11 +550,11 @@ def create_base_map(center_lat, center_lon, zoom):
         top: 10px;
         right: 60px;
         z-index: 1000;
-        background: rgba(14, 17, 23, 0.95);
+        background: #ffffff;
         border: 2px solid #e81cff;
         border-radius: 8px;
         padding: 8px 14px;
-        color: #ffffff;
+        color: #1a0a2e;
         font-weight: 600;
         font-size: 13px;
         cursor: pointer;
@@ -568,7 +568,7 @@ def create_base_map(center_lat, center_lon, zoom):
         pointer-events: auto;
     }
     #custom-search-btn:hover {
-        background: rgba(232, 28, 255, 0.25);
+        background: #f0f0f0;
         box-shadow: 0 0 12px rgba(232, 28, 255, 0.6);
     }
     </style>
