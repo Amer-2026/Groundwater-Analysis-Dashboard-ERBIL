@@ -551,7 +551,7 @@ def create_base_map(center_lat, center_lon, zoom):
         right: 60px;
         z-index: 1000;
         background: #ffffff;
-        border: 2px solid #e81cff;
+        border: 2px solid #FFFFFF;
         border-radius: 8px;
         padding: 8px 14px;
         color: #1a0a2e;
