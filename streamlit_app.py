@@ -1044,31 +1044,48 @@ def to_csv_bytes(rows, value_col="value"):
 
 @st.dialog("📍 Specify Location")
 def specify_location_dialog():
-    """Modal dialog for entering Latitude and Longitude."""
-    st.markdown("Enter coordinates (decimal degrees):")
+    """Modal dialog for entering Latitude and Longitude in Decimal Degrees."""
+    st.markdown(
+        """
+        Enter coordinates in **Decimal Degrees (DD)** format.
+        
+        Example: `36.19120, 44.00940`
+        """
+    )
+
+    st.markdown("---")
+
     col1, col2 = st.columns(2)
     with col1:
         lat_input = st.number_input(
-            "Latitude",
+            "Latitude (°N/S)",
             min_value=-90.0,
             max_value=90.0,
             value=float(st.session_state.get("search_lat") or 36.19),
-            step=0.0001,
+            step=0.00001,
             format="%.5f",
             key="dialog_lat",
+            help="Range: -90 to +90. Positive = North, Negative = South",
         )
     with col2:
         lng_input = st.number_input(
-            "Longitude",
+            "Longitude (°E/W)",
             min_value=-180.0,
             max_value=180.0,
             value=float(st.session_state.get("search_lng") or 44.01),
-            step=0.0001,
+            step=0.00001,
             format="%.5f",
             key="dialog_lng",
+            help="Range: -180 to +180. Positive = East, Negative = West",
         )
 
+    st.caption(
+        "💡 Tip: use the ▲▼ arrows to adjust by 0.00001° "
+        "(≈ 1 meter precision) — or type values directly."
+    )
+
     st.markdown("---")
+
     c1, c2 = st.columns(2)
     with c1:
         if st.button("✅ OK", use_container_width=True, type="primary", key="dialog_ok"):
