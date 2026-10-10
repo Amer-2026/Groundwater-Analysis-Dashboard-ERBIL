@@ -1684,22 +1684,24 @@ def main():
         }
         
         /* ===== Specify Location button — white bg, purple text ===== */
-        div.stButton > button[key="open_specify_location"] {
+        div[data-testid="stButton"] button[key="open_specify_location"] {
             background-color: #ffffff !important;
+            background: #ffffff !important;
             color: #696eff !important;
             border: 2px solid #e81cff !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
         }
-        div.stButton > button[key="open_specify_location"] p,
-        div.stButton > button[key="open_specify_location"] span,
-        div.stButton > button[key="open_specify_location"] div {
+        div[data-testid="stButton"] button[key="open_specify_location"] * {
             color: #696eff !important;
+            background-color: transparent !important;
         }
-        div.stButton > button[key="open_specify_location"]:hover {
+        div[data-testid="stButton"] button[key="open_specify_location"]:hover {
             background-color: #f0f0f0 !important;
+            background: #f0f0f0 !important;
+        }
+        div[data-testid="stButton"] button[key="open_specify_location"]:hover * {
             color: #696eff !important;
-            border-color: #e81cff !important;
         }
     </style>
     """,
