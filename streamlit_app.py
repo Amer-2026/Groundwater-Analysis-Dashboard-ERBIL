@@ -1920,7 +1920,17 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    st.markdown(f"### 🗺️ {t('interactive_map')}")
+                    # Map header row: title on left, Specify Location button on right
+                    _h_col1, _h_col2 = st.columns([3, 1])
+                    with _h_col1:
+                        st.markdown(f"### 🗺️ {t('interactive_map')}")
+                    with _h_col2:
+                        if st.button(
+                            "📍 Specify Location",
+                            key="open_specify_location",
+                            use_container_width=True,
+                        ):
+                            specify_location_dialog()
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
@@ -1986,13 +1996,7 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # ---- Specify Location button ----
-                    if st.button(
-                        "📍 Specify Location",
-                        key="open_specify_location",
-                        use_container_width=True,
-                    ):
-                        specify_location_dialog()
+
 
                     # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                     drawings = map_data.get("all_drawings") or []
