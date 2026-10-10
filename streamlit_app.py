@@ -1986,16 +1986,13 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # ---- Hidden Specify Location trigger ----
-                    # Rendered inside st.empty() so it takes zero visual space.
-                    # The in-map button triggers this via JavaScript.
-                    _hidden_trigger = st.empty()
-                    with _hidden_trigger.container():
-                        if st.button(
-                            "trigger_specify_dialog",
-                            key="open_specify_location",
-                        ):
-                            specify_location_dialog()
+                    # ---- Specify Location button ----
+                    if st.button(
+                        "📍 Specify Location",
+                        key="open_specify_location",
+                        use_container_width=True,
+                    ):
+                        specify_location_dialog()
 
                     # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                     drawings = map_data.get("all_drawings") or []
