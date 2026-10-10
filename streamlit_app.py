@@ -542,41 +542,7 @@ def create_base_map(center_lat, center_lon, zoom):
     </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
-        # ===== Custom "Specify Location" button inside the map =====
-    search_btn_html = """
-    <style>
-    #custom-search-btn {
-        position: absolute;
-        top: 10px;
-        right: 60px;
-        z-index: 1000;
-        background: #ffffff;
-        border: 2px solid #b2afa9;
-        border-radius: 8px;
-        padding: 8px 14px;
-        color: #1a0a2e;
-        font-weight: 600;
-        font-size: 13px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: all 0.2s ease;
-        font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
-        white-space: nowrap;
-        pointer-events: auto;
-    }
-    #custom-search-btn:hover {
-        background: #f0f0f0;
-        box-shadow: 0 0 12px rgba(232, 28, 255, 0.6);
-    }
-    </style>
-    <div id="custom-search-btn">
-        📍 Specify Location
-    </div>
-    """
-    m.get_root().html.add_child(folium.Element(search_btn_html))
+
 
     return m
 def add_ee_layer(map_obj, ee_image, vis_params, name):
@@ -1125,40 +1091,7 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-        # ===== JavaScript: hide the trigger button by its text =====
-    st.markdown(
-        """
-        <script>
-        (function() {
-            function hideTrigger() {
-                const buttons = document.querySelectorAll('button');
-                for (const b of buttons) {
-                    if (b.innerText.trim() === 'trigger_specify_dialog') {
-                        b.style.setProperty('display', 'none', 'important');
-                        b.style.setProperty('visibility', 'hidden', 'important');
-                        b.style.setProperty('height', '0', 'important');
-                        b.style.setProperty('width', '0', 'important');
-                        b.style.setProperty('padding', '0', 'important');
-                        b.style.setProperty('margin', '0', 'important');
-                        b.style.setProperty('position', 'absolute', 'important');
-                        b.style.setProperty('left', '-9999px', 'important');
-                        let parent = b.parentElement;
-                        for (let i = 0; i < 4 && parent; i++) {
-                            parent.style.setProperty('display', 'none', 'important');
-                            parent = parent.parentElement;
-                        }
-                    }
-                }
-            }
-            hideTrigger();
-            setTimeout(hideTrigger, 500);
-            setTimeout(hideTrigger, 1500);
-            setTimeout(hideTrigger, 3000);
-        })();
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
+
 
     # ============================================================
     # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
