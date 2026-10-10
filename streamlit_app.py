@@ -1125,6 +1125,40 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
+        # ===== JavaScript: hide the trigger button by its text =====
+    st.markdown(
+        """
+        <script>
+        (function() {
+            function hideTrigger() {
+                const buttons = document.querySelectorAll('button');
+                for (const b of buttons) {
+                    if (b.innerText.trim() === 'trigger_specify_dialog') {
+                        b.style.setProperty('display', 'none', 'important');
+                        b.style.setProperty('visibility', 'hidden', 'important');
+                        b.style.setProperty('height', '0', 'important');
+                        b.style.setProperty('width', '0', 'important');
+                        b.style.setProperty('padding', '0', 'important');
+                        b.style.setProperty('margin', '0', 'important');
+                        b.style.setProperty('position', 'absolute', 'important');
+                        b.style.setProperty('left', '-9999px', 'important');
+                        let parent = b.parentElement;
+                        for (let i = 0; i < 4 && parent; i++) {
+                            parent.style.setProperty('display', 'none', 'important');
+                            parent = parent.parentElement;
+                        }
+                    }
+                }
+            }
+            hideTrigger();
+            setTimeout(hideTrigger, 500);
+            setTimeout(hideTrigger, 1500);
+            setTimeout(hideTrigger, 3000);
+        })();
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # ============================================================
     # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
