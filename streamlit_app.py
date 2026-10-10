@@ -1682,10 +1682,29 @@ def main():
             padding: 0 !important;
             visibility: hidden !important;
         }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+        
+        /* ===== Specify Location button — white bg, purple text ===== */
+        div.stButton > button[key="open_specify_location"] {
+            background-color: #ffffff !important;
+            color: #696eff !important;
+            border: 2px solid #e81cff !important;
+            border-radius: 8px !important;
+            font-weight: 700 !important;
+        }
+        div.stButton > button[key="open_specify_location"] p,
+        div.stButton > button[key="open_specify_location"] span,
+        div.stButton > button[key="open_specify_location"] div {
+            color: #696eff !important;
+        }
+        div.stButton > button[key="open_specify_location"]:hover {
+            background-color: #f0f0f0 !important;
+            color: #696eff !important;
+            border-color: #e81cff !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
