@@ -1699,25 +1699,21 @@ def main():
             overflow: hidden !important;
             box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
-        /* ===== Specify Location button — white with purple border ===== */
-        /* High-specificity override to beat the general .stButton rule */
-        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]),
-        div[class*="st-key-open_specify_location"] .stButton > button:not([kind="primary"]) {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border: 2px solid #e81cff !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            padding: 0.5rem 1rem !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
-            transition: all 0.2s ease !important;
-        }
-        div[class*="st-key-specify_location_wrap"] .stButton > button:not([kind="primary"]):hover,
-        div[class*="st-key-open_specify_location"] .stButton > button:not([kind="primary"]):hover {
-            background-color: #f0f0f0 !important;
-            color: #1a0a2e !important;
-            border-color: #e81cff !important;
-            box-shadow: 0 0 12px rgba(232, 28, 255, 0.6) !important;
+        /* ===== Hide the hidden Specify Location trigger ===== */
+        body div[class*="st-key-hidden_specify_trigger"],
+        body div[class*="st-key-hidden_specify_trigger"] > div,
+        body div[class*="st-key-hidden_specify_trigger"] > div > div,
+        body div.stVerticalBlock[class*="st-key-hidden_specify_trigger"],
+        html body div[class*="st-key-hidden_specify_trigger"],
+        html body div[class*="st-key-hidden_specify_trigger"] > div,
+        html body div[class*="st-key-hidden_specify_trigger"] > div > div > div {
+            display: none !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            visibility: hidden !important;
         }
         </style>
         """,
