@@ -2020,8 +2020,10 @@ def main():
                     )
 
                     # ---- Hidden Specify Location trigger ----
-                    # Hidden button — the in-map "Specify Location" button triggers it via JS
-                    with st.container(key="hidden_specify_trigger"):
+                    # Rendered inside st.empty() so it takes zero visual space.
+                    # The in-map button triggers this via JavaScript.
+                    _hidden_trigger = st.empty()
+                    with _hidden_trigger.container():
                         if st.button(
                             "trigger_specify_dialog",
                             key="open_specify_location",
