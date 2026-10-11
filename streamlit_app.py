@@ -1753,6 +1753,63 @@ def main():
         div[data-testid="stButton"] button[key="open_specify_location"]:hover * {
             color: #000000 !important;
         }
+        /* ===== Specify Location DIALOG — white bg, black text ===== */
+        div[role="dialog"],
+        div[data-testid="stModal"],
+        div[data-testid="stDialog"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+        div[role="dialog"] h1,
+        div[role="dialog"] h2,
+        div[role="dialog"] h3,
+        div[role="dialog"] h4,
+        div[data-testid="stModal"] h1,
+        div[data-testid="stModal"] h2,
+        div[data-testid="stModal"] h3,
+        div[data-testid="stDialog"] h1,
+        div[data-testid="stDialog"] h2,
+        div[data-testid="stDialog"] h3 {
+            color: #000000 !important;
+        }
+        div[role="dialog"] p,
+        div[role="dialog"] span,
+        div[role="dialog"] label,
+        div[role="dialog"] .stMarkdown,
+        div[data-testid="stModal"] p,
+        div[data-testid="stModal"] span,
+        div[data-testid="stModal"] label,
+        div[data-testid="stModal"] .stMarkdown,
+        div[data-testid="stDialog"] p,
+        div[data-testid="stDialog"] span,
+        div[data-testid="stDialog"] label,
+        div[data-testid="stDialog"] .stMarkdown {
+            color: #000000 !important;
+        }
+        div[role="dialog"] input,
+        div[data-testid="stModal"] input,
+        div[data-testid="stDialog"] input {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #c6c5c1 !important;
+        }
+        div[role="dialog"] div[data-baseweb="input"],
+        div[data-testid="stModal"] div[data-baseweb="input"],
+        div[data-testid="stDialog"] div[data-baseweb="input"] {
+            background-color: #ffffff !important;
+        }
+        div[role="dialog"] button[kind="secondary"],
+        div[data-testid="stModal"] button[kind="secondary"],
+        div[data-testid="stDialog"] button[kind="secondary"] {
+            background-color: #f0f0f0 !important;
+            color: #000000 !important;
+            border: 1px solid #c6c5c1 !important;
+        }
+        div[role="dialog"] hr,
+        div[data-testid="stModal"] hr,
+        div[data-testid="stDialog"] hr {
+            border-color: #c6c5c1 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
