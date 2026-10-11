@@ -1741,9 +1741,10 @@ def main():
             min-height: 32px !important;
             height: 32px !important;
         }
-        div[data-testid="stButton"] button[key="open_specify_location"] * {
+        div[data-testid="stButton"] button[key="open_specify_location"] p,
+        div[data-testid="stButton"] button[key="open_specify_location"] span,
+        div[data-testid="stButton"] button[key="open_specify_location"] div {
             color: #696eff !important;
-            background-color: transparent !important;
         }
         div[data-testid="stButton"] button[key="open_specify_location"]:hover {
             background-color: #f0f0f0 !important;
