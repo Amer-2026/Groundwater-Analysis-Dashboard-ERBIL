@@ -1091,6 +1091,39 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
+        # ===== JavaScript: override the Specify Location button colors =====
+    st.markdown(
+        """
+        <script>
+        (function() {
+            function styleButton() {
+                const buttons = document.querySelectorAll('button');
+                for (const b of buttons) {
+                    const key = b.getAttribute('key');
+                    const text = b.innerText.trim();
+                    if (key === 'open_specify_location' || text === '📍 Specify Location') {
+                        b.style.setProperty('background-color', '#ffffff', 'important');
+                        b.style.setProperty('background', '#ffffff', 'important');
+                        b.style.setProperty('color', '#696eff', 'important');
+                        b.style.setProperty('border', '2px solid #e81cff', 'important');
+                        b.style.setProperty('border-radius', '8px', 'important');
+                        b.style.setProperty('font-weight', '700', 'important');
+                        b.querySelectorAll('*').forEach(el => {
+                            el.style.setProperty('color', '#696eff', 'important');
+                            el.style.setProperty('background-color', 'transparent', 'important');
+                        });
+                    }
+                }
+            }
+            styleButton();
+            setTimeout(styleButton, 300);
+            setTimeout(styleButton, 1000);
+            setTimeout(styleButton, 2500);
+        })();
+        </script>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
     # ============================================================
