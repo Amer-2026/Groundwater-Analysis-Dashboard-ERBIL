@@ -1110,6 +1110,9 @@ def main():
                             b.style.setProperty('border', '2px solid #e81cff', 'important');
                             b.style.setProperty('border-radius', '8px', 'important');
                             b.style.setProperty('font-weight', '700', 'important');
+                            b.style.setProperty('padding', '0.3rem 0.8rem', 'important');
+                            b.style.setProperty('min-height', '32px', 'important');
+                            b.style.setProperty('height', '32px', 'important');
                             b.querySelectorAll('*').forEach(el => {
                                 el.style.setProperty('color', '#696eff', 'important');
                                 el.style.setProperty('background-color', 'transparent', 'important');
