@@ -1992,7 +1992,6 @@ def main():
                         if st.button(
                             "📍 Specify Location",
                             key="open_specify_location",
-                            use_container_width=True,
                         ):
                             specify_location_dialog()
 
