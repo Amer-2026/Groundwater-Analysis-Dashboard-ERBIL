@@ -1985,7 +1985,7 @@ def main():
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
-                    _h_col1, _h_col2 = st.columns([3, 1])
+                    _h_col1, _h_col2 = st.columns([5, 1])
                     with _h_col1:
                         st.markdown(f"### 🗺️ {t('interactive_map')}")
                     with _h_col2:
