@@ -1729,12 +1729,12 @@ def main():
             visibility: hidden !important;
         }
         
-        /* ===== Specify Location button — white bg, purple text ===== */
+        /* ===== Specify Location button — white bg, black text ===== */
         div[data-testid="stButton"] button[key="open_specify_location"] {
             background-color: #ffffff !important;
             background: #ffffff !important;
-            color: #696eff !important;
-            border: 2px solid #e81cff !important;
+            color: #000000 !important;
+            border: 2px solid #c6c5c1 !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
             padding: 0.3rem 0.8rem !important;
@@ -1744,14 +1744,14 @@ def main():
         div[data-testid="stButton"] button[key="open_specify_location"] p,
         div[data-testid="stButton"] button[key="open_specify_location"] span,
         div[data-testid="stButton"] button[key="open_specify_location"] div {
-            color: #696eff !important;
+            color: #000000 !important;
         }
         div[data-testid="stButton"] button[key="open_specify_location"]:hover {
             background-color: #f0f0f0 !important;
             background: #f0f0f0 !important;
         }
         div[data-testid="stButton"] button[key="open_specify_location"]:hover * {
-            color: #696eff !important;
+            color: #000000 !important;
         }
     </style>
     """,
