@@ -1137,6 +1137,82 @@ def main():
         """,
         height=0,
     )
+        # ===== JavaScript: style the Specify Location dialog =====
+    components.html(
+        """
+        <script>
+        (function() {
+            const dialogCss = `
+                [data-testid="stDialog"],
+                [role="dialog"],
+                .stDialog {
+                    background-color: #ffffff !important;
+                    color: #000000 !important;
+                }
+                [data-testid="stDialog"] *,
+                [role="dialog"] * {
+                    color: #000000 !important;
+                }
+                [data-testid="stDialog"] h1,
+                [data-testid="stDialog"] h2,
+                [data-testid="stDialog"] h3,
+                [data-testid="stDialog"] h4 {
+                    color: #000000 !important;
+                }
+                [data-testid="stDialog"] input {
+                    background-color: #ffffff !important;
+                    color: #000000 !important;
+                    border: 1px solid #c6c5c1 !important;
+                }
+                [data-testid="stDialog"] div[data-baseweb="input"] {
+                    background-color: #ffffff !important;
+                }
+                [data-testid="stDialog"] button[kind="secondary"] {
+                    background-color: #f0f0f0 !important;
+                    color: #000000 !important;
+                    border: 1px solid #c6c5c1 !important;
+                }
+                [data-testid="stDialog"] hr {
+                    border-color: #c6c5c1 !important;
+                }
+            `;
+
+            function injectDialogCss() {
+                try {
+                    const parentDoc = window.parent.document;
+                    const iframes = parentDoc.querySelectorAll('iframe');
+                    for (const iframe of iframes) {
+                        try {
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            if (!iframeDoc) continue;
+                            if (iframeDoc.querySelector('[data-testid="stDialog"], [role="dialog"], .stDialog')) {
+                                if (!iframeDoc.getElementById('dialog-styler')) {
+                                    const styleEl = iframeDoc.createElement('style');
+                                    styleEl.id = 'dialog-styler';
+                                    styleEl.textContent = dialogCss;
+                                    iframeDoc.head.appendChild(styleEl);
+                                }
+                            }
+                        } catch (e) {
+                            // Cross-origin iframe — skip
+                        }
+                    }
+                } catch (e) {
+                    console.log('Dialog CSS inject error:', e);
+                }
+            }
+
+            injectDialogCss();
+            setTimeout(injectDialogCss, 500);
+            setTimeout(injectDialogCss, 1000);
+            setTimeout(injectDialogCss, 2000);
+            setTimeout(injectDialogCss, 3500);
+            setTimeout(injectDialogCss, 5000);
+        })();
+        </script>
+        """,
+        height=0,
+    )
 
 
     # ============================================================
