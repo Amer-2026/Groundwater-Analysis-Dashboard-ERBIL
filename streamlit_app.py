@@ -22,6 +22,7 @@ import folium
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 from folium.plugins import Fullscreen, MousePosition, Draw
 from streamlit_folium import st_folium
 
@@ -1091,38 +1092,47 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-        # ===== JavaScript: override the Specify Location button colors =====
-    st.markdown(
+    # ===== JavaScript: override the Specify Location button colors =====
+    # components.html() is used because st.markdown strips <script> tags.
+    components.html(
         """
         <script>
         (function() {
-            function styleButton() {
-                const buttons = document.querySelectorAll('button');
-                for (const b of buttons) {
-                    const key = b.getAttribute('key');
-                    const text = b.innerText.trim();
-                    if (key === 'open_specify_location' || text === '📍 Specify Location') {
-                        b.style.setProperty('background-color', '#ffffff', 'important');
-                        b.style.setProperty('background', '#ffffff', 'important');
-                        b.style.setProperty('color', '#696eff', 'important');
-                        b.style.setProperty('border', '2px solid #e81cff', 'important');
-                        b.style.setProperty('border-radius', '8px', 'important');
-                        b.style.setProperty('font-weight', '700', 'important');
-                        b.querySelectorAll('*').forEach(el => {
-                            el.style.setProperty('color', '#696eff', 'important');
-                            el.style.setProperty('background-color', 'transparent', 'important');
-                        });
+            function styleButton(doc) {
+                try {
+                    const buttons = doc.querySelectorAll('button');
+                    for (const b of buttons) {
+                        const text = b.innerText.trim();
+                        if (text === '📍 Specify Location') {
+                            b.style.setProperty('background-color', '#ffffff', 'important');
+                            b.style.setProperty('background', '#ffffff', 'important');
+                            b.style.setProperty('color', '#696eff', 'important');
+                            b.style.setProperty('border', '2px solid #e81cff', 'important');
+                            b.style.setProperty('border-radius', '8px', 'important');
+                            b.style.setProperty('font-weight', '700', 'important');
+                            b.querySelectorAll('*').forEach(el => {
+                                el.style.setProperty('color', '#696eff', 'important');
+                                el.style.setProperty('background-color', 'transparent', 'important');
+                            });
+                        }
                     }
+                } catch (e) {
+                    console.log('styleButton error:', e);
                 }
             }
-            styleButton();
-            setTimeout(styleButton, 300);
-            setTimeout(styleButton, 1000);
-            setTimeout(styleButton, 2500);
+            function run() {
+                styleButton(document);
+                try { styleButton(window.parent.document); } catch (e) {}
+            }
+            run();
+            setTimeout(run, 300);
+            setTimeout(run, 1000);
+            setTimeout(run, 2500);
+            setTimeout(run, 4000);
         })();
         </script>
         """,
-        unsafe_allow_html=True,
+        height=0,
     )
 
 
