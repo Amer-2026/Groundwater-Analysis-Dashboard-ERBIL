@@ -1734,6 +1734,9 @@ def main():
             border: 2px solid #e81cff !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
+            padding: 0.3rem 0.8rem !important;
+            min-height: 32px !important;
+            height: 32px !important;
         }
         div[data-testid="stButton"] button[key="open_specify_location"] * {
             color: #696eff !important;
