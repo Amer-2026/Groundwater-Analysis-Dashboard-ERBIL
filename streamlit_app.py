@@ -1106,15 +1106,15 @@ def main():
                         if (text === '📍 Specify Location') {
                             b.style.setProperty('background-color', '#ffffff', 'important');
                             b.style.setProperty('background', '#ffffff', 'important');
-                            b.style.setProperty('color', '#696eff', 'important');
-                            b.style.setProperty('border', '2px solid #e81cff', 'important');
+                            b.style.setProperty('color', '#000000', 'important');
+                            b.style.setProperty('border', '2px solid #c6c5c1', 'important');
                             b.style.setProperty('border-radius', '8px', 'important');
                             b.style.setProperty('font-weight', '700', 'important');
                             b.style.setProperty('padding', '0.3rem 0.8rem', 'important');
                             b.style.setProperty('min-height', '32px', 'important');
                             b.style.setProperty('height', '32px', 'important');
                             b.querySelectorAll('*').forEach(el => {
-                                el.style.setProperty('color', '#696eff', 'important');
+                                el.style.setProperty('color', '#000000', 'important');
                                 el.style.setProperty('background-color', 'transparent', 'important');
                             });
                         }
