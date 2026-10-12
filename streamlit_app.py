@@ -2360,29 +2360,29 @@ def main():
             }
         }
 
-        (function() {
-            function attachHandlers() {
-                try {
-                    const parentDoc = window.parent.document;
-                    const buttons = parentDoc.querySelectorAll('button');
-                    for (const b of buttons) {
-                        const text = b.innerText.trim();
-                        if (text === '📍 Specify Location' && !b.dataset.modalAttached) {
-                            b.dataset.modalAttached = 'true';
-                            b.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                openModal();
-                            }, true);
-                        }
+        // Poll continuously to attach handler to the button in the parent page
+        setInterval(function() {
+            try {
+                const parentDoc = window.parent.document;
+                const buttons = parentDoc.querySelectorAll('button');
+                for (const b of buttons) {
+                    const text = b.innerText.trim();
+                    if (text === '📍 Specify Location' && !b.dataset.modalAttached) {
+                        b.dataset.modalAttached = 'true';
+                        b.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const modal = document.getElementById('custom-location-modal');
+                            if (modal) {
+                                modal.classList.add('open');
+                            } else {
+                                console.log('Modal element not found');
+                            }
+                        }, true);
                     }
-                } catch (e) {}
-            }
-            attachHandlers();
-            setTimeout(attachHandlers, 500);
-            setTimeout(attachHandlers, 1500);
-            setTimeout(attachHandlers, 3000);
-        })();
+                }
+            } catch (e) {}
+        }, 500);
         </script>
         """,
         height=0,
