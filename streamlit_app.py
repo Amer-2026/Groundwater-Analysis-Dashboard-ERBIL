@@ -1942,7 +1942,7 @@ def main():
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
-                    _h_col1, _h_col2 = st.columns([5 , 1])
+                    _h_col1, _h_col2 = st.columns([4 , 1])
                     with _h_col2:
                         # Button's click is intercepted by JS to open the custom modal
                         st.button(
