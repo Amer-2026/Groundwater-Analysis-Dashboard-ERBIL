@@ -1942,7 +1942,7 @@ def main():
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
-                    _h_col1, _h_col2 = st.columns([4, 1.2])
+                    _h_col1, _h_col2 = st.columns([4.5, 1.2])
                     with _h_col1:
                         st.markdown(
                             f"<h3 style='margin:0; padding-top:4px;'>🗺️ {t('interactive_map')}</h3>",
