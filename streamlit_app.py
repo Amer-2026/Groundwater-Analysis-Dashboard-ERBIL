@@ -2385,7 +2385,7 @@ def main():
         }, 500);
         </script>
         """,
-        height=0,
+        height=1,
     )
 
     # ---- Footer ----
