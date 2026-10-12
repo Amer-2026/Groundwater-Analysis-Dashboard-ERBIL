@@ -1057,9 +1057,11 @@ def main():
                             b.style.setProperty('border', '2px solid #c6c5c1', 'important');
                             b.style.setProperty('border-radius', '8px', 'important');
                             b.style.setProperty('font-weight', '700', 'important');
-                            b.style.setProperty('padding', '0.3rem 0.8rem', 'important');
-                            b.style.setProperty('min-height', '32px', 'important');
-                            b.style.setProperty('height', '32px', 'important');
+                            b.style.setProperty('padding', '0.2rem 0.7rem', 'important');
+                            b.style.setProperty('min-height', '26px', 'important');
+                            b.style.setProperty('height', '26px', 'important');
+                            b.style.setProperty('font-size', '13px', 'important');
+                            b.style.setProperty('line-height', '1', 'important');
                             b.querySelectorAll('*').forEach(el => {
                                 el.style.setProperty('color', '#000000', 'important');
                                 el.style.setProperty('background-color', 'transparent', 'important');
