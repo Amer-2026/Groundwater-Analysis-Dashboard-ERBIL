@@ -1942,12 +1942,17 @@ def main():
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
-                    _h_col1, _h_col2 = st.columns([4 , 1])
+                    _h_col1, _h_col2 = st.columns([3, 1.2])
+                    with _h_col1:
+                        st.markdown(
+                            f"<h3 style='margin:0; padding-top:4px;'>🗺️ {t('interactive_map')}</h3>",
+                            unsafe_allow_html=True,
+                        )
                     with _h_col2:
-                        # Button's click is intercepted by JS to open the custom modal
                         st.button(
                             "📍 Specify Location",
                             key="open_specify_location",
+                            use_container_width=True,
                         )
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
