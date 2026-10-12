@@ -1943,14 +1943,12 @@ def main():
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
                     _h_col1, _h_col2 = st.columns([5 , 1])
-                    with _h_col1:
-                        st.markdown(f"### 🗺️ {t('interactive_map')}")
                     with _h_col2:
-                        if st.button(
+                        # Button's click is intercepted by JS to open the custom modal
+                        st.button(
                             "📍 Specify Location",
                             key="open_specify_location",
-                        ):
-                            specify_location_dialog()
+                        )
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
@@ -2211,6 +2209,184 @@ def main():
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
                 st.error(traceback.format_exc())
+
+    # ===== Custom HTML Modal for Specify Location =====
+    components.html(
+        """
+        <style>
+        #custom-location-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999999;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
+        }
+        #custom-location-modal.open {
+            display: flex;
+        }
+        #custom-location-modal .modal-box {
+            background: #ffffff;
+            color: #1a0a2e;
+            border-radius: 12px;
+            padding: 24px 28px;
+            min-width: 380px;
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        #custom-location-modal h2 {
+            margin: 0 0 6px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a0a2e;
+        }
+        #custom-location-modal .subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 18px;
+        }
+        #custom-location-modal .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+        #custom-location-modal label {
+            width: 90px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1a0a2e;
+        }
+        #custom-location-modal input[type="number"] {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #c6c5c1;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #1a0a2e;
+            background: #ffffff;
+            outline: none;
+        }
+        #custom-location-modal input[type="number"]:focus {
+            border-color: #696eff;
+            box-shadow: 0 0 0 2px rgba(105, 110, 255, 0.2);
+        }
+        #custom-location-modal .btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        #custom-location-modal button {
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+        #custom-location-modal .btn-cancel {
+            background: #ffffff;
+            color: #1a0a2e;
+            border: 1px solid #c6c5c1;
+        }
+        #custom-location-modal .btn-cancel:hover {
+            background: #f0f0f0;
+        }
+        #custom-location-modal .btn-ok {
+            background: #a8f368;
+            color: #1a0a2e;
+        }
+        #custom-location-modal .btn-ok:hover {
+            background: #8fd154;
+        }
+        #custom-location-modal .close-x {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            padding: 4px 8px;
+        }
+        #custom-location-modal .close-x:hover {
+            color: #1a0a2e;
+        }
+        </style>
+
+        <div id="custom-location-modal">
+            <div class="modal-box">
+                <button class="close-x" onclick="closeModal()">✕</button>
+                <h2>📍 Specify Location</h2>
+                <div class="subtitle">Enter coordinates in Decimal Degrees (DD).<br>Example: 36.19120, 44.00940</div>
+                <div class="row">
+                    <label>Latitude:</label>
+                    <input type="number" id="modal-lat" step="0.00001" value="36.19" />
+                </div>
+                <div class="row">
+                    <label>Longitude:</label>
+                    <input type="number" id="modal-lng" step="0.00001" value="44.01" />
+                </div>
+                <div class="btn-row">
+                    <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button class="btn-ok" onclick="submitModal()">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function openModal() {
+            document.getElementById('custom-location-modal').classList.add('open');
+        }
+        function closeModal() {
+            document.getElementById('custom-location-modal').classList.remove('open');
+        }
+        function submitModal() {
+            const lat = document.getElementById('modal-lat').value;
+            const lng = document.getElementById('modal-lng').value;
+            try {
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('lat', lat);
+                url.searchParams.set('lng', lng);
+                window.parent.location.href = url.toString();
+            } catch (e) {
+                console.log('Modal submit error:', e);
+            }
+        }
+
+        (function() {
+            function attachHandlers() {
+                try {
+                    const parentDoc = window.parent.document;
+                    const buttons = parentDoc.querySelectorAll('button');
+                    for (const b of buttons) {
+                        const text = b.innerText.trim();
+                        if (text === '📍 Specify Location' && !b.dataset.modalAttached) {
+                            b.dataset.modalAttached = 'true';
+                            b.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                openModal();
+                            }, true);
+                        }
+                    }
+                } catch (e) {}
+            }
+            attachHandlers();
+            setTimeout(attachHandlers, 500);
+            setTimeout(attachHandlers, 1500);
+            setTimeout(attachHandlers, 3000);
+        })();
+        </script>
+        """,
+        height=0,
+    )
 
     # ---- Footer ----
     with st.expander(t("about_tool")):
