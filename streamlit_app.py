@@ -1084,45 +1084,7 @@ def main():
         """,
         height=0,
     )
-        # ===== JavaScript: style the Specify Location dialog =====
-    components.html(
-        """
-        <script>
-        (function() {
-            const dialogCss = `
-                [data-testid="stDialog"],
-                [role="dialog"],
-                .stDialog {
-                    background-color: #ffffff !important;
-                    color: #000000 !important;
-                }
-                [data-testid="stDialog"] *,
-                [role="dialog"] * {
-                    color: #000000 !important;
-                }
-                [data-testid="stDialog"] h1,
-                [data-testid="stDialog"] h2,
-                [data-testid="stDialog"] h3,
-                [data-testid="stDialog"] h4 {
-                    color: #000000 !important;
-                }
-                [data-testid="stDialog"] input {
-                    background-color: #ffffff !important;
-                    color: #000000 !important;
-                    border: 1px solid #c6c5c1 !important;
-                }
-                [data-testid="stDialog"] div[data-baseweb="input"] {
-                    background-color: #ffffff !important;
-                }
-                [data-testid="stDialog"] button[kind="secondary"] {
-                    background-color: #f0f0f0 !important;
-                    color: #000000 !important;
-                    border: 1px solid #c6c5c1 !important;
-                }
-                [data-testid="stDialog"] hr {
-                    border-color: #c6c5c1 !important;
-                }
-            `;
+
 
 
 
