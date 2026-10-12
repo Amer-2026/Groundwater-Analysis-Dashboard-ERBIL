@@ -1124,42 +1124,6 @@ def main():
                 }
             `;
 
-            function injectDialogCss() {
-                try {
-                    const parentDoc = window.parent.document;
-                    const iframes = parentDoc.querySelectorAll('iframe');
-                    for (const iframe of iframes) {
-                        try {
-                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                            if (!iframeDoc) continue;
-                            if (iframeDoc.querySelector('[data-testid="stDialog"], [role="dialog"], .stDialog')) {
-                                if (!iframeDoc.getElementById('dialog-styler')) {
-                                    const styleEl = iframeDoc.createElement('style');
-                                    styleEl.id = 'dialog-styler';
-                                    styleEl.textContent = dialogCss;
-                                    iframeDoc.head.appendChild(styleEl);
-                                }
-                            }
-                        } catch (e) {
-                            // Cross-origin iframe — skip
-                        }
-                    }
-                } catch (e) {
-                    console.log('Dialog CSS inject error:', e);
-                }
-            }
-
-            injectDialogCss();
-            setTimeout(injectDialogCss, 500);
-            setTimeout(injectDialogCss, 1000);
-            setTimeout(injectDialogCss, 2000);
-            setTimeout(injectDialogCss, 3500);
-            setTimeout(injectDialogCss, 5000);
-        })();
-        </script>
-        """,
-        height=0,
-    )
 
 
     # ============================================================
