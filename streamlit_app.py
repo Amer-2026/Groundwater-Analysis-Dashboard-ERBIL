@@ -2052,7 +2052,7 @@ def main():
                                         st.session_state.search_pending = True
                                         st.session_state.show_location_form = False
                                         st.rerun()
-                            with col_cancel:
+                with col_cancel:
                                     if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
                                     st.session_state.show_location_form = False
                                     st.rerun()
