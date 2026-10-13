@@ -2076,7 +2076,7 @@ def main():
                 zoom = int(cfg["zoom"])
 
                     # If the user searched for a location, override the center
-                    if st.session_state.get("search_pending"):
+                if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
                         center_lat = float(_search_lat)
