@@ -2072,7 +2072,7 @@ def main():
                         return
 
                 center_lat = float(cfg["center_lat"])
-                    center_lon = float(cfg["center_lon"])
+                center_lon = float(cfg["center_lon"])
                     zoom = int(cfg["zoom"])
 
                     # If the user searched for a location, override the center
