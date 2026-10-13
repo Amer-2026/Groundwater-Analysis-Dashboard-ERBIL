@@ -1077,10 +1077,13 @@ def main():
                 try { styleButton(window.parent.document); } catch (e) {}
             }
             run();
-            setTimeout(run, 300);
-            setTimeout(run, 1000);
-            setTimeout(run, 2500);
-            setTimeout(run, 4000);
+            // Poll frequently for the first few seconds, then slow down
+            let __styleInterval = setInterval(run, 150);
+            setTimeout(function() {
+                clearInterval(__styleInterval);
+                // Keep checking every 500ms forever (cheap and reliable)
+                setInterval(run, 500);
+            }, 5000);
         })();
         </script>
         """,
@@ -1680,18 +1683,36 @@ def main():
             visibility: hidden !important;
         }
         
+
         /* ===== Specify Location button — white bg, black text ===== */
         div[data-testid="stButton"] button[key="open_specify_location"] {
+           background-color: #ffffff !important;
+           background: #ffffff !important;
+           color: #000000 !important;
+           border: 2px solid #c6c5c1 !important;
+           border-radius: 8px !important;
+           font-weight: 700 !important;
+           padding: 0.3rem 0.8rem !important;
+           min-height: 32px !important;
+           height: 32px !important;
+       }
+               /* Higher-specificity override to beat Streamlit's default button */
+        html body div[data-testid="stButton"] > button[key="open_specify_location"],
+        html body div.stButton > button[key="open_specify_location"],
+        html body button[key="open_specify_location"] {
             background-color: #ffffff !important;
             background: #ffffff !important;
             color: #000000 !important;
             border: 2px solid #c6c5c1 !important;
             border-radius: 8px !important;
             font-weight: 700 !important;
-            padding: 0.3rem 0.8rem !important;
-            min-height: 32px !important;
-            height: 32px !important;
+            padding: 0.2rem 0.7rem !important;
+            min-height: 26px !important;
+            height: 26px !important;
+            font-size: 13px !important;
+            line-height: 1 !important;
         }
+       div[data-testid="stButton"] button[key="open_specify_location"] p,
         div[data-testid="stButton"] button[key="open_specify_location"] p,
         div[data-testid="stButton"] button[key="open_specify_location"] span,
         div[data-testid="stButton"] button[key="open_specify_location"] div {
