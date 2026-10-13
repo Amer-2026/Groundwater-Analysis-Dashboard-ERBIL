@@ -2067,7 +2067,7 @@ def main():
                         ),
                         None,
                     )
-    if not selected_asset:
+        if not selected_asset:
                         st.error(t("no_data_month"))
                         return
 
