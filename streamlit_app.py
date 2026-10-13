@@ -1982,7 +1982,46 @@ def main():
                         ):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
+                    # ===== Inline Location Form =====
+                    if st.session_state.get("show_location_form", False):
+                        with st.container(key="location_form_wrap"):
+                            st.markdown("### 📍 Specify Location")
+                            st.caption("Enter coordinates in Decimal Degrees (DD). Example: 36.19120, 44.00940")
 
+                            col_lat, col_lng = st.columns(2)
+                            with col_lat:
+                                lat_val = st.number_input(
+                                    "Latitude",
+                                    min_value=-90.0,
+                                    max_value=90.0,
+                                    value=float(st.session_state.get("search_lat") or 36.19),
+                                    step=0.00001,
+                                    format="%.5f",
+                                    key="inline_lat",
+                                )
+                            with col_lng:
+                                lng_val = st.number_input(
+                                    "Longitude",
+                                    min_value=-180.0,
+                                    max_value=180.0,
+                                    value=float(st.session_state.get("search_lng") or 44.01),
+                                    step=0.00001,
+                                    format="%.5f",
+                                    key="inline_lng",
+                                )
+
+                            col_ok, col_cancel = st.columns([1, 1])
+                            with col_ok:
+                                if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                                    st.session_state.search_lat = lat_val
+                                    st.session_state.search_lng = lng_val
+                                    st.session_state.search_pending = True
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
+                            with col_cancel:
+                                if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
