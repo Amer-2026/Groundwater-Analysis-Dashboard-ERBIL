@@ -2110,7 +2110,7 @@ def main():
                             tooltip="Searched location",
                             icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
-                    st.session_state["search_pending"] = False
+                st.session_state["search_pending"] = False
                     folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
