@@ -2046,14 +2046,14 @@ def main():
 
                        col_ok, col_cancel = st.columns([1, 1])
                 with col_ok:
-    if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
-                                    st.session_state.search_lat = lat_val
-                                    st.session_state.search_lng = lng_val
-                                    st.session_state.search_pending = True
-                                    st.session_state.show_location_form = False
-                                    st.rerun()
+                        if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                                        st.session_state.search_lat = lat_val
+                                        st.session_state.search_lng = lng_val
+                                        st.session_state.search_pending = True
+                                        st.session_state.show_location_form = False
+                                        st.rerun()
                             with col_cancel:
-                                if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                                    if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
                                     st.session_state.show_location_form = False
                                     st.rerun()
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
