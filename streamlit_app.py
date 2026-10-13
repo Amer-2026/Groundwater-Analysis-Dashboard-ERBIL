@@ -2125,7 +2125,7 @@ def main():
 
                     # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
                 drawings = map_data.get("all_drawings") or []
-                    latest = None
+                latest = None
                     for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
