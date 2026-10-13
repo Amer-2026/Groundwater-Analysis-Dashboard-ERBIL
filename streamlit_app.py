@@ -1975,11 +1975,13 @@ def main():
                             unsafe_allow_html=True,
                         )
                     with _h_col2:
-                        st.button(
+                        if st.button(
                             "📍 Specify Location",
                             key="open_specify_location",
                             use_container_width=True,
-                        )
+                        ):
+                            st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
+                            st.rerun()
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
