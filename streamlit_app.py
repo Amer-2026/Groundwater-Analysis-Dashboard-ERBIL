@@ -2056,8 +2056,8 @@ def main():
                                     if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
                                         st.session_state.show_location_form = False
                                         st.rerun()
-    selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-    selected_year_month = selected_date.strftime("%Y_%m")
+        selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+        selected_year_month = selected_date.strftime("%Y_%m")
 
                     selected_asset = next(
                         (
