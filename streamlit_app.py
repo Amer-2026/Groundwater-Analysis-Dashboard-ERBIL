@@ -2084,7 +2084,7 @@ def main():
                         zoom = 15
                         st.info(f"🔧 Applying center: lat={center_lat}, lng={center_lon}")
 
-                    m = create_base_map(center_lat, center_lon, zoom)
+                m = create_base_map(center_lat, center_lon, zoom)
                     ee_image = ee.Image(selected_asset)
 
                     opacity = st.session_state.get("opacity", 0.7)
