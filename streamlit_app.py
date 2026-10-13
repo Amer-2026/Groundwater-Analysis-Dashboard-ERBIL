@@ -2071,7 +2071,7 @@ def main():
                         st.error(t("no_data_month"))
                         return
 
-                    center_lat = float(cfg["center_lat"])
+    center_lat = float(cfg["center_lat"])
                     center_lon = float(cfg["center_lon"])
                     zoom = int(cfg["zoom"])
 
