@@ -2044,7 +2044,7 @@ def main():
                                     key="inline_lng",
                                 )
 
-                   col_ok, col_cancel = st.columns([1, 1])
+                       col_ok, col_cancel = st.columns([1, 1])
                 with col_ok:
     if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
                                     st.session_state.search_lat = lat_val
