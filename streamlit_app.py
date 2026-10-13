@@ -2413,7 +2413,7 @@ def main():
         }, 500);
         </script>
         """,
-        height=1,
+        height=500, scrolling=False,
     )
 
     # ---- Footer ----
