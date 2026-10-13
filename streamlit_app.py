@@ -2114,7 +2114,7 @@ def main():
                 folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
-                    map_data = st_folium(
+                map_data = st_folium(
                         m,
                         width=None,
                         height=850,
