@@ -1729,6 +1729,40 @@ def main():
             color: #000000 !important;
         }
 
+            /* ===== Inline Location Form — white card ===== */
+        div[class*="st-key-location_form_wrap"] {
+            background-color: #ffffff !important;
+            border: 2px solid #c6c5c1 !important;
+            border-radius: 12px !important;
+            padding: 20px 24px !important;
+            max-width: 520px !important;
+            margin-top: 12px !important;
+            margin-bottom: 16px !important;
+        }
+        div[class*="st-key-location_form_wrap"] h3,
+        div[class*="st-key-location_form_wrap"] label,
+        div[class*="st-key-location_form_wrap"] p,
+        div[class*="st-key-location_form_wrap"] .stMarkdown,
+        div[class*="st-key-location_form_wrap"] .stCaption {
+            color: #1a0a2e !important;
+        }
+        div[class*="st-key-location_form_wrap"] input[type="number"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #c6c5c1 !important;
+        }
+        div[class*="st-key-location_form_wrap"] div[data-baseweb="input"] {
+            background-color: #ffffff !important;
+        }
+        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]) {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 1px solid #c6c5c1 !important;
+            border-radius: 6px !important;
+        }
+        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
+            background-color: #f0f0f0 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
