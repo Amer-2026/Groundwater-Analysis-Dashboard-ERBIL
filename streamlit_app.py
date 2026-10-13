@@ -1032,6 +1032,9 @@ def main():
 
     if "search_pending" not in st.session_state:
         st.session_state.search_pending = False
+        
+    if "show_location_form" not in st.session_state:
+        st.session_state.show_location_form = False
 
     st.set_page_config(
         page_title=t("page_title"),
