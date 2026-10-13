@@ -2088,8 +2088,8 @@ def main():
                 ee_image = ee.Image(selected_asset)
 
                 opacity = st.session_state.get("opacity", 0.7)
-                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                    vis_params["opacity"] = opacity
+                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                vis_params["opacity"] = opacity
 
                     add_ee_layer(
                         m,
