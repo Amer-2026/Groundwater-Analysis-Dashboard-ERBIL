@@ -2132,7 +2132,7 @@ def main():
                             latest = d
                             break
 
-                    if latest:
+                if latest:
                         geom = latest["geometry"]
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
