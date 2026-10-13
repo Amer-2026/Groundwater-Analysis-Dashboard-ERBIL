@@ -2059,7 +2059,7 @@ def main():
                 selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                 selected_year_month = selected_date.strftime("%Y_%m")
 
-                    selected_asset = next(
+                selected_asset = next(
                         (
                             a
                             for a in assets
