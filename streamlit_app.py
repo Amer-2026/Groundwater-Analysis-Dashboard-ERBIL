@@ -2044,22 +2044,24 @@ def main():
                                     key="inline_lng",
                                 )
 
-                col_ok, col_cancel = st.columns([1, 1])
-                with col_ok:
-                        if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
-                                        st.session_state.search_lat = lat_val
-                                        st.session_state.search_lng = lng_val
-                                        st.session_state.search_pending = True
-                                        st.session_state.show_location_form = False
-                                        st.rerun()
-                with col_cancel:
-                                    if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
-                                        st.session_state.show_location_form = False
-                                        st.rerun()
-                selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y_%m")
+                            col_ok, col_cancel = st.columns([1, 1])
+                            with col_ok:
+                                if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                                    st.session_state.search_lat = lat_val
+                                    st.session_state.search_lng = lng_val
+                                    st.session_state.search_pending = True
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
+                            with col_cancel:
+                                if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
 
-                selected_asset = next(
+                    # ---- Build the map ----
+                    selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+                    selected_year_month = selected_date.strftime("%Y_%m")
+
+                    selected_asset = next(
                         (
                             a
                             for a in assets
@@ -2067,40 +2069,39 @@ def main():
                         ),
                         None,
                     )
-                if not selected_asset:
+                    if not selected_asset:
                         st.error(t("no_data_month"))
                         return
 
-                center_lat = float(cfg["center_lat"])
-                center_lon = float(cfg["center_lon"])
-                zoom = int(cfg["zoom"])
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    zoom = int(cfg["zoom"])
 
                     # If the user searched for a location, override the center
-                if st.session_state.get("search_pending"):
+                    if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
                         center_lat = float(_search_lat)
                         center_lon = float(_search_lng)
                         zoom = 15
-                        st.info(f"🔧 Applying center: lat={center_lat}, lng={center_lon}")
 
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
+                    m = create_base_map(center_lat, center_lon, zoom)
+                    ee_image = ee.Image(selected_asset)
 
-                opacity = st.session_state.get("opacity", 0.7)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = opacity
+                    opacity = st.session_state.get("opacity", 0.7)
+                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                    vis_params["opacity"] = opacity
 
-                add_ee_layer(
+                    add_ee_layer(
                         m,
                         ee_image,
                         vis_params,
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
                     )
-                add_colormap(m, vis_params, st.session_state.current_parameter)
-                    
-                                        # If the user searched, place a red marker at the location
-                if st.session_state.get("search_pending"):
+                    add_colormap(m, vis_params, st.session_state.current_parameter)
+
+                    # If the user searched, place a red marker at the location
+                    if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
                                 st.session_state.get("search_lat"),
@@ -2110,29 +2111,27 @@ def main():
                             tooltip="Searched location",
                             icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
-                st.session_state["search_pending"] = False
-                folium.LayerControl().add_to(m)
+                    st.session_state["search_pending"] = False
+                    folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
-                map_data = st_folium(
+                    map_data = st_folium(
                         m,
                         width=None,
                         height=850,
                         returned_objects=["all_drawings"],
                     )
 
-
-
-                    # Process the most recent drawing (Point / LineString / Polygon / Circle / Rectangle)
-                drawings = map_data.get("all_drawings") or []
-                latest = None
-                for d in reversed(drawings):  # newest first
+                    # Process the most recent drawing
+                    drawings = map_data.get("all_drawings") or []
+                    latest = None
+                    for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
                             latest = d
                             break
 
-                if latest:
+                    if latest:
                         geom = latest["geometry"]
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
@@ -2145,17 +2144,14 @@ def main():
                         if st.session_state.get("_selection_signature") != signature:
                             st.session_state["_selection_signature"] = signature
 
-                            # Store the current selection
                             st.session_state["current_selection"] = {
                                 "type": geom_type,
                                 "coordinates": coords,
                             }
 
-                            # Reset downstream data — will be filled right below
                             st.session_state.time_series_data = None
                             st.session_state.regional_summary_data = None
 
-                            # Compute time series for the drawn shape (any type)
                             sel_geom = selection_to_ee_geometry({
                                 "type": geom_type,
                                 "coordinates": coords,
@@ -2170,17 +2166,14 @@ def main():
                                         scale=100,
                                     )
                                     st.session_state.time_series_data = _ts
-
                                 except Exception as e:
                                     st.warning(f"Could not compute time series for shape: {e}")
                                     st.session_state.time_series_data = None
 
-                                # Store the "clicked" location for compatibility
                                 if geom_type == "Point":
                                     lng, lat = coords[0], coords[1]
                                     st.session_state.last_clicked = {"lat": lat, "lng": lng}
                                 else:
-                                    # For non-point shapes, use the first coordinate as a reference
                                     if geom_type == "LineString":
                                         first = coords[0]
                                     elif geom_type == "Polygon":
