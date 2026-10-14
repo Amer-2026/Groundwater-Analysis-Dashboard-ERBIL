@@ -2191,7 +2191,7 @@ def main():
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
-                st.markdown(
+                    st.markdown(
                     f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                     unsafe_allow_html=True,
                 )
