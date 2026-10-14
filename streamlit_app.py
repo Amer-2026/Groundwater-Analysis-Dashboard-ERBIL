@@ -2003,7 +2003,8 @@ def main():
         else:
             try:
                 # 50% / 50% split
-                map_col, stats_col = st.columns([1, 1])
+                with st.container(key="map_stats_row"):
+                    map_col, stats_col = st.columns([1, 1])
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
