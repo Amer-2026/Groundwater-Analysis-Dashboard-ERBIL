@@ -2011,10 +2011,10 @@ def main():
                     # Map header row: title on left, Specify Location button on right
                     _h_col1, _h_col2 = st.columns([5, 1.2])
                     with _h_col1:
-                        st.markdown(
-                            f"<h3 style='margin:0; padding-top:4px;'>🗺️ {t('interactive_map')}</h3>",
-                            unsafe_allow_html=True,
-                        )
+                    st.markdown(
+                        f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
+                        unsafe_allow_html=True,
+                    )
                     with _h_col2:
                         if st.button(
                             "📍 Specify Location",
