@@ -2191,11 +2191,10 @@ def main():
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
-                    # Statistics
-                    st.markdown(
-                        f'<div class="stats-section" style="margin-top:0;"><h3 style="margin-top:0; padding-top:4px;">📊 {t("statistics")}</h3></div>',
-                        unsafe_allow_html=True,
-                    )
+                st.markdown(
+                    f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
+                    unsafe_allow_html=True,
+                )
                     try:
                         # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
