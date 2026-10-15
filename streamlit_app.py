@@ -1773,15 +1773,22 @@ def main():
             background-color: #f0f0f0 !important;
         }
 
-        /* Remove top padding above the metric row to align with the map */
+        /* Pull the metric row up to align with the top of the map */
         div[data-testid="stMetric"] {
-            margin-top: -12px !important;
+            margin-top: -40px !important;
             padding-top: 0 !important;
         }
 
-        /* Reduce the top margin of the metric row's column container */
+        /* Remove padding on the column container holding the metrics */
         div[data-testid="column"]:has(div[data-testid="stMetric"]) {
             padding-top: 0 !important;
+            margin-top: -20px !important;
+        }
+
+        /* Also remove padding on the horizontal block that contains the metric columns */
+        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
+            padding-top: 0 !important;
+            margin-top: -20px !important;
         }
     </style>
     """,
