@@ -2144,12 +2144,19 @@ def main():
                     folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
+                     with st.container(key="map_wrap"):
                     map_data = st_folium(
                         m,
                         width=None,
                         height=850,
                         returned_objects=["all_drawings"],
                     )
+                    #map_data = st_folium(
+                    #    m,
+                    #    width=None,
+                    #    height=850,
+                    #    returned_objects=["all_drawings"],
+                    #)
 
                     # Process the most recent drawing
                     drawings = map_data.get("all_drawings") or []
