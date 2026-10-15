@@ -2240,7 +2240,7 @@ def main():
 
                         with st.container(key="stats_metrics_row"):
                         stat_cols = st.columns(3)
-                        with stat_cols[0]:
+                            with stat_cols[0]:
                             st.metric(
                                 t('minimum'),
                                 f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
