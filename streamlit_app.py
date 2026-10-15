@@ -1994,6 +1994,7 @@ def main():
                             "📍 Specify Location",
                             key="open_specify_location",
                             use_container_width=True,
+                            type="primary",       # ← Add this line
                         ):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
