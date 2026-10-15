@@ -1042,56 +1042,7 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-    # ===== JavaScript: override the Specify Location button colors =====
-    # components.html() is used because st.markdown strips <script> tags.
-    components.html(
-        """
-        <script>
-        (function() {
-            function styleButton(doc) {
-                try {
-                    const buttons = doc.querySelectorAll('button');
-                    for (const b of buttons) {
-                        const text = b.innerText.trim();
-                        if (text === '📍 Specify Location') {
-                            b.style.setProperty('background-color', '#ffffff', 'important');
-                            b.style.setProperty('background', '#ffffff', 'important');
-                            b.style.setProperty('color', '#000000', 'important');
-                            b.style.setProperty('border', '2px solid #c6c5c1', 'important');
-                            b.style.setProperty('border-radius', '8px', 'important');
-                            b.style.setProperty('font-weight', '700', 'important');
-                            b.style.setProperty('padding', '0.2rem 0.7rem', 'important');
-                            b.style.setProperty('min-height', '26px', 'important');
-                            b.style.setProperty('height', '26px', 'important');
-                            b.style.setProperty('font-size', '13px', 'important');
-                            b.style.setProperty('line-height', '1', 'important');
-                            b.querySelectorAll('*').forEach(el => {
-                                el.style.setProperty('color', '#000000', 'important');
-                                el.style.setProperty('background-color', 'transparent', 'important');
-                            });
-                        }
-                    }
-                } catch (e) {
-                    console.log('styleButton error:', e);
-                }
-            }
-            function run() {
-                styleButton(document);
-                try { styleButton(window.parent.document); } catch (e) {}
-            }
-            run();
-            // Poll frequently for the first few seconds, then slow down
-            let __styleInterval = setInterval(run, 150);
-            setTimeout(function() {
-                clearInterval(__styleInterval);
-                // Keep checking every 500ms forever (cheap and reliable)
-                setInterval(run, 500);
-            }, 5000);
-        })();
-        </script>
-        """,
-        height=0,
-    )
+
 
 
 
