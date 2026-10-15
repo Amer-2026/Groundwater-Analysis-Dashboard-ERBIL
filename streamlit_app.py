@@ -1644,8 +1644,12 @@ def main():
         }
         
 
-        /* ===== Specify Location button — matches date range picker ===== */
-        div[class*="st-key-open_specify_location"] button {
+        /* ===== Specify Location button — force light blue like date picker ===== */
+        div[class*="st-key-open_specify_location"] button,
+        div[class*="st-key-open_specify_location"] .stButton > button,
+        html body div[class*="st-key-open_specify_location"] button,
+        html body div[class*="st-key-open_specify_location"] .stButton > button,
+        html body button[key="open_specify_location"] {
             background-color: #cae9ff !important;
             background: #cae9ff !important;
             color: #0e1117 !important;
@@ -1658,17 +1662,25 @@ def main():
             font-size: 14px !important;
             line-height: 38px !important;
             box-shadow: none !important;
+            transform: none !important;
         }
 
-        div[class*="st-key-open_specify_location"] button:hover {
+        div[class*="st-key-open_specify_location"] button:hover,
+        html body div[class*="st-key-open_specify_location"] button:hover,
+        html body button[key="open_specify_location"]:hover {
             background-color: #a8d8f0 !important;
             background: #a8d8f0 !important;
             color: #0e1117 !important;
+            box-shadow: 0 2px 15px rgba(168, 216, 240, 0.4) !important;
+            transform: none !important;
         }
 
-        div[class*="st-key-open_specify_location"] button * {
+        div[class*="st-key-open_specify_location"] button *,
+        html body div[class*="st-key-open_specify_location"] button * {
             color: #0e1117 !important;
+            background-color: transparent !important;
         }
+
 
             /* ===== Inline Location Form — white card ===== */
         div[class*="st-key-location_form_wrap"] {
