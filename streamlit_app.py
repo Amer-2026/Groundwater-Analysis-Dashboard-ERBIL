@@ -2138,7 +2138,7 @@ def main():
                             ],
                             popup=f"Searched: {st.session_state.get('search_lat'):.5f}, {st.session_state.get('search_lng'):.5f}",
                             tooltip="Searched location",
-                            icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
+                        icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
                     st.session_state["search_pending"] = False
                     folium.LayerControl().add_to(m)
