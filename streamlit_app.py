@@ -1393,12 +1393,12 @@ def main():
 
         /* Add spacing between sections - using h3 tags inside divs */
         .stats-section {
-            margin-top: -25px !important;
+            margin-top: 0 !important;
         }
 
         .stats-section h3 {
-            margin-top: -25px !important;
-            padding-top: 0 !important;
+            margin-top: 0 !important;
+            padding-top: 4px !important;
             margin-bottom: 10px !important;
         }
 
