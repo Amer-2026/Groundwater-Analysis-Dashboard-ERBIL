@@ -1769,10 +1769,25 @@ def main():
         div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
         }
+                div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
+            background-color: #f0f0f0 !important;
+        }
+
+        /* Remove top padding above the metric row to align with the map */
+        div[data-testid="stMetric"] {
+            margin-top: 0 !important;
+            padding-top: 8px !important;
+        }
+
+        /* Reduce the top margin of the metric row's column container */
+        div[data-testid="column"]:has(div[data-testid="stMetric"]) {
+            padding-top: 0 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
