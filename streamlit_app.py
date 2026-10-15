@@ -1775,7 +1775,7 @@ def main():
 
         /* Remove top padding above the metric row to align with the map */
         div[data-testid="stMetric"] {
-            margin-top: -120px !important;
+            margin-top: -600px !important;
             padding-top: 0 !important;
         }
 
