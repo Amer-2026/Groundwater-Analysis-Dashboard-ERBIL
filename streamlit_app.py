@@ -2239,7 +2239,7 @@ def main():
                         mean_val = stats.get(f"{prefix}_mean")
 
                         with st.container(key="stats_metrics_row"):
-                        stat_cols = st.columns(3)
+                            stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
                                 t('minimum'),
