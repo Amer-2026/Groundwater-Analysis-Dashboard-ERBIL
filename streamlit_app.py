@@ -1693,46 +1693,30 @@ def main():
         }
         
 
-        /* ===== Specify Location button — white bg, black text ===== */
-        div[data-testid="stButton"] button[key="open_specify_location"] {
-           background-color: #ffffff !important;
-           background: #ffffff !important;
-           color: #000000 !important;
-           border: 2px solid #c6c5c1 !important;
-           border-radius: 8px !important;
-           font-weight: 700 !important;
-           padding: 0.3rem 0.8rem !important;
-           min-height: 32px !important;
-           height: 32px !important;
-       }
-               /* Higher-specificity override to beat Streamlit's default button */
-        html body div[data-testid="stButton"] > button[key="open_specify_location"],
-        html body div.stButton > button[key="open_specify_location"],
-        html body button[key="open_specify_location"] {
-            background-color: #ffffff !important;
-            background: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #c6c5c1 !important;
+        /* ===== Specify Location button — matches date range picker ===== */
+        div[class*="st-key-open_specify_location"] button {
+            background-color: #cae9ff !important;
+            background: #cae9ff !important;
+            color: #0e1117 !important;
+            border: none !important;
             border-radius: 8px !important;
-            font-weight: 700 !important;
-            padding: 0.2rem 0.7rem !important;
-            min-height: 26px !important;
-            height: 26px !important;
-            font-size: 13px !important;
-            line-height: 1 !important;
+            font-weight: 600 !important;
+            padding: 0 !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            font-size: 14px !important;
+            line-height: 38px !important;
+            box-shadow: none !important;
         }
-       div[data-testid="stButton"] button[key="open_specify_location"] p,
-        div[data-testid="stButton"] button[key="open_specify_location"] p,
-        div[data-testid="stButton"] button[key="open_specify_location"] span,
-        div[data-testid="stButton"] button[key="open_specify_location"] div {
-            color: #000000 !important;
+
+        div[class*="st-key-open_specify_location"] button:hover {
+            background-color: #a8d8f0 !important;
+            background: #a8d8f0 !important;
+            color: #0e1117 !important;
         }
-        div[data-testid="stButton"] button[key="open_specify_location"]:hover {
-            background-color: #f0f0f0 !important;
-            background: #f0f0f0 !important;
-        }
-        div[data-testid="stButton"] button[key="open_specify_location"]:hover * {
-            color: #000000 !important;
+
+        div[class*="st-key-open_specify_location"] button * {
+            color: #0e1117 !important;
         }
 
             /* ===== Inline Location Form — white card ===== */
