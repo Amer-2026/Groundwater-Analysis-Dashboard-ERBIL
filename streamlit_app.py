@@ -2238,7 +2238,7 @@ def main():
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
 
-    with st.container(key="stats_metrics_row"):
+        with st.container(key="stats_metrics_row"):
                         stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
