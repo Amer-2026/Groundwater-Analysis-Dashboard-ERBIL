@@ -1868,63 +1868,60 @@ def main():
                 st.session_state.regional_summary_data = None
                 st.rerun()
 
-    # --- Date range picker (right column) + View month dropdown (left column) ---
-    # The range is read first, then the month options are rendered in the LEFT column.
-    with nav_col_range:
-        try:
-            asset_path = cfg["asset_path"]
-            assets = get_ee_assets(asset_path)   # ✅ EE already initialized
-            if assets:
-                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-                if asset_dates:
-                    min_date, max_date = min(asset_dates), max(asset_dates)
+    # --- START DATE & END DATE ---
+    try:
+        asset_path = cfg["asset_path"]
+        assets = get_ee_assets(asset_path)
+        if assets:
+            asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+            if asset_dates:
+                min_date, max_date = min(asset_dates), max(asset_dates)
 
-                    # Initialize session range to full span on first load
-                    if st.session_state.date_range is None:
-                        st.session_state.date_range = (min_date.date(), max_date.date())
+                # Initialize session state if empty
+                if st.session_state.date_range is None:
+                    st.session_state.date_range = (min_date.date(), max_date.date())
 
-                    picked = st.date_input(
-                        t("select_date_range"),
-                        value=st.session_state.date_range,
+                # Column 4: START DATE
+                with nav_col_month:
+                    start_date = st.date_input(
+                        "START DATE",
+                        value=st.session_state.date_range[0],
                         min_value=min_date.date(),
                         max_value=max_date.date(),
-                        key="top_date_range_selector",
-                        label_visibility="collapsed",
+                        key="start_date_selector",
                     )
 
-                    # Streamlit returns a single date until both ends are picked
-                    if isinstance(picked, (tuple, list)) and len(picked) == 2:
-                        st.session_state.date_range = (picked[0], picked[1])
+                # Column 5: END DATE
+                with nav_col_range:
+                    end_date = st.date_input(
+                        "END DATE",
+                        value=st.session_state.date_range[1],
+                        min_value=min_date.date(),
+                        max_value=max_date.date(),
+                        key="end_date_selector",
+                    )
 
-                        # Clear stale cached data so charts recompute for the new range
-                        st.session_state.regional_summary_data = None
-                        st.session_state.time_series_data = None
+                # If the dates change, reset the map
+                if (start_date, end_date) != st.session_state.date_range:
+                    st.session_state.date_range = (start_date, end_date)
+                    st.session_state.regional_summary_data = None
+                    st.session_state.time_series_data = None
+                    st.session_state.map_generated = False
 
-                        # Narrow `assets` so all downstream code respects the range
-                        start_ym = picked[0].strftime("%Y_%m")
-                        end_ym = picked[1].strftime("%Y_%m")
-                        assets = [
-                            a for a in assets
-                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                        ]
+                # Filter assets based on the chosen dates
+                start_ym = start_date.strftime("%Y_%m")
+                end_ym = end_date.strftime("%Y_%m")
+                assets = [
+                    a for a in assets
+                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                ]
 
-                        # Build month options from the ranged assets
-                        ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-                        st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
-        except Exception as e:
-            st.warning(f"Could not load dates: {e}")
+                # Save the available months for the map dropdown
+                ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+                st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
-    # View month dropdown — positioned to the left of the date range
-    with nav_col_month:
-        months_for_view = st.session_state.get("ranged_months_disp") or []
-        if months_for_view:
-            with st.container(key="view_month_wrap"):
-                view_month = st.selectbox(
-                    t("view_month"),
-                    options=months_for_view,
-                    index=len(months_for_view) - 1,
-                    key="view_month_selector",
-                    label_visibility="collapsed",
+    except Exception as e:
+        st.warning(f"Could not load dates: {e}")
                 )
             st.session_state.selected_date_str = view_month
        
