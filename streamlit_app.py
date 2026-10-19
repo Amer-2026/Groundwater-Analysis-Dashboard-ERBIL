@@ -1755,12 +1755,7 @@ def main():
             padding-top: 0 !important;
             margin-top: -20px !important;
         }
-                /* Tighten the custom date buttons */
-        div[data-testid="stMarkdownContainer"]:has(#btn-start-date),
-        div[data-testid="stMarkdownContainer"]:has(#btn-end-date) {
-            margin-bottom: -15px !important; 
-            padding-bottom: 0 !important;
-        }
+
     </style>
     """,
     unsafe_allow_html=True,
