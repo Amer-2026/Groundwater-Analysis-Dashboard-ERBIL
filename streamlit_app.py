@@ -658,8 +658,17 @@ def get_image_min_max(asset_id):
 
 
 def get_vis_params(parameter, asset_id):
-    min_val, max_val = get_image_min_max(asset_id)
+    # 1. Get the palette
     palette = PALETTES.get(parameter, PALETTES["recharge"])
+    
+    # 2. FORCE the visual range for Recharge
+    if parameter == "recharge":
+        # Recharge is usually small numbers (0 to 100 mm/month)
+        # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
+        return {"min": 0, "max": 100, "palette": palette}
+        
+    # 3. For Abstraction (mm & m3), let it calculate dynamically
+    min_val, max_val = get_image_min_max(asset_id)
     return {"min": min_val, "max": max_val, "palette": palette}
 
 def selection_to_ee_geometry(selection):
