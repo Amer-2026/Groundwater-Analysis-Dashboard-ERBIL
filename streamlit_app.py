@@ -1880,46 +1880,6 @@ def main():
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
 
-                # Column 4 & 5: CUSTOM START / END DATE PICKER
-                with nav_col_month:
-                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>START DATE</p>", unsafe_allow_html=True)
-                    if st.button(f"📅 {st.session_state.date_range[0].strftime('%Y / %m / %d')}", key="btn_open_start_cal", use_container_width=True):
-                        st.session_state.active_calendar = "start"
-                        st.rerun()
-
-                with nav_col_range:
-                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>END DATE</p>", unsafe_allow_html=True)
-                    if st.button(f"📅 {st.session_state.date_range[1].strftime('%Y / %m / %d')}", key="btn_open_end_cal", use_container_width=True):
-                        st.session_state.active_calendar = "end"
-                        st.rerun()
-
-                # The Streamlit Calendar
-                if st.session_state.get("active_calendar"):
-                    st.markdown("---")
-                    st.write(f"### 📅 Target Date ({st.session_state.active_calendar.upper()})")
-                    
-                    cal_years = [str(y) for y in range(2018, 2031)]
-                    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(st.session_state.date_range[0].year if st.session_state.active_calendar == 'start' else st.session_state.date_range[1].year)))
-                    
-                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-                    sel_month = st.selectbox("Month", cal_months, index=0)
-                    
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                        if st.button("Cancel", key="cal_cancel"):
-                            st.session_state.active_calendar = None
-                            st.rerun()
-                    with col2:
-                        if st.button("Select", key="cal_select", type="primary"):
-                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
-                            if st.session_state.active_calendar == "start":
-                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
-                            else:
-                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
-                            st.session_state.active_calendar = None
-                            st.rerun()
-                    st.markdown("---")
-
 
                 # Get the dates from session state (updated by the custom calendar)
                 start_date = st.session_state.date_range[0]
