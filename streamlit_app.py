@@ -2233,7 +2233,7 @@ def main():
                         with st.spinner(t("computing")):
                     # Filter assets by the selected date range
                             if st.session_state.date_range:
-                        start_ym = st.session_state.date_range[0].strftime("%Y_%m")
+                            start_ym = st.session_state.date_range[0].strftime("%Y_%m")
                         end_ym = st.session_state.date_range[1].strftime("%Y_%m")
                         ranged_assets = [
                             a for a in assets
