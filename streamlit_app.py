@@ -1922,8 +1922,7 @@ def main():
 
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
-                )
-            st.session_state.selected_date_str = view_month
+
        
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
