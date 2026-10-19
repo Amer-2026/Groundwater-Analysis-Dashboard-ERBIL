@@ -792,14 +792,6 @@ def get_time_series_data(point, parameter, assets):
     return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
 
 
-def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
-    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
-
-    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
-    Larger `scale` (100 m) keeps it fast for areas/lines.
-    """
-    images = _collection_with_dates(assets, parameter)
-
     def compute_mean(img):
         return ee.Feature(
             None,
