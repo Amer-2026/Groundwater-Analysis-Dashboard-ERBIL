@@ -1057,25 +1057,7 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-    # ==========================================
-    # CATCH THE DATE RETURNED FROM JAVASCRIPT
-    # ==========================================
-    if "selected_date" in st.query_params and "date_type" in st.query_params:
-        new_date_str = st.query_params["selected_date"]
-        date_type = st.query_params["date_type"]
-        
-        try:
-            new_date = datetime.strptime(new_date_str, "%Y-%m-%d").date()
-            if date_type == "start":
-                st.session_state.date_range = (new_date, st.session_state.date_range[1])
-            else:
-                st.session_state.date_range = (st.session_state.date_range[0], new_date)
-            
-            # Clear the query params and reload
-            st.query_params.clear()
-            st.rerun()
-        except Exception:
-            st.query_params.clear()
+
 
 
 
@@ -1098,7 +1080,7 @@ def main():
     # ---- DARK THEME CSS ----
     st.markdown(
         """
-        
+        <style>
         /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button {
             display: none !important;
@@ -1746,8 +1728,10 @@ def main():
             border: 1px solid #c6c5c1 !important;
             border-radius: 6px !important;
         }
-
         div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
+            background-color: #f0f0f0 !important;
+        }
+                div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
         }
 
@@ -1773,7 +1757,6 @@ def main():
             padding-top: 0 !important;
             margin-top: -20px !important;
         }
-
     </style>
     """,
     unsafe_allow_html=True,
@@ -1885,81 +1868,60 @@ def main():
                 st.session_state.regional_summary_data = None
                 st.rerun()
 
-                # 1. Get available dates from Earth Engine assets
-                try:
-                    asset_path = cfg["asset_path"]
-                    assets = get_ee_assets(asset_path)
-                    if assets:
-                        asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-                        if asset_dates:
-                            min_date, max_date = min(asset_dates), max(asset_dates)
-                            
-                            # Initialize session state if empty
-                            if st.session_state.date_range is None:
-                                st.session_state.date_range = (min_date.date(), max_date.date())
-                except Exception as e:
-                    st.warning(f"Could not load dates: {e}")
+    # --- START DATE & END DATE ---
+    try:
+        asset_path = cfg["asset_path"]
+        assets = get_ee_assets(asset_path)
+        if assets:
+            asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+            if asset_dates:
+                min_date, max_date = min(asset_dates), max(asset_dates)
 
-                # 2. Display the custom buttons
+                # Initialize session state if empty
+                if st.session_state.date_range is None:
+                    st.session_state.date_range = (min_date.date(), max_date.date())
+
+                # Column 4: START DATE
                 with nav_col_month:
-                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>START DATE</p>", unsafe_allow_html=True)
-                    if st.button(f"📅 {st.session_state.date_range[0].strftime('%Y / %m / %d')}", key="btn_open_start_cal", use_container_width=True):
-                        st.session_state.active_calendar = "start"
-                        st.rerun()
+                    start_date = st.date_input(
+                        "START DATE",
+                        value=st.session_state.date_range[0],
+                        min_value=min_date.date(),
+                        max_value=max_date.date(),
+                        key="start_date_selector",
+                    )
 
+                # Column 5: END DATE
                 with nav_col_range:
-                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>END DATE</p>", unsafe_allow_html=True)
-                    if st.button(f"📅 {st.session_state.date_range[1].strftime('%Y / %m / %d')}", key="btn_open_end_cal", use_container_width=True):
-                        st.session_state.active_calendar = "end"
-                        st.rerun()
+                    end_date = st.date_input(
+                        "END DATE",
+                        value=st.session_state.date_range[1],
+                        min_value=min_date.date(),
+                        max_value=max_date.date(),
+                        key="end_date_selector",
+                    )
 
-                # 3. The Popup Dialog
-                @st.dialog("📅 Target Date")
-                def show_calendar():
-                    active = st.session_state.get("active_calendar")
-                    if not active:
-                        return
-                        
-                    st.write(f"Select new **{active.upper()} DATE**:")
-                    
-                    cal_years = [str(y) for y in range(2018, 2031)]
-                    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
-                    
-                    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
-                    
-                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-                    sel_month = st.selectbox("Month", cal_months, index=0)
-                    
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if st.button("❌ Cancel", use_container_width=True):
-                            st.session_state.active_calendar = None
-                            st.rerun()
-                    with col2:
-                        if st.button("✔ Select", type="primary", use_container_width=True):
-                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
-                            if active == "start":
-                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
-                            else:
-                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
-                            st.session_state.active_calendar = None
-                            st.rerun()
+                # If the dates change, reset the map
+                if (start_date, end_date) != st.session_state.date_range:
+                    st.session_state.date_range = (start_date, end_date)
+                    st.session_state.regional_summary_data = None
+                    st.session_state.time_series_data = None
+                    st.session_state.map_generated = False
 
-                # Trigger the popup if a button was clicked
-                if st.session_state.get("active_calendar"):
-                    show_calendar()
-
-                # 4. Filter assets based on the chosen dates for the map
-                start_date = st.session_state.date_range[0]
-                end_date = st.session_state.date_range[1]
+                # Filter assets based on the chosen dates
                 start_ym = start_date.strftime("%Y_%m")
                 end_ym = end_date.strftime("%Y_%m")
                 assets = [
                     a for a in assets
                     if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
                 ]
+
+                # Save the available months for the map dropdown
                 ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
                 st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
+
+    except Exception as e:
+        st.warning(f"Could not load dates: {e}")
 
        
 
