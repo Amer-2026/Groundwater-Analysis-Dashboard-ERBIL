@@ -1057,7 +1057,25 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-
+    # ==========================================
+    # CATCH THE DATE RETURNED FROM JAVASCRIPT
+    # ==========================================
+    if "selected_date" in st.query_params and "date_type" in st.query_params:
+        new_date_str = st.query_params["selected_date"]
+        date_type = st.query_params["date_type"]
+        
+        try:
+            new_date = datetime.strptime(new_date_str, "%Y-%m-%d").date()
+            if date_type == "start":
+                st.session_state.date_range = (new_date, st.session_state.date_range[1])
+            else:
+                st.session_state.date_range = (st.session_state.date_range[0], new_date)
+            
+            # Clear the query params and reload
+            st.query_params.clear()
+            st.rerun()
+        except Exception:
+            st.query_params.clear()
 
 
 
