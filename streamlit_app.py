@@ -579,15 +579,29 @@ UNITS = {
 def get_image_min_max(asset_id):
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    minmax = img.reduceRegion(
+    
+    # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
+    valid_img = img.updateMask(img.neq(0))
+    
+    minmax = valid_img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
         maxPixels=1e9,
+        bestEffort=True
     ).getInfo()
-    min_key = next(key for key in minmax if key.endswith("_min"))
-    max_key = next(key for key in minmax if key.endswith("_max"))
-    return minmax[min_key], minmax[max_key]
+    
+    min_key = next((key for key in minmax if key.endswith("_min")), None)
+    max_key = next((key for key in minmax if key.endswith("_max")), None)
+    
+    min_val = minmax.get(min_key) if min_key else None
+    max_val = minmax.get(max_key) if max_key else None
+    
+    # Fallback to a default range if everything is masked or min==max
+    if min_val is None or max_val is None or min_val == max_val:
+        return 0, 100  # Recharge usually falls between 0 and 100 mm
+        
+    return min_val, max_val
 
 
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
@@ -2217,24 +2231,30 @@ def main():
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
-                            # Filter assets by the selected date range
-                            if st.session_state.date_range:
-                                start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                                ranged_assets = [
-                                    a for a in assets
-                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                                ]
-                            else:
-                                ranged_assets = assets
+                    # Filter assets by the selected date range
+                    if st.session_state.date_range:
+                        start_ym = st.session_state.date_range[0].strftime("%Y_%m")
+                        end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                        ranged_assets = [
+                            a for a in assets
+                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                        ]
+                    else:
+                        ranged_assets = assets
 
-                            summary = get_regional_summary(
-                                st.session_state.current_parameter,
-                                tuple(ranged_assets),
-                                int(cfg.get("native_scale_m", 20)),
-                            )
-                            if summary:
-                                st.session_state.regional_summary_data = summary
+                    try:
+                        summary = get_regional_summary(
+                            st.session_state.current_parameter,
+                            tuple(ranged_assets),
+                            int(cfg.get("native_scale_m", 20)),
+                        )
+                        if summary:
+                            st.session_state.regional_summary_data = summary
+                        else:
+                            st.session_state.regional_summary_data = []
+                    except Exception as e:
+                        st.error(f"Error computing regional summary: {e}")
+                        st.session_state.regional_summary_data = []
 
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
