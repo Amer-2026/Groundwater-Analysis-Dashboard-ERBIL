@@ -2115,12 +2115,9 @@ def main():
                 )
 
 
-                # If the dates change, reset the map
-                if (start_date, end_date) != st.session_state.date_range:
-                    st.session_state.date_range = (start_date, end_date)
-                    st.session_state.regional_summary_data = None
-                    st.session_state.time_series_data = None
-                    st.session_state.map_generated = False
+                # Get the dates from session state (updated by the custom calendar)
+                start_date = st.session_state.date_range[0]
+                end_date = st.session_state.date_range[1]
 
                 # Filter assets based on the chosen dates
                 start_ym = start_date.strftime("%Y_%m")
