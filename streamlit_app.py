@@ -1887,24 +1887,16 @@ def main():
 
                 # Column 4 & 5: CUSTOM START / END DATE PICKER
                 with nav_col_month:
-                    st.markdown(f"""
-                        <div style="display: flex; flex-direction: column; width: 100%;">
-                            <label style="color: white; font-size: 14px; margin-bottom: 5px;">START DATE</label>
-                            <button id="btn-start-date" style="background-color: #cae9ff; color: #0e1117; border: none; border-radius: 8px; height: 38px; font-weight: 600; font-size: 14px; cursor: pointer; width: 100%;">
-                                📅 {st.session_state.date_range[0].strftime('%Y / %m / %d')}
-                            </button>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>START DATE</p>", unsafe_allow_html=True)
+                    if st.button(f"📅 {st.session_state.date_range[0].strftime('%Y / %m / %d')}", key="btn_open_start_cal", use_container_width=True):
+                        st.session_state.active_calendar = "start"
+                        st.rerun()
 
                 with nav_col_range:
-                    st.markdown(f"""
-                        <div style="display: flex; flex-direction: column; width: 100%;">
-                            <label style="color: white; font-size: 14px; margin-bottom: 5px;">END DATE</label>
-                            <button id="btn-end-date" style="background-color: #cae9ff; color: #0e1117; border: none; border-radius: 8px; height: 38px; font-weight: 600; font-size: 14px; cursor: pointer; width: 100%;">
-                                📅 {st.session_state.date_range[1].strftime('%Y / %m / %d')}
-                            </button>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("<p style='color: white; font-size: 14px; margin-bottom: 5px; margin-top: -15px;'>END DATE</p>", unsafe_allow_html=True)
+                    if st.button(f"📅 {st.session_state.date_range[1].strftime('%Y / %m / %d')}", key="btn_open_end_cal", use_container_width=True):
+                        st.session_state.active_calendar = "end"
+                        st.rerun()
 
                 # Inject the Custom Calendar Modal
                 components.html(
