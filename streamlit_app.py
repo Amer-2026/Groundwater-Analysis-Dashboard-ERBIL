@@ -1728,10 +1728,8 @@ def main():
             border: 1px solid #c6c5c1 !important;
             border-radius: 6px !important;
         }
+
         div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
-            background-color: #f0f0f0 !important;
-        }
-                div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
         }
 
@@ -1756,6 +1754,12 @@ def main():
         div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
             padding-top: 0 !important;
             margin-top: -20px !important;
+        }
+                /* Tighten the custom date buttons */
+        div[data-testid="stMarkdownContainer"]:has(#btn-start-date),
+        div[data-testid="stMarkdownContainer"]:has(#btn-end-date) {
+            margin-bottom: -15px !important; 
+            padding-bottom: 0 !important;
         }
     </style>
     """,
@@ -1901,6 +1905,215 @@ def main():
                             </button>
                         </div>
                     """, unsafe_allow_html=True)
+
+                # Inject the Custom Calendar Modal
+                components.html(
+                    """
+                    <style>
+                        /* The Modal Background */
+                        .date-modal-overlay {
+                            display: none;
+                            position: fixed;
+                            top: 0; left: 0; width: 100%; height: 100%;
+                            background: rgba(0, 0, 0, 0.6);
+                            z-index: 999999;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .date-modal-overlay.open {
+                            display: flex;
+                        }
+                        /* The Modal Box */
+                        .date-modal-box {
+                            background: #1e1e1e;
+                            border: 1px solid #444;
+                            border-radius: 8px;
+                            width: 450px;
+                            color: #e0e0e0;
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .modal-header {
+                            padding: 12px 16px;
+                            border-bottom: 1px solid #444;
+                            font-weight: bold;
+                            font-size: 14px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+                        .modal-content {
+                            display: flex;
+                            padding: 16px;
+                            gap: 20px;
+                            height: 280px;
+                        }
+                        /* Columns */
+                        .col-years { width: 60px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; border-right: 1px solid #444; padding-right: 10px; }
+                        .col-months { width: 180px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; }
+                        .col-days { flex: 1; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; align-content: start; }
+                        
+                        /* Items */
+                        .year-item, .month-item, .day-item {
+                            cursor: pointer;
+                            padding: 6px;
+                            text-align: center;
+                            border-radius: 4px;
+                            font-size: 13px;
+                            transition: 0.2s;
+                        }
+                        .year-item:hover, .month-item:hover, .day-item:hover {
+                            background: #333;
+                        }
+                        .year-item.active, .month-item.active, .day-item.active {
+                            background: #8b6d39; /* Gold color from your screenshot */
+                            color: white;
+                        }
+                        .day-header { font-size: 10px; color: #888; text-align: center; }
+                        .day-item.inactive { color: #555; pointer-events: none; }
+                        
+                        /* Footer */
+                        .modal-footer {
+                            padding: 12px 16px;
+                            border-top: 1px solid #444;
+                            display: flex;
+                            justify-content: flex-end;
+                            gap: 10px;
+                        }
+                        .btn-modal {
+                            padding: 6px 16px;
+                            border-radius: 4px;
+                            border: none;
+                            cursor: pointer;
+                            font-weight: bold;
+                        }
+                        .btn-cancel { background: #a44; color: white; }
+                        .btn-cancel:hover { background: #c55; }
+                        .btn-select { background: #2563eb; color: white; }
+                        .btn-select:hover { background: #1d4ed8; }
+                    </style>
+
+                    <div id="dateModal" class="date-modal-overlay">
+                        <div class="date-modal-box">
+                            <div class="modal-header">📅 TARGET DATE</div>
+                            <div class="modal-content">
+                                <div class="col-years" id="yearList"></div>
+                                <div class="col-months" id="monthList"></div>
+                                <div class="col-days" id="dayList"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn-modal btn-cancel" onclick="closeDateModal()">❌ Cancel</button>
+                                <button class="btn-modal btn-select" onclick="confirmDate()">✔ Select</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        let targetInputId = null;
+                        let selectedYear = 2024;
+                        let selectedMonth = 0; // 0-11
+                        let selectedDay = 1;
+                        
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+                        function initCalendar() {
+                            const yearList = document.getElementById('yearList');
+                            for (let y = 2018; y <= 2030; y++) {
+                                const div = document.createElement('div');
+                                div.className = 'year-item' + (y === selectedYear ? ' active' : '');
+                                div.innerText = y;
+                                div.onclick = () => { selectedYear = y; renderCalendar(); };
+                                yearList.appendChild(div);
+                            }
+                            renderCalendar();
+                        }
+
+                        function renderCalendar() {
+                            // Render Years
+                            document.querySelectorAll('.year-item').forEach(el => {
+                                el.classList.toggle('active', el.innerText == selectedYear);
+                            });
+
+                            // Render Months
+                            const monthList = document.getElementById('monthList');
+                            monthList.innerHTML = '';
+                            months.forEach((m, i) => {
+                                const div = document.createElement('div');
+                                div.className = 'month-item' + (i === selectedMonth ? ' active' : '');
+                                div.innerText = m;
+                                div.onclick = () => { selectedMonth = i; renderCalendar(); };
+                                monthList.appendChild(div);
+                            });
+
+                            // Render Days
+                            const dayList = document.getElementById('dayList');
+                            dayList.innerHTML = '';
+                            daysOfWeek.forEach(d => {
+                                const div = document.createElement('div');
+                                div.className = 'day-header';
+                                div.innerText = d;
+                                dayList.appendChild(div);
+                            });
+
+                            const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
+                            const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+                            
+                            for (let i = 0; i < firstDay; i++) {
+                                dayList.appendChild(document.createElement('div'));
+                            }
+                            for (let d = 1; d <= daysInMonth; d++) {
+                                const div = document.createElement('div');
+                                div.className = 'day-item' + (d === selectedDay ? ' active' : '');
+                                div.innerText = d;
+                                div.onclick = () => { selectedDay = d; renderCalendar(); };
+                                dayList.appendChild(div);
+                            }
+                        }
+
+                        // Open Modal functions attached to buttons
+                        setInterval(() => {
+                            try {
+                                const doc = window.parent.document;
+                                const btnStart = doc.getElementById('btn-start-date');
+                                const btnEnd = doc.getElementById('btn-end-date');
+                                
+                                if (btnStart && !btnStart.hasAttribute('data-bound')) {
+                                    btnStart.setAttribute('data-bound', 'true');
+                                    btnStart.onclick = (e) => { e.preventDefault(); openDateModal('start'); };
+                                }
+                                if (btnEnd && !btnEnd.hasAttribute('data-bound')) {
+                                    btnEnd.setAttribute('data-bound', 'true');
+                                    btnEnd.onclick = (e) => { e.preventDefault(); openDateModal('end'); };
+                                }
+                            } catch(e) {}
+                        }, 500);
+
+                        function openDateModal(type) {
+                            targetInputId = type;
+                            document.getElementById('dateModal').classList.add('open');
+                        }
+
+                        function closeDateModal() {
+                            document.getElementById('dateModal').classList.remove('open');
+                        }
+
+                        function confirmDate() {
+                            const dateStr = selectedYear + "-" + String(selectedMonth + 1).padStart(2, '0') + "-" + String(selectedDay).padStart(2, '0');
+                            const url = new URL(window.parent.location.href);
+                            url.searchParams.set('selected_date', dateStr);
+                            url.searchParams.set('date_type', targetInputId);
+                            window.parent.location.href = url.toString();
+                        }
+                        
+                        initCalendar();
+                    </script>
+                    """,
+                    height=0,
+                )
+
 
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
