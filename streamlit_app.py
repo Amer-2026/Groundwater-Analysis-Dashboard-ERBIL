@@ -1883,29 +1883,24 @@ def main():
 
                 # Column 4 & 5: CUSTOM START / END DATE PICKER
                 with nav_col_month:
-                    # We use Streamlit text inputs to hold the values behind the scenes
-                    # They will be hidden by CSS, and the JS calendar will update them
-                    start_val = st.text_input("START DATE", value=st.session_state.date_range[0].strftime("%Y-%m-%d"), key="start_date_hidden", label_visibility="visible")
-                    
+                    st.markdown(f"""
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label style="color: white; font-size: 14px; margin-bottom: 5px;">START DATE</label>
+                            <button id="btn-start-date" style="background-color: #cae9ff; color: #0e1117; border: none; border-radius: 8px; height: 38px; font-weight: 600; font-size: 14px; cursor: pointer; width: 100%;">
+                                📅 {st.session_state.date_range[0].strftime('%Y / %m / %d')}
+                            </button>
+                        </div>
+                    """, unsafe_allow_html=True)
+
                 with nav_col_range:
-                    end_val = st.text_input("END DATE", value=st.session_state.date_range[1].strftime("%Y-%m-%d"), key="end_date_hidden", label_visibility="visible")
-
-                # Convert the string values back to Python dates
-                start_date = datetime.strptime(start_val, "%Y-%m-%d").date()
-                end_date = datetime.strptime(end_val, "%Y-%m-%d").date()
-
-                # Inject the custom JavaScript Calendar HTML/CSS
-                components.html(
-                    """
-                    <style>
-                        /* We will add the beautiful dark theme styles here in Step 2 */
-                    </style>
-                    <script>
-                        // We will add the calendar logic and Streamlit communication here in Step 3
-                    </script>
-                    """,
-                    height=0,
-                )
+                    st.markdown(f"""
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label style="color: white; font-size: 14px; margin-bottom: 5px;">END DATE</label>
+                            <button id="btn-end-date" style="background-color: #cae9ff; color: #0e1117; border: none; border-radius: 8px; height: 38px; font-weight: 600; font-size: 14px; cursor: pointer; width: 100%;">
+                                📅 {st.session_state.date_range[1].strftime('%Y / %m / %d')}
+                            </button>
+                        </div>
+                    """, unsafe_allow_html=True)
 
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
