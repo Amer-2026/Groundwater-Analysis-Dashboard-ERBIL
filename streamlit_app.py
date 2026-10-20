@@ -1757,6 +1757,35 @@ def main():
             padding-top: 0 !important;
             margin-top: -20px !important;
         }
+        /* 2. Hide the calendar icon inside the input */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] svg,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] svg {
+            display: none !important;
+        }
+        
+        /* 3. Ensure the input doesn't have unnecessary padding now that the icon is gone */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] > div > div,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] > div > div {
+            padding-left: 10px !important;
+            justify-content: center !important;
+        }
+
+        /* 4. Create the fake label INSIDE the input area using CSS */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"]::before {
+            content: "START DATE  :  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"]::before {
+            content: "END DATE  :  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 5px;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -1883,23 +1912,25 @@ def main():
 
                 # Column 4: START DATE
                 with nav_col_month:
-                    start_date = st.date_input(
-                        "START DATE",
-                        value=st.session_state.date_range[0],
-                        min_value=min_date.date(),
-                        max_value=max_date.date(),
-                        key="start_date_selector",
-                    )
+                    with st.container(key="start_date_wrap"):
+                        start_date = st.date_input(
+                            "START DATE",
+                            value=st.session_state.date_range[0],
+                            min_value=min_date.date(),
+                            max_value=max_date.date(),
+                            key="start_date_selector",
+                        )
 
                 # Column 5: END DATE
                 with nav_col_range:
-                    end_date = st.date_input(
-                        "END DATE",
-                        value=st.session_state.date_range[1],
-                        min_value=min_date.date(),
-                        max_value=max_date.date(),
-                        key="end_date_selector",
-                    )
+                    with st.container(key="end_date_wrap"):
+                        end_date = st.date_input(
+                            "END DATE",
+                            value=st.session_state.date_range[1],
+                            min_value=min_date.date(),
+                            max_value=max_date.date(),
+                            key="end_date_selector",
+                        )
 
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
