@@ -1757,6 +1757,7 @@ def main():
             padding-top: 0 !important;
             margin-top: -20px !important;
         }
+        
         /* 2. Hide the calendar icon inside the input */
         div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] svg,
         div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] svg {
@@ -1910,27 +1911,59 @@ def main():
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
 
-                # Column 4: START DATE
-                with nav_col_month:
-                    with st.container(key="start_date_wrap"):
-                        start_date = st.date_input(
-                            "START DATE",
-                            value=st.session_state.date_range[0],
-                            min_value=min_date.date(),
-                            max_value=max_date.date(),
-                            key="start_date_selector",
-                        )
+        /* ===== STYLE THE DATE PICKERS AS BUTTONS ===== */
+        
+        /* 1. Hide the empty label space completely so the box moves up */
+        div[class*="st-key-start_date_wrap"] label,
+        div[class*="st-key-end_date_wrap"] label {
+            display: none !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
 
-                # Column 5: END DATE
-                with nav_col_range:
-                    with st.container(key="end_date_wrap"):
-                        end_date = st.date_input(
-                            "END DATE",
-                            value=st.session_state.date_range[1],
-                            min_value=min_date.date(),
-                            max_value=max_date.date(),
-                            key="end_date_selector",
-                        )
+        /* 2. Style the actual input box to look exactly like the buttons */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] > div,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] > div {
+            background-color: #cae9ff !important;
+            border: none !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        /* 3. Style the text (date) inside the box */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] input,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] input {
+            color: #0e1117 !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            text-align: center !important;
+            padding: 0 !important;
+        }
+
+        /* 4. Hide the calendar icon */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] svg,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] svg {
+            display: none !important;
+        }
+
+        /* 5. ADD THE TITLE INSIDE THE BOX */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] > div::before {
+            content: "START DATE:  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] > div::before {
+            content: "END DATE:  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+        }
 
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
