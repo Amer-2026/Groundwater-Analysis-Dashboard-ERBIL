@@ -1911,27 +1911,54 @@ def main():
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
 
-                # Column 4: START DATE
+                # Column 4: START DATE BUTTON
                 with nav_col_month:
-                    with st.container(key="start_date_wrap"):
-                        start_date = st.date_input(
-                            " ", 
-                            value=st.session_state.date_range[0],
-                            min_value=min_date.date(),
-                            max_value=max_date.date(),
-                            key="start_date_selector",
-                        )
+                    if st.button(f"📅 START DATE: {st.session_state.date_range[0].strftime('%Y / %m / %d')}", key="btn_start_cal", use_container_width=True):
+                        st.session_state.active_cal = "start"
+                        st.rerun()
 
-                # Column 5: END DATE
+                # Column 5: END DATE BUTTON
                 with nav_col_range:
-                    with st.container(key="end_date_wrap"):
-                        end_date = st.date_input(
-                            " ", 
-                            value=st.session_state.date_range[1],
-                            min_value=min_date.date(),
-                            max_value=max_date.date(),
-                            key="end_date_selector",
-                        )
+                    if st.button(f"📅 END DATE: {st.session_state.date_range[1].strftime('%Y / %m / %d')}", key="btn_end_cal", use_container_width=True):
+                        st.session_state.active_cal = "end"
+                        st.rerun()
+
+                # The Popup Dialog
+                @st.dialog("📅 Target Date")
+                def show_calendar():
+                    active = st.session_state.get("active_cal")
+                    if not active:
+                        return
+                    
+                    st.write(f"Select new **{active.upper()} DATE**:")
+                    cal_years = [str(y) for y in range(2018, 2031)]
+                    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+                    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
+                    
+                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    sel_month = st.selectbox("Month", cal_months, index=0)
+                    
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        if st.button("❌ Cancel", use_container_width=True):
+                            st.session_state.active_cal = None
+                            st.rerun()
+                    with c2:
+                        if st.button("✔ Select", type="primary", use_container_width=True):
+                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
+                            if active == "start":
+                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
+                            else:
+                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
+                            st.session_state.active_cal = None
+                            st.rerun()
+
+                if st.session_state.get("active_cal"):
+                    show_calendar()
+
+                # Get the dates for the map generation
+                start_date = st.session_state.date_range[0]
+                end_date = st.session_state.date_range[1]
                         
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
