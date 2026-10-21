@@ -1990,7 +1990,10 @@ def main():
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
-            st.session_state.current_date = st.session_state.selected_date_str
+            
+            # Set the map to display the START DATE month
+            #st.session_state.current_date = st.session_state.selected_date_str
+            st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
 
@@ -2053,20 +2056,30 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # Map header row: title on left, Specify Location button on right
-                    _h_col1, _h_col2 = st.columns([5, 1.2])
+                    # Map header row: title, View Month, Specify Location button
+                    _h_col1, _h_col2, _h_col3 = st.columns([4, 2, 1.5])
+                    
                     with _h_col1:
                         st.markdown(
                             f"<h3 style='margin:0; padding-top:4px;'>🗺️ {t('interactive_map')}</h3>",
                             unsafe_allow_html=True,
                         )
+                        
                     with _h_col2:
-                        if st.button(
-                            "📍 Specify Location",
-                            key="open_specify_location",
-                            use_container_width=True,
-                            type="primary",       # ← Add this line
-                        ):
+                        # Let the user pick which month in the date range they want to see
+                        months_for_map = st.session_state.get("ranged_months_disp") or []
+                        if months_for_map:
+                            view_month = st.selectbox(
+                                "View Month",
+                                options=months_for_map,
+                                index=0, # Defaults to the first month in the range
+                                key="map_month_selector",
+                                label_visibility="collapsed",
+                            )
+                            st.session_state.current_date = view_month # Update the map date
+                            
+                    with _h_col3:
+                        if st.button("📍 Specify Location", key="open_specify_location", use_container_width=True):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
                     # ===== Inline Location Form =====
