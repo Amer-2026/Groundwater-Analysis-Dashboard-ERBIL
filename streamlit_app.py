@@ -1913,14 +1913,12 @@ def main():
 
                 # Column 4: START DATE BUTTON
                 with nav_col_month:
-                    #if st.button(f"📅 Start date: {st.session_state.date_range[0].strftime('%Y / %m / %d')}", key="btn_start_cal", use_container_width=True):
                      if st.button("📅 Start date", key="btn_start_cal", use_container_width=True):
                         st.session_state.active_cal = "start"
                         st.rerun()
 
                 # Column 5: END DATE BUTTON
                 with nav_col_range:
-                    #if st.button(f"📅 End date: {st.session_state.date_range[1].strftime('%Y / %m / %d')}", key="btn_end_cal", use_container_width=True):
                      if st.button("📅 End date", key="btn_end_cal", use_container_width=True):
                         st.session_state.active_cal = "end"
                         st.rerun()
