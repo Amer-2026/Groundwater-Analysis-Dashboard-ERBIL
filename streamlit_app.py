@@ -1996,7 +1996,31 @@ def main():
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
-
+    # ===== CUSTOM DATE RANGE TIMELINE =====
+    if st.session_state.get("date_range"):
+        start_dt = st.session_state.date_range[0]
+        end_dt = st.session_state.date_range[1]
+        
+        # Format the dates to look like the screenshot (e.g., "01 JAN 2020")
+        start_str = start_dt.strftime("%d %b %Y").upper()
+        end_str = end_dt.strftime("%d %b %Y").upper()
+        
+        # HTML and CSS for the custom timeline bar
+        timeline_html = f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin-top: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+                📅 {start_str}
+            </div>
+            <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
+                <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+                <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+            </div>
+            <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+                📅 {end_str}
+            </div>
+        </div>
+        """
+        st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # NOTE: The old "# ---- Earth Engine ----" block that used to live here
