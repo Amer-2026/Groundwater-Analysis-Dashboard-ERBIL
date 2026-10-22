@@ -2007,8 +2007,7 @@ def main():
         
         # HTML and CSS for the custom timeline bar
         timeline_html = f"""
-        #<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 0px 20px; margin: 5px 0px 20px 780px; max-width: 600px; height: 38px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
             <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">
                 📅 {start_str}
             </div>
