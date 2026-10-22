@@ -1855,13 +1855,14 @@ def main():
     banner_html = f"""
 <div class="banner">
 <div class="banner-inner">
-{logo1_html}
+<div style="display: flex; gap: 15px;">
+    {logo1_html}
+    {logo2_html}
+</div>
 <div class="banner-title">
 <h1>💧 {t('dashboard_header')}</h1>
 <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
 <div class="welcome">{t('welcome_subtitle')}</div>
-</div>
-{logo2_html}
 </div>
 </div>
 """
