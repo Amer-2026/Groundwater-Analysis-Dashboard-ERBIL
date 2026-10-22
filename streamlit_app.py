@@ -26,6 +26,15 @@ import streamlit.components.v1 as components
 from folium.plugins import Fullscreen, MousePosition, Draw
 from streamlit_folium import st_folium
 
+import base64
+
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        return ""
+
 # ==================== Translations ====================
 TRANSLATIONS = {
     "en": {
@@ -1830,15 +1839,30 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- COSMIC BLOOM BANNER - Full Width with Title Left ----
+        # Load logos for the banner
+    logo1_b64 = get_base64_image("logo1.png")
+    logo2_b64 = get_base64_image("logo2.png")
+    
+    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 80px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
+    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 80px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
     st.markdown(
         f"""
         <div class="banner">
             <div class="banner-inner">
+                
+                <!-- LEFT LOGO -->
+                {logo1_html}
+                
+                <!-- CENTER TEXT -->
                 <div class="banner-title">
                     <h1>💧 {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                     <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
+
+                <!-- RIGHT LOGO -->
+                {logo2_html}
+                
             </div>
         </div>
         """,
