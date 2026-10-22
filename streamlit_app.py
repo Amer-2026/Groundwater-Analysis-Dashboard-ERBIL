@@ -2009,18 +2009,15 @@ def main():
         timeline_html = f"""
         <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 0px 15px; margin: 5px 0px 20px 150px; max-width: 800px; height: 38px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
             
-            <!-- Start Date Bubble -->
             <div style="background: #555; color: white; padding: 4px 12px; border-radius: 15px; font-weight: normal; font-size: 14px; display: flex; align-items: center;">
                 <span style="margin-right: 5px;">📅</span> {start_str}
             </div>
             
-            <!-- Middle Gold Line -->
             <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
                 <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
                 <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
             </div>
             
-            <!-- End Date Bubble -->
             <div style="background: #555; color: white; padding: 4px 12px; border-radius: 15px; font-weight: normal; font-size: 14px; display: flex; align-items: center;">
                 <span style="margin-right: 5px;">📅</span> {end_str}
             </div>
