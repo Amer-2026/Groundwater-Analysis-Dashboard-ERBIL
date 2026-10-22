@@ -1846,23 +1846,17 @@ def main():
     logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 80px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
     logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 80px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
     st.markdown(
-        f"""
-        <div class="banner">
+        f"""<div class="banner">
             <div class="banner-inner">
-                
                 {logo1_html}
-                
                 <div class="banner-title">
                     <h1>💧 {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                     <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
-
                 {logo2_html}
-                
             </div>
-        </div>
-        """,
+        </div>""",
         unsafe_allow_html=True,
     )
 
