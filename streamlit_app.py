@@ -2006,7 +2006,7 @@ def main():
         end_str = end_dt.strftime("%d %b %Y").upper()
         
         # HTML and CSS for the custom timeline bar
-        timeline_html = f"""
+        timeline_html = f'''
         <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 0px 15px; margin: 5px 0px 20px 150px; max-width: 800px; height: 38px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
             
             <div style="background: #555; color: white; padding: 4px 12px; border-radius: 15px; font-weight: normal; font-size: 14px; display: flex; align-items: center;">
@@ -2023,7 +2023,7 @@ def main():
             </div>
             
         </div>
-        """
+        '''
         st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
