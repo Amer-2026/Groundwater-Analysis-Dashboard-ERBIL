@@ -1148,7 +1148,7 @@ def main():
                 #7B2FBE 90%,
                 #4a1a8a 100%
             );
-            padding: 1rem 4rem 1.5rem 4rem;
+            padding: 0rem 4rem 1.5rem 4rem;
             margin: 0 !important;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
