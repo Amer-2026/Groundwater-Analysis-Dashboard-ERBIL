@@ -969,7 +969,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
 
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
     """Create regional summary bar chart with optional download button as annotation"""
-    import base64
+
 
     df = pd.DataFrame(summary_data)
     if df.empty:
