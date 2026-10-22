@@ -1855,7 +1855,7 @@ def main():
     banner_html = f"""
 <div class="banner">
 <div class="banner-inner">
-<div style="display: flex; gap: 0px;">
+<div style="display: flex; gap: 50px;">
     {logo1_html}
     {logo2_html}
 </div>
