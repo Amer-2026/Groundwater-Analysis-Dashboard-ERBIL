@@ -2006,24 +2006,20 @@ def main():
         end_str = end_dt.strftime("%d %b %Y").upper()
         
         # HTML and CSS for the custom timeline bar
-        timeline_html = f'''
-        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 0px 15px; margin: 5px 0px 20px 150px; max-width: 800px; height: 38px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            
-            <div style="background: #555; color: white; padding: 4px 12px; border-radius: 15px; font-weight: normal; font-size: 14px; display: flex; align-items: center;">
-                <span style="margin-right: 5px;">📅</span> {start_str}
+        timeline_html = f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">
+                📅 {start_str}
             </div>
-            
             <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
                 <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
                 <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
             </div>
-            
-            <div style="background: #555; color: white; padding: 4px 12px; border-radius: 15px; font-weight: normal; font-size: 14px; display: flex; align-items: center;">
-                <span style="margin-right: 5px;">📅</span> {end_str}
+            <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+                📅 {end_str}
             </div>
-            
         </div>
-        '''
+        """
         st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
