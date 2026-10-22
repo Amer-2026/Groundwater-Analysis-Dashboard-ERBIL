@@ -1178,14 +1178,15 @@ def main():
         .banner-inner {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start; /* Pushes everything to the left */
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 2rem;
             position: relative;
             z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+       /* max-width: 1200px;  <-- Remove or comment out this line */
+       /* margin: 0 auto;     <-- Remove or comment out this line */
+       margin-left: 20px; /* Optional: adds a little padding on the left */
+   }
 
         /* Title aligned to LEFT */
         .banner-title {
