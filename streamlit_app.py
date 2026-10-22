@@ -1849,8 +1849,8 @@ def main():
     # Load logos for the banner
     logo1_b64 = get_base64_image("logo1.png")
     logo2_b64 = get_base64_image("logo2.png")
-    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 100px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
-    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 100px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
+    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
+    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
     banner_html = f"""
 <div class="banner">
