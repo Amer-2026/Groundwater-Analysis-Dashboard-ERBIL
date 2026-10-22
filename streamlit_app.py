@@ -2015,7 +2015,7 @@ def main():
                 <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
                 <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
             </div>
-            <div style="background: #555; color: white; padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
                 📅 {end_str}
             </div>
         </div>
