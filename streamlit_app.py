@@ -1856,7 +1856,7 @@ def main():
 <div class="banner">
 <div class="banner-inner">
 #<div style="display: flex; gap: 0px;">
-<div style="display: flex; gap: 0px; margin-right: 20px;">
+<div style="display: flex; gap: 0px; margin-right: 50px;">
     {logo1_html}
     {logo2_html}
 </div>
