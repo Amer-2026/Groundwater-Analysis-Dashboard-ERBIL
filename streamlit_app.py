@@ -1146,7 +1146,7 @@ def main():
                 #4a1a8a 70%,
                 #2d1b69 80%,
                 #1a0533 90%,
-                #0a0a2e 90%
+                #0a0a2e 50%
             );
             padding: 1rem 3rem 1rem 3rem;
             margin: 0 !important;
