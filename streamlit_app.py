@@ -1136,7 +1136,7 @@ def main():
         /* COSMIC BLOOM BANNER - Static vibrant gradient */
         .banner {
             background: linear-gradient(135deg, 
-                #4a1a8a 5%,
+                #4a1a8a 0%,
                 #7B2FBE 10%,
                 #26C5F3 20%,
                 #FF9A9E 30%,
