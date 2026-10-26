@@ -583,7 +583,7 @@ PALETTES = {
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
-    "": "mm/month",
+    "recharge_mm": "mm/month",
 }
 
 
