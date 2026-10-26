@@ -1961,15 +1961,15 @@ def main():
 
     # --- Column 1: Abstraction Dropdown ---
     with nav_col1:
-        # Check what is currently selected to update the label
         if st.session_state.selected_parameter == "abstraction_mm":
             abs_label = f"🔴 {t('nav_abstraction_mm')}"
         elif st.session_state.selected_parameter == "abstraction_m3":
             abs_label = f"🔴 {t('nav_abstraction_m3')}"
         else:
             abs_label = "⚪ Abstraction"
-            
-        with st.popover(abs_label, use_container_width=True):
+
+        # Custom HTML Dropdown
+        with st.expander(abs_label, expanded=False):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
@@ -1983,15 +1983,14 @@ def main():
 
     # --- Column 2: Recharge Dropdown ---
     with nav_col2:
-        # Check what is currently selected to update the label
         if st.session_state.selected_parameter == "recharge_mm":
             rc_label = f"🔴 {t('nav_recharge_mm')}"
         elif st.session_state.selected_parameter == "recharge_m3":
             rc_label = f"🔴 {t('nav_recharge_m3')}"
         else:
             rc_label = "⚪ Recharge"
-            
-        with st.popover(rc_label, use_container_width=True):
+
+        with st.expander(rc_label, expanded=False):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
@@ -2003,7 +2002,7 @@ def main():
                 st.session_state.regional_summary_data = None
                 st.rerun()
 
-    # --- Column 3: Placeholder for future parameters ---
+    # --- Column 3: Placeholder ---
     with nav_col3:
         pass
 
