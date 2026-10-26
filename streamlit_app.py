@@ -1963,11 +1963,11 @@ def main():
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
-                st.session_state.rerun()
+                st.rerun()
             if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
-                st.session_state.rerun()
+                st.rerun()
 
     # --- Column 2: Recharge Dropdown ---
     with nav_col2:
