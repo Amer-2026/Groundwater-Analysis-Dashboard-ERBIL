@@ -1800,30 +1800,56 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== STYLE THE PARAMETER DROPDOWNS (POPOVERS) ===== */
+        /* ===== STYLE THE EXPANDER TO LOOK LIKE A GREEN BUTTON ===== */
         
-        /* Force the main popover button to be green */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+        /* Force the expander container to have no background */
+        div[data-testid="stExpander"] {
+            background-color: transparent !important;
+            border: none !important;
+        }
+
+        /* Style the clickable header (the main button) */
+        div[data-testid="stExpander"] details summary {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
             font-weight: 600 !important;
             font-size: 14px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            padding: 0 10px !important;
+            margin-bottom: 5px !important;
         }
         
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover {
-            background-color: #8fd154 !important;
+        /* Make the text inside the header black and centered */
+        div[data-testid="stExpander"] details summary p {
+            color: #1a0a2e !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-align: center !important;
+            width: 100% !important;
+            margin: 0 !important;
         }
 
-        /* Style the options inside the dropdown */
-        div[data-testid="stPopover"] div[data-baseweb="popover"] button {
+        /* Hide the default expander arrow (we don't need it) */
+        div[data-testid="stExpander"] details summary svg {
+            display: none !important;
+        }
+
+        /* Style the dropdown menu area when it opens */
+        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] {
+            background-color: #1e1e1e !important;
+            padding: 10px !important;
+            border-radius: 8px !important;
+            border: 1px solid #444 !important;
+        }
+        
+        /* Style the options inside the dropdown menu */
+        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] button {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
@@ -1835,32 +1861,7 @@ def main():
             font-weight: 600 !important;
         }
         
-        div[data-testid="stPopover"] div[data-baseweb="popover"] button:hover {
-            background-color: #8fd154 !important;
-        }
-
-        /* The container that pops up with the options */
-        div[data-testid="stPopover"] div[data-baseweb="popover"] > div {
-            background-color: #1e1e1e !important; /* Dark background for the menu */
-            border: 1px solid #444 !important;
-            border-radius: 8px !important;
-            padding: 10px !important;
-        }
-
-        /* The buttons inside the dropdown menu (Abstraction mm, m3, etc.) */
-        div[data-testid="stPopover"] div[data-baseweb="popover"] button {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            border-radius: 6px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            margin-bottom: 8px !important; /* Space between the options */
-            font-weight: 600 !important;
-        }
-        
-        div[data-testid="stPopover"] div[data-baseweb="popover"] button:hover {
+        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] button:hover {
             background-color: #8fd154 !important;
         }
     </style>
