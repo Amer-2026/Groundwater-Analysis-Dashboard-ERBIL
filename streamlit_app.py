@@ -1802,8 +1802,8 @@ def main():
         }
         /* ===== STYLE THE PARAMETER DROPDOWNS (POPOVERS) ===== */
         
-        /* The main button you click to open the dropdown */
-        div[data-testid="stPopover"] > button {
+        /* Force the main popover button to be green */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
@@ -1818,7 +1818,24 @@ def main():
             align-items: center !important;
         }
         
-        div[data-testid="stPopover"] > button:hover {
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover {
+            background-color: #8fd154 !important;
+        }
+
+        /* Style the options inside the dropdown */
+        div[data-testid="stPopover"] div[data-baseweb="popover"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 6px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        div[data-testid="stPopover"] div[data-baseweb="popover"] button:hover {
             background-color: #8fd154 !important;
         }
 
