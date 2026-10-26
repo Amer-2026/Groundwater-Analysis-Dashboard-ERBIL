@@ -2298,8 +2298,8 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # Process the most recent drawing
-                    drawings = map_data.get("all_drawings") or []
+                # Process the most recent drawing
+                drawings = map_data.get("all_drawings") or []
                     latest = None
                     for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
