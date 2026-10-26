@@ -1800,69 +1800,59 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== STYLE THE EXPANDER TO LOOK LIKE A GREEN BUTTON ===== */
+        /* ===== NUCLEAR OPTION: FORCE POPOVER BUTTONS TO BE GREEN ===== */
         
-        /* Force the expander container to have no background */
-        div[data-testid="stExpander"] {
-            background-color: transparent !important;
-            border: none !important;
+        /* 1. Target the container of the popover button */
+        div[data-testid="stPopover"] {
+            width: 100% !important;
         }
 
-        /* Style the clickable header (the main button) */
-        div[data-testid="stExpander"] details summary {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
+        /* 2. Target the button itself and ALL elements inside it */
+        div[data-testid="stPopover"] > button,
+        div[data-testid="stPopover"] > button * {
+            background-color: #a8f368 !important; /* Force Green */
+            color: #1a0a2e !important;            /* Force Dark Text */
             border: none !important;
-            border-radius: 8px !important;
+            fill: #1a0a2e !important;             /* Force Icon color */
+        }
+
+        /* 3. Size the button exactly like the others */
+        div[data-testid="stPopover"] > button {
             height: 38px !important;
             min-height: 38px !important;
+            border-radius: 8px !important;
+            width: 100% !important;
             display: flex !important;
-            align-items: center !important;
             justify-content: center !important;
+            align-items: center !important;
             font-weight: 600 !important;
             font-size: 14px !important;
-            padding: 0 10px !important;
-            margin-bottom: 5px !important;
-        }
-        
-        /* Make the text inside the header black and centered */
-        div[data-testid="stExpander"] details summary p {
-            color: #1a0a2e !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            text-align: center !important;
-            width: 100% !important;
-            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        /* Hide the default expander arrow (we don't need it) */
-        div[data-testid="stExpander"] details summary svg {
-            display: none !important;
-        }
-
-        /* Style the dropdown menu area when it opens */
-        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] {
-            background-color: #1e1e1e !important;
-            padding: 10px !important;
-            border-radius: 8px !important;
-            border: 1px solid #444 !important;
-        }
-        
-        /* Style the options inside the dropdown menu */
-        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] button {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            border-radius: 6px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            margin-bottom: 8px !important;
-            font-weight: 600 !important;
-        }
-        
-        div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] button:hover {
+        /* 4. Hover effect */
+        div[data-testid="stPopover"] > button:hover,
+        div[data-testid="stPopover"] > button:hover * {
             background-color: #8fd154 !important;
+        }
+
+        /* 5. Style the popup menu that opens */
+        div[data-baseweb="popover"] > div {
+            background-color: #1e1e1e !important;
+            border: 1px solid #444 !important;
+            border-radius: 8px !important;
+        }
+        
+        /* 6. Style the options inside the popup */
+        div[data-baseweb="popover"] button {
+            background-color: #1e1e1e !important;
+            color: white !important;
+            border: none !important;
+            width: 100% !important;
+            text-align: left !important;
+        }
+        div[data-baseweb="popover"] button:hover {
+            background-color: #444 !important;
         }
     </style>
     """,
@@ -1968,19 +1958,16 @@ def main():
             abs_label = f"🔴 {t('nav_abstraction_m3')}"
         else:
             abs_label = "⚪ Abstraction"
-
-        # Custom HTML Dropdown
-        with st.expander(abs_label, expanded=False):
+            
+        with st.popover(abs_label, use_container_width=True):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+                st.session_state.rerun()
             if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+                st.session_state.rerun()
 
     # --- Column 2: Recharge Dropdown ---
     with nav_col2:
@@ -1990,18 +1977,16 @@ def main():
             rc_label = f"🔴 {t('nav_recharge_m3')}"
         else:
             rc_label = "⚪ Recharge"
-
-        with st.expander(rc_label, expanded=False):
+            
+        with st.popover(rc_label, use_container_width=True):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+                st.session_state.rerun()
             if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_m3"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
-                st.rerun()
+                st.session_state.rerun()
 
     # --- Column 3: Placeholder ---
     with nav_col3:
