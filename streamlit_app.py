@@ -2273,7 +2273,7 @@ def main():
                         ee_image,
                         vis_params,
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
-                    )
+                )
                     add_colormap(m, vis_params, st.session_state.current_parameter)
 
                     # If the user searched, place a red marker at the location
