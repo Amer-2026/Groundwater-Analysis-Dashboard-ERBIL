@@ -576,7 +576,7 @@ PALETTES = {
     "abstraction_mm": ["#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c"],
     "abstraction_m3": ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8",
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
-    "": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
+    "recharge_mm": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
 }
 
@@ -2232,14 +2232,19 @@ def main():
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
-                    selected_asset = next(
-                        (
-                            a
-                            for a in assets
-                            if st.session_state.current_parameter in a and selected_year_month in a
-                        ),
-                        None,
-                    )
+                # Map the parameter name to the actual asset name in Earth Engine
+                search_param = st.session_state.current_parameter
+                if search_param == "recharge_mm":
+                    search_param = "recharge"  # Your GEE assets are named just "recharge"
+                
+                selected_asset = next(
+                    (
+                        a
+                        for a in assets
+                        if search_param in a and selected_year_month in a
+                    ),
+                    None,
+                )
                     if not selected_asset:
                         st.error(t("no_data_month"))
                         return
