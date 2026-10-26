@@ -107,7 +107,8 @@ For support or more information, please contact the development team.""",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
-        "nav_recharge": "Recharge",
+        "nav_recharge_mm": "Recharge (mm)",
+        "nav_recharge_m3": "Recharge (m³)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -187,7 +188,8 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "عرض البيانات الخام",
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
-        "nav_recharge": "التغذية الجوفية",
+        "nav_recharge_mm": "التغذية الجوفية (مم)",
+        "nav_recharge_m3": "التغذية الجوفية (م³)",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -266,7 +268,8 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "داتای خاو",
         "nav_abstraction_mm": "دەرهێنان (مم)",
         "nav_abstraction_m3": "دەرهێنان (م³)",
-        "nav_recharge": "پڕبوونەوە",
+        "nav_recharge_mm": "پڕبوونەوە (مم)",
+        "nav_recharge_m3": "پڕبوونەوە (م³)",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1797,6 +1800,52 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
+        /* ===== STYLE THE PARAMETER DROPDOWNS (POPOVERS) ===== */
+        
+        /* The main button you click to open the dropdown */
+        div[data-testid="stPopover"] > button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        
+        div[data-testid="stPopover"] > button:hover {
+            background-color: #8fd154 !important;
+        }
+
+        /* The container that pops up with the options */
+        div[data-testid="stPopover"] div[data-baseweb="popover"] > div {
+            background-color: #1e1e1e !important; /* Dark background for the menu */
+            border: 1px solid #444 !important;
+            border-radius: 8px !important;
+            padding: 10px !important;
+        }
+
+        /* The buttons inside the dropdown menu (Abstraction mm, m3, etc.) */
+        div[data-testid="stPopover"] div[data-baseweb="popover"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 6px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            margin-bottom: 8px !important; /* Space between the options */
+            font-weight: 600 !important;
+        }
+        
+        div[data-testid="stPopover"] div[data-baseweb="popover"] button:hover {
+            background-color: #8fd154 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -1890,37 +1939,54 @@ def main():
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
     
-    _mm_active = st.session_state.selected_parameter == "abstraction_mm"
-    _m3_active = st.session_state.selected_parameter == "abstraction_m3"
-    _rc_active = st.session_state.selected_parameter == "recharge"
+    _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
+    _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
-    _mm_label = ("🔴 " if _mm_active else "⚪ ") + t("nav_abstraction_mm")
-    _m3_label = ("🔴 " if _m3_active else "⚪ ") + t("nav_abstraction_m3")
-    _rc_label = ("🔴 " if _rc_active else "⚪ ") + t("nav_recharge")
-
+    # --- Column 1: Abstraction Dropdown ---
     with nav_col1:
-        with st.container(key=f"param_mm_{'active' if _mm_active else 'inactive'}"):
-            if st.button(_mm_label, key="nav_mm", use_container_width=True):
+        if st.session_state.selected_parameter == "abstraction_mm":
+            abs_label = f"🔴 {t('nav_abstraction_mm')}"
+        elif st.session_state.selected_parameter == "abstraction_m3":
+            abs_label = f"🔴 {t('nav_abstraction_m3')}"
+        else:
+            abs_label = "⚪ Abstraction"
+            
+        with st.popover(abs_label, use_container_width=True):
+            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
                 st.rerun()
-
-    with nav_col2:
-        with st.container(key=f"param_m3_{'active' if _m3_active else 'inactive'}"):
-            if st.button(_m3_label, key="nav_m3", use_container_width=True):
+            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
                 st.rerun()
 
-    with nav_col3:
-        with st.container(key=f"param_recharge_{'active' if _rc_active else 'inactive'}"):
-            if st.button(_rc_label, key="nav_recharge", use_container_width=True):
-                st.session_state.selected_parameter = "recharge"
+    # --- Column 2: Recharge Dropdown ---
+    with nav_col2:
+        if st.session_state.selected_parameter == "recharge_mm":
+            rc_label = f"🔴 {t('nav_recharge_mm')}"
+        elif st.session_state.selected_parameter == "recharge_m3":
+            rc_label = f"🔴 {t('nav_recharge_m3')}"
+        else:
+            rc_label = "⚪ Recharge"
+            
+        with st.popover(rc_label, use_container_width=True):
+            if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
+                st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
                 st.session_state.regional_summary_data = None
                 st.rerun()
+            if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
+                st.session_state.selected_parameter = "recharge_m3"
+                st.session_state.map_generated = False
+                st.session_state.regional_summary_data = None
+                st.rerun()
+
+    # --- Column 3: Placeholder for future parameters ---
+    with nav_col3:
+        pass
 
     # --- START DATE & END DATE ---
     try:
