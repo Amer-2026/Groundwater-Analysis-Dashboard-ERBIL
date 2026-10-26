@@ -2288,7 +2288,7 @@ def main():
                         icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
                 st.session_state["search_pending"] = False
-                    folium.LayerControl().add_to(m)
+                folium.LayerControl().add_to(m)
 
                     # Read all drawings from the map
                     map_data = st_folium(
