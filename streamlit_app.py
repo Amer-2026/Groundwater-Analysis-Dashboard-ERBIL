@@ -94,7 +94,7 @@ For support or more information, please contact the development team.""",
         "layer": "Layer",
         "abstraction_mm": "Abstraction (mm)",
         "abstraction_m3": "Abstraction (m³)",
-        "recharge": "Recharge",
+        "": "",
         "error_get_assets": "Error in get_ee_assets",
         "error_parse_date": "Error parsing date from asset",
         "value_label": "Value",
@@ -107,8 +107,8 @@ For support or more information, please contact the development team.""",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
-        "nav_recharge_mm": "Recharge (mm)",
-        "nav_recharge_m3": "Recharge (m³)",
+        "nav__mm": " (mm)",
+        "nav__m3": " (m³)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -175,7 +175,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "layer": "طبقة",
         "abstraction_mm": "السحب (مم)",
         "abstraction_m3": "السحب (م³)",
-        "recharge": "التغذية الجوفية",
+        "": "التغذية الجوفية",
         "error_get_assets": "خطأ في جلب الأصول",
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
@@ -188,8 +188,8 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "عرض البيانات الخام",
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
-        "nav_recharge_mm": "التغذية الجوفية (مم)",
-        "nav_recharge_m3": "التغذية الجوفية (م³)",
+        "nav__mm": "التغذية الجوفية (مم)",
+        "nav__m3": "التغذية الجوفية (م³)",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -255,7 +255,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "layer": "چین",
         "abstraction_mm": "دەرهێنان (مم)",
         "abstraction_m3": "دەرهێنان (م³)",
-        "recharge": "پڕبوونەوە",
+        "": "پڕبوونەوە",
         "error_get_assets": "هەڵە لە هێنانی ئەستەکان",
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
@@ -268,8 +268,8 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "داتای خاو",
         "nav_abstraction_mm": "دەرهێنان (مم)",
         "nav_abstraction_m3": "دەرهێنان (م³)",
-        "nav_recharge_mm": "پڕبوونەوە (مم)",
-        "nav_recharge_m3": "پڕبوونەوە (م³)",
+        "nav__mm": "پڕبوونەوە (مم)",
+        "nav__m3": "پڕبوونەوە (م³)",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -576,14 +576,14 @@ PALETTES = {
     "abstraction_mm": ["#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c"],
     "abstraction_m3": ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8",
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
-    "recharge": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
+    "": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
 }
 
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
-    "recharge": "mm/month",
+    "": "mm/month",
 }
 
 
@@ -611,7 +611,7 @@ def get_image_min_max(asset_id):
     
     # Fallback to a default range if everything is masked or min==max
     if min_val is None or max_val is None or min_val == max_val:
-        return 0, 100  # Recharge usually falls between 0 and 100 mm
+        return 0, 100  #  usually falls between 0 and 100 mm
         
     return min_val, max_val
 
@@ -671,11 +671,11 @@ def get_image_min_max(asset_id):
 
 def get_vis_params(parameter, asset_id):
     # 1. Get the palette
-    palette = PALETTES.get(parameter, PALETTES["recharge"])
+    palette = PALETTES.get(parameter, PALETTES[""])
     
-    # 2. FORCE the visual range for Recharge
-    if parameter == "recharge":
-        # Recharge is usually small numbers (0 to 100 mm/month)
+    # 2. FORCE the visual range for 
+    if parameter == "":
+        #  is usually small numbers (0 to 100 mm/month)
         # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
         return {"min": 0, "max": 100, "palette": palette}
         
@@ -1604,7 +1604,7 @@ def main():
         /* SELECTED — WHITE with blue border (higher specificity than .stButton rule) */
         div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]),
-        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]) {
+        div[class*="st-key-param__active"] .stButton > button:not([kind="primary"]) {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 2px solid #696eff !important;
@@ -1612,7 +1612,7 @@ def main():
         }
         div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]):hover,
         div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]):hover,
-        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]):hover {
+        div[class*="st-key-param__active"] .stButton > button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
         }
@@ -1620,13 +1620,13 @@ def main():
         /* UNSELECTED — green with dark text */
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]),
-        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]) {
+        div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
         }
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]):hover,
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]):hover,
-        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]):hover {
+        div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]):hover {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
@@ -1986,7 +1986,7 @@ def main():
             if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_m3"
                 st.session_state.map_generated = False
-                st.session_state.rerun()
+                st.rerun()
 
     # --- Column 3: Placeholder ---
     with nav_col3:
