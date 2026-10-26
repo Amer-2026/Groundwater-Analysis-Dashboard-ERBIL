@@ -2276,8 +2276,8 @@ def main():
                 )
                 add_colormap(m, vis_params, st.session_state.current_parameter)
 
-                    # If the user searched, place a red marker at the location
-                    if st.session_state.get("search_pending"):
+                # If the user searched, place a red marker at the location
+                if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
                                 st.session_state.get("search_lat"),
