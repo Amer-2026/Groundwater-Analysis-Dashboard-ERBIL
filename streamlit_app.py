@@ -1982,7 +1982,7 @@ def main():
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
-                st.session_state.rerun()
+                st.rerun()
             if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_m3"
                 st.session_state.map_generated = False
