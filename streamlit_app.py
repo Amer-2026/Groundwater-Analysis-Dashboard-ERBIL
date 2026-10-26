@@ -1961,6 +1961,7 @@ def main():
 
     # --- Column 1: Abstraction Dropdown ---
     with nav_col1:
+        # Check what is currently selected to update the label
         if st.session_state.selected_parameter == "abstraction_mm":
             abs_label = f"🔴 {t('nav_abstraction_mm')}"
         elif st.session_state.selected_parameter == "abstraction_m3":
@@ -1982,6 +1983,7 @@ def main():
 
     # --- Column 2: Recharge Dropdown ---
     with nav_col2:
+        # Check what is currently selected to update the label
         if st.session_state.selected_parameter == "recharge_mm":
             rc_label = f"🔴 {t('nav_recharge_mm')}"
         elif st.session_state.selected_parameter == "recharge_m3":
