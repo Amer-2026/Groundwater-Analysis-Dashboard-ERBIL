@@ -2261,7 +2261,7 @@ def main():
                         center_lon = float(_search_lng)
                         zoom = 15
 
-                    m = create_base_map(center_lat, center_lon, zoom)
+                m = create_base_map(center_lat, center_lon, zoom)
                     ee_image = ee.Image(selected_asset)
 
                     opacity = st.session_state.get("opacity", 0.7)
