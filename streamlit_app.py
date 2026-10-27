@@ -111,6 +111,9 @@ For support or more information, please contact the development team.""",
         "nav_recharge_m3": "Recharge (m³)",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
+        "nav_region": "Region",
+        "nav_subnational": "Sub-National",
+        "nav_national": "National",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -194,6 +197,9 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "التغذية الجوفية (م³)",
         "nav__mm": "التغذية الجوفية (مم)",
         "nav__m3": "التغذية الجوفية (م³)",
+        "nav_region": "المنطقة",
+        "nav_subnational": "دون الوطني",
+        "nav_national": "وطني",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -276,6 +282,9 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "پڕبوونەوە (م³)",
         "nav__mm": "پڕبوونەوە (مم)",
         "nav__m3": "پڕبوونەوە (م³)",
+        "nav_region": "ناوچە",
+        "nav_subnational": "ناوچەیی",
+        "nav_national": "نیشتمانی",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1940,8 +1949,27 @@ def main():
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
-    # --- Column 1: Abstraction Dropdown ---
+    # Ensure session state defaults for the new region button
+    if "selected_location" not in st.session_state:
+        st.session_state.selected_location = "subnational"
+
+    # --- Column 1: Region Dropdown ---
     with nav_col1:
+        if st.session_state.selected_location == "subnational":
+            loc_label = f"📍 {t('nav_subnational')}"
+        else:
+            loc_label = f"📍 {t('nav_national')}"
+            
+        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
+
+    # --- Column 2: Abstraction Dropdown ---
+    with nav_col2:
         if st.session_state.selected_parameter == "abstraction_mm":
             abs_label = f"🔴 {t('nav_abstraction_mm')}"
         elif st.session_state.selected_parameter == "abstraction_m3":
@@ -1960,8 +1988,8 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Column 2: Recharge Dropdown ---
-    with nav_col2:
+    # --- Column 3: Recharge Dropdown ---
+    with nav_col3:
         if st.session_state.selected_parameter == "recharge_mm":
             rc_label = f"🔴 {t('nav_recharge_mm')}"
         elif st.session_state.selected_parameter == "recharge_m3":
@@ -1980,8 +2008,8 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Column 3: Placeholder ---
-    with nav_col3:
+    # --- Column 4: Placeholder (We will use this for dates later) ---
+    with nav_col_month:
         pass
 
     # --- START DATE & END DATE ---
