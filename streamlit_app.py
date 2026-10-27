@@ -2017,19 +2017,6 @@ def main():
                 st.session_state.selected_location = "national"
                 st.rerun()
 
-        # Now just use the plain text for the button
-        loc_label = f"{t('nav_region')}"
-
-            
-        # Pass the combined string to the popover
-        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
-                st.session_state.selected_location = "national"
-                st.rerun()
-
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         if st.session_state.selected_parameter == "abstraction_mm":
@@ -2039,7 +2026,6 @@ def main():
         else:
             abs_label = "⚪ Abstraction"
             
-        # ADDED key="abs_dropdown"
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
@@ -2059,7 +2045,6 @@ def main():
         else:
             rc_label = "⚪ Recharge"
             
-        # ADDED key="rc_dropdown"
         with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
