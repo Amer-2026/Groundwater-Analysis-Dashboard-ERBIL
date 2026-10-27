@@ -1806,13 +1806,13 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== FORCE GREEN POPOVER BUTTONS ===== */
+        /* ===== FORCE GREEN POPOVER BUTTONS (Based on DevTools) ===== */
         
-        /* Force the main popover button to be green, just like the Start Date button */
-        div[data-testid="stPopover"] > button {
+        /* Target the exact button element Streamlit uses */
+        button[data-testid="stPopoverButton"] {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
-            border: none !important;
+            border: 1px solid #a8f368 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
@@ -1823,21 +1823,23 @@ def main():
             justify-content: center !important;
             align-items: center !important;
             box-shadow: none !important;
+            outline: none !important;
+            padding: 0 10px !important;
         }
-        
-        /* Force text and icons inside the button to be black */
-        div[data-testid="stPopover"] > button * {
+
+        /* Force the text and icons inside the button to be black */
+        button[data-testid="stPopoverButton"] * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
 
         /* Hover, Focus, and Active states */
-        div[data-testid="stPopover"] > button:hover,
-        div[data-testid="stPopover"] > button:focus,
-        div[data-testid="stPopover"] > button:active {
+        button[data-testid="stPopoverButton"]:hover,
+        button[data-testid="stPopoverButton"]:focus,
+        button[data-testid="stPopoverButton"]:active {
             background-color: #8fd154 !important;
+            border-color: #8fd154 !important;
             color: #1a0a2e !important;
-            border: none !important;
             box-shadow: none !important;
             outline: none !important;
         }
