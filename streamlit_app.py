@@ -1853,6 +1853,43 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
+                /* ===== FORCE PURPLE REGION BUTTON ===== */
+        
+        /* Force background to purple and shape to match */
+        div[class*="st-key-loc_dropdown"] button {
+            background-color: #B429F9 !important;
+            background: #B429F9 !important;
+            color: #ffffff !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        /* Force text/icons to be white */
+        div[class*="st-key-loc_dropdown"] button * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
+
+        /* Hover state */
+        div[class*="st-key-loc_dropdown"] button:hover,
+        div[class*="st-key-loc_dropdown"] button:focus,
+        div[class*="st-key-loc_dropdown"] button:active {
+            background-color: #9a22d9 !important;
+            background: #9a22d9 !important;
+            border-color: #9a22d9 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
