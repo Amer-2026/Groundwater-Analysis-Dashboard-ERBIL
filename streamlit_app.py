@@ -1806,69 +1806,40 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== FORCE GREEN POPOVER BUTTONS (Using Keys) ===== */
+        /* ===== FORCE GREEN POPOVER BUTTONS ===== */
         
-        /* Target the specific popover buttons by their key */
-        div[class*="st-key-abs_dropdown"] > button,
-        div[class*="st-key-rc_dropdown"] > button {
+        /* Force the main popover button to be green, just like the Start Date button */
+        div[data-testid="stPopover"] > button {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            padding: 0 !important;
             box-shadow: none !important;
-            outline: none !important;
         }
-
+        
         /* Force text and icons inside the button to be black */
-        div[class*="st-key-abs_dropdown"] > button *,
-        div[class*="st-key-rc_dropdown"] > button * {
+        div[data-testid="stPopover"] > button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
 
         /* Hover, Focus, and Active states */
-        div[class*="st-key-abs_dropdown"] > button:hover,
-        div[class*="st-key-abs_dropdown"] > button:focus,
-        div[class*="st-key-abs_dropdown"] > button:active,
-        div[class*="st-key-rc_dropdown"] > button:hover,
-        div[class*="st-key-rc_dropdown"] > button:focus,
-        div[class*="st-key-rc_dropdown"] > button:active {
+        div[data-testid="stPopover"] > button:hover,
+        div[data-testid="stPopover"] > button:focus,
+        div[data-testid="stPopover"] > button:active {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
-        }
-
-        /* ===== Style the Dropdown Menu that opens ===== */
-        div[data-baseweb="popover"] > div {
-            background-color: #1e1e1e !important;
-            border: 1px solid #444 !important;
-            border-radius: 8px !important;
-        }
-        
-        /* Style the options inside the menu */
-        div[data-baseweb="popover"] button {
-            background-color: #a8f368 !important; /* Make options green too */
-            color: #1a0a2e !important;
-            border: none !important;
-            width: 100% !important;
-            text-align: left !important;
-            border-radius: 6px !important;
-            margin-bottom: 5px !important;
-        }
-        
-        div[data-baseweb="popover"] button:hover {
-            background-color: #8fd154 !important;
         }
     </style>
     """,
@@ -1966,7 +1937,6 @@ def main():
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
-    # --- Column 1: Abstraction Dropdown ---
     # --- Column 1: Abstraction Dropdown ---
     with nav_col1:
         if st.session_state.selected_parameter == "abstraction_mm":
