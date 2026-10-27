@@ -1853,10 +1853,10 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-                /* ===== FORCE PURPLE REGION BUTTON ===== */
+        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
         
-        /* Force background to purple and shape to match */
-        div[class*="st-key-loc_dropdown"] button {
+        /* Target the exact button inside the popover container */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
             background: #B429F9 !important;
             color: #ffffff !important;
@@ -1874,16 +1874,16 @@ def main():
             outline: none !important;
         }
 
-        /* Force text/icons to be white */
-        div[class*="st-key-loc_dropdown"] button * {
+        /* Force text to be white */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
         }
 
         /* Hover state */
-        div[class*="st-key-loc_dropdown"] button:hover,
-        div[class*="st-key-loc_dropdown"] button:focus,
-        div[class*="st-key-loc_dropdown"] button:active {
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
             background-color: #9a22d9 !important;
             background: #9a22d9 !important;
             border-color: #9a22d9 !important;
