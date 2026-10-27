@@ -1955,11 +1955,7 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        if st.session_state.selected_location == "subnational":
-            loc_label = f"📍 {t('nav_subnational')}"
-        else:
-            loc_label = f"📍 {t('nav_national')}"
-            
+            loc_label = f"📍 {t('nav_region')}"
         with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
             if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
                 st.session_state.selected_location = "subnational"
