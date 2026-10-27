@@ -2009,9 +2009,16 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        # Always display "Region" as the main title
-        loc_label = f"{t('nav_region')}"
+        # Load the image as a Base64 string
+        region_b64 = get_base64_image("region_icon.png")
+        
+        # Create the HTML image tag
+        icon_html = f'<img src="data:image/png;base64,{region_b64}" style="height: 20px; margin-right: 5px; vertical-align: middle;">'
+        
+        # Combine the image and the text
+        loc_label = f"{icon_html} {t('nav_region')}"
             
+        # Pass the combined string to the popover
         with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
             if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
                 st.session_state.selected_location = "subnational"
