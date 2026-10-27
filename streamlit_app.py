@@ -1961,6 +1961,8 @@ def main():
     logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
     logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
+    region_b64 = get_base64_image("region_icon.png")
+
     banner_html = f"""
 <div class="banner">
 <div class="banner-inner">
