@@ -2007,28 +2007,17 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-        # Load the image as a Base64 string
-        region_b64 = get_base64_image("region_icon.png")
-        
-        # Inject a tiny CSS rule just for this button to show the image
-        st.markdown(
-            f"""
-            <style>
-            div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {{
-                content: "" !important;
-                display: inline-block !important;
-                width: 20px !important;
-                height: 20px !important;
-                background-image: url('data:image/png;base64,{region_b64}') !important;
-                background-size: contain !important;
-                background-repeat: no-repeat !important;
-                background-position: center !important;
-                margin-right: 8px !important;
-            }}
-            </style>
-            """, 
-            unsafe_allow_html=True
-        )
+    # --- Column 1: Region Dropdown ---
+    with nav_col1:
+        loc_label = f"{t('nav_region')}"
+            
+        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
 
         # Now just use the plain text for the button
         loc_label = f"{t('nav_region')}"
