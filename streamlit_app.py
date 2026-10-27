@@ -1806,27 +1806,17 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== NUCLEAR OPTION: FORCE POPOVER BUTTONS TO BE GREEN ===== */
+        /* ===== FORCE GREEN POPOVER BUTTONS (Using Keys) ===== */
         
-        /* 1. Target the container of the popover button */
-        div[data-testid="stPopover"] {
-            width: 100% !important;
-        }
-
-        /* 2. Target the button itself and ALL elements inside it */
-        div[data-testid="stPopover"] > button,
-        div[data-testid="stPopover"] > button * {
-            background-color: #a8f368 !important; /* Force Green */
-            color: #1a0a2e !important;            /* Force Dark Text */
+        /* Target the specific popover buttons by their key */
+        div[class*="st-key-abs_dropdown"] > button,
+        div[class*="st-key-rc_dropdown"] > button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
             border: none !important;
-            fill: #1a0a2e !important;             /* Force Icon color */
-        }
-
-        /* 3. Size the button exactly like the others */
-        div[data-testid="stPopover"] > button {
+            border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            border-radius: 8px !important;
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
@@ -1834,31 +1824,51 @@ def main():
             font-weight: 600 !important;
             font-size: 14px !important;
             padding: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
 
-        /* 4. Hover effect */
-        div[data-testid="stPopover"] > button:hover,
-        div[data-testid="stPopover"] > button:hover * {
+        /* Force text and icons inside the button to be black */
+        div[class*="st-key-abs_dropdown"] > button *,
+        div[class*="st-key-rc_dropdown"] > button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
+
+        /* Hover, Focus, and Active states */
+        div[class*="st-key-abs_dropdown"] > button:hover,
+        div[class*="st-key-abs_dropdown"] > button:focus,
+        div[class*="st-key-abs_dropdown"] > button:active,
+        div[class*="st-key-rc_dropdown"] > button:hover,
+        div[class*="st-key-rc_dropdown"] > button:focus,
+        div[class*="st-key-rc_dropdown"] > button:active {
             background-color: #8fd154 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
 
-        /* 5. Style the popup menu that opens */
+        /* ===== Style the Dropdown Menu that opens ===== */
         div[data-baseweb="popover"] > div {
             background-color: #1e1e1e !important;
             border: 1px solid #444 !important;
             border-radius: 8px !important;
         }
         
-        /* 6. Style the options inside the popup */
+        /* Style the options inside the menu */
         div[data-baseweb="popover"] button {
-            background-color: #1e1e1e !important;
-            color: white !important;
+            background-color: #a8f368 !important; /* Make options green too */
+            color: #1a0a2e !important;
             border: none !important;
             width: 100% !important;
             text-align: left !important;
+            border-radius: 6px !important;
+            margin-bottom: 5px !important;
         }
+        
         div[data-baseweb="popover"] button:hover {
-            background-color: #444 !important;
+            background-color: #8fd154 !important;
         }
     </style>
     """,
