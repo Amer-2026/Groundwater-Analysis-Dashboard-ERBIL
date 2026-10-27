@@ -1890,6 +1890,27 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
+                /* ===== CUSTOM REGION BUTTON ICON ===== */
+        
+        /* Make sure the button uses flexbox to align the icon and text */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 8px !important; /* Space between icon and text */
+        }
+
+        /* Insert the custom image before the text */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
+            content: "" !important;
+            display: inline-block !important;
+            width: 20px !important;  /* Adjust size here */
+            height: 20px !important; /* Adjust size here */
+            background-image: url('data:image/png;base64,{region_b64}') !important;
+            background-size: contain !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -1933,12 +1954,6 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- COSMIC BLOOM BANNER - Full Width with Title Left ----
-        # Load logos for the banner
-    logo1_b64 = get_base64_image("logo1.png")
-    logo2_b64 = get_base64_image("logo2.png")
-    
-    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 80px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
-    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 80px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
     # Load logos for the banner
     logo1_b64 = get_base64_image("logo1.png")
@@ -1993,7 +2008,7 @@ def main():
     # --- Column 1: Region Dropdown ---
     with nav_col1:
         # Always display "Region" as the main title
-        loc_label = f"📍 {t('nav_region')}"
+        loc_label = f"{t('nav_region')}"
             
         with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
             if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
