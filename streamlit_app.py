@@ -1957,6 +1957,7 @@ def main():
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
     # --- Column 1: Abstraction Dropdown ---
+    # --- Column 1: Abstraction Dropdown ---
     with nav_col1:
         if st.session_state.selected_parameter == "abstraction_mm":
             abs_label = f"🔴 {t('nav_abstraction_mm')}"
@@ -1965,7 +1966,8 @@ def main():
         else:
             abs_label = "⚪ Abstraction"
             
-        with st.popover(abs_label, use_container_width=True):
+        # ADDED key="abs_dropdown"
+        with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
@@ -1984,7 +1986,8 @@ def main():
         else:
             rc_label = "⚪ Recharge"
             
-        with st.popover(rc_label, use_container_width=True):
+        # ADDED key="rc_dropdown"
+        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
