@@ -1605,6 +1605,7 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
             fill: #ffffff !important;
             color: #ffffff !important;
+        }
         /* ===== Parameter button selected/unselected state ===== */
 
         /* SELECTED — WHITE with blue border (higher specificity than .stButton rule) */
