@@ -1806,40 +1806,40 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== FORCE GREEN POPOVER BUTTONS (Based on DevTools) ===== */
+        /* ===== ULTIMATE FIX FOR POPOVER BUTTONS ===== */
         
-        /* Target the exact button element Streamlit uses */
-        button[data-testid="stPopoverButton"] {
+        /* 1. Force the background to be exactly #a8f368 */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
             background-color: #a8f368 !important;
-            color: #1a0a2e !important;
+            background: #a8f368 !important;
             border: 1px solid #a8f368 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
             width: 100% !important;
+            padding: 0 10px !important;
+            box-shadow: none !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            box-shadow: none !important;
-            outline: none !important;
-            padding: 0 10px !important;
         }
 
-        /* Force the text and icons inside the button to be black */
-        button[data-testid="stPopoverButton"] * {
+        /* 2. Force all text and icons inside to be black */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] *,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] span {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
         }
 
-        /* Hover, Focus, and Active states */
-        button[data-testid="stPopoverButton"]:hover,
-        button[data-testid="stPopoverButton"]:focus,
-        button[data-testid="stPopoverButton"]:active {
+        /* 3. Hover, Focus, Active states (to prevent the black flash) */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
             background-color: #8fd154 !important;
+            background: #8fd154 !important;
             border-color: #8fd154 !important;
-            color: #1a0a2e !important;
             box-shadow: none !important;
             outline: none !important;
         }
