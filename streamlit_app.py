@@ -1890,23 +1890,21 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-                /* ===== CUSTOM REGION BUTTON ICON ===== */
-        
-        /* Make sure the button uses flexbox to align the icon and text */
+        /* ===== CUSTOM REGION BUTTON ICON ===== */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            gap: 8px !important; /* Space between icon and text */
+            gap: 8px !important;
         }
 
-        /* Insert the custom image before the text */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
             content: "" !important;
             display: inline-block !important;
-            width: 20px !important;  /* Adjust size here */
-            height: 20px !important; /* Adjust size here */
-            background-image: url('data:image/png;base64,{region_b64}') !important;
+            width: 20px !important;
+            height: 20px !important;
+            /* Point this to your image on GitHub */
+            background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
             background-size: contain !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
