@@ -2184,7 +2184,7 @@ def main():
             st.rerun()
 
     # Column 6: END DATE BUTTON
-    with nav_col_range6:
+    with nav_col6:
         end_display = st.session_state.date_range[1].strftime('%Y / %m / %d')
         if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
