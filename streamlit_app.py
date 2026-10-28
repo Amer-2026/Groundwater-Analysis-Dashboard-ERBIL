@@ -1925,18 +1925,35 @@ def main():
             background-position: center !important;
         }
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
-        
-        /* Target the specific horizontal block */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
             gap: 0.5rem !important; 
-            align-items: stretch !important; /* Changed from center to stretch */
+            align-items: center !important;
         }
 
-        /* Make sure the columns don't have a minimum width */
+        /* Allow columns to shrink */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
             min-width: 0 !important;
             width: 100% !important;
+        }
+
+        /* Force the Date Inputs to shrink and fit inside their columns */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"],
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+        
+        /* Override Streamlit's default minimum width for date inputs */
+        div[data-testid="stDateInput"] > div > div {
+            min-width: 0 !important;
+        }
+        
+        /* Ensure the input text doesn't push the width out */
+        div[data-testid="stDateInput"] input {
+            text-overflow: ellipsis !important;
+            min-width: 0 !important;
+            font-size: 13px !important; /* Slightly smaller text to fit */
         }
     </style>
     """,
