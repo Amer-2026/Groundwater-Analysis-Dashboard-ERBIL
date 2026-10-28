@@ -2199,7 +2199,7 @@ def main():
     st.write(f"Select new **{active.upper()} DATE**:")
     st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
     cal_years = [str(y) for y in range(2018, 2031)]
-                    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
                     sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
                     
                     cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
