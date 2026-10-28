@@ -2234,19 +2234,19 @@ def main():
                     st.session_state.time_series_data = None
                     st.session_state.map_generated = False
 
-    # Filter assets based on the chosen dates
-    start_ym = start_date.strftime("%Y_%m")
-    end_ym = end_date.strftime("%Y_%m")
-    assets = [
+                # Filter assets based on the chosen dates
+                start_ym = start_date.strftime("%Y_%m")
+                end_ym = end_date.strftime("%Y_%m")
+                assets = [
                     a for a in assets
                     if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
                 ]
 
-    # Save the available months for the map dropdown
-    ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-    st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
+                # Save the available months for the map dropdown
+                ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+                st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
-         except Exception as e:
+    except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
        
