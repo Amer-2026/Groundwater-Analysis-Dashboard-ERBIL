@@ -1926,14 +1926,14 @@ def main():
         }
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         
-        /* Target the specific horizontal block that contains the Region button */
+        /* Target the specific horizontal block */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
             gap: 0.5rem !important; 
-            align-items: center !important;
+            align-items: stretch !important; /* Changed from center to stretch */
         }
 
-        /* Make sure the columns don't have a minimum width that forces them to wrap */
+        /* Make sure the columns don't have a minimum width */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
             min-width: 0 !important;
             width: 100% !important;
@@ -2026,7 +2026,7 @@ def main():
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 0.9, 1, 1.1, 1])
+    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1, 1.2, 1.1])
     
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
