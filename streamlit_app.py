@@ -2221,7 +2221,7 @@ def main():
                             st.rerun()
 
                         if st.session_state.get("active_cal"):
-                    show_calendar()
+                        show_calendar()
 
                 # Get the dates for the map generation
                 start_date = st.session_state.date_range[0]
