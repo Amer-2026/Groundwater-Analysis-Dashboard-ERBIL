@@ -1927,7 +1927,7 @@ def main():
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
-            gap: 0.5rem !important; 
+            gap: 0.3rem !important; /* Reduced gap to fit 7 buttons */
             align-items: center !important;
         }
 
