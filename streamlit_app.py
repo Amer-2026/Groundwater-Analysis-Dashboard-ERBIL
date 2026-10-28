@@ -1924,6 +1924,10 @@ def main():
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
+        /* Prevent the top navigation bar from wrapping to a new line */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
+            flex-wrap: nowrap !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
