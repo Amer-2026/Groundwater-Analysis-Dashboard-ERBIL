@@ -2223,8 +2223,8 @@ def main():
     if st.session_state.get("active_cal"):
                     show_calendar()
 
-                # Get the dates for the map generation
-                start_date = st.session_state.date_range[0]
+    # Get the dates for the map generation
+    start_date = st.session_state.date_range[0]
                 end_date = st.session_state.date_range[1]
                         
                 # If the dates change, reset the map
