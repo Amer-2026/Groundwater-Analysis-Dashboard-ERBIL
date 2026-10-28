@@ -2246,7 +2246,7 @@ def main():
     ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
     st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
-except Exception as e:
+    except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
        
