@@ -114,6 +114,11 @@ For support or more information, please contact the development team.""",
         "nav_region": "Region",
         "nav_subnational": "Sub-National",
         "nav_national": "National",
+        "nav_analysis": "Analysis",
+        "nav_wsi": "Water Stress Index",
+        "nav_water_balance": "Water Balance",
+        "nav_climate_et": "Climate / ET",
+        "nav_irrigation": "Irrigation Efficiency",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -200,6 +205,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_region": "المنطقة",
         "nav_subnational": "دون الوطني",
         "nav_national": "وطني",
+        "nav_analysis": "التحليل",
+        "nav_wsi": "مؤشر الإجهاد المائي",
+        "nav_water_balance": "التوازن المائي",
+        "nav_climate_et": "المناخ / التبخر-النتح",
+        "nav_irrigation": "كفاءة الري",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -285,6 +295,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_region": "ناوچە",
         "nav_subnational": "ناوچەیی",
         "nav_national": "نیشتمانی",
+        "nav_analysis": "شیکردنەوە",
+        "nav_wsi": "پێوەرەی کێشەی ئاو",
+        "nav_water_balance": "هاوسەنگی ئاو",
+        "nav_climate_et": "کەشوهەوا / هەڵمبوون",
+        "nav_irrigation": "کاریگەری ئاودێری",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -2055,9 +2070,30 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Column 4: Placeholder (We will use this for dates later) ---
+    # --- Column 4: Analysis Dropdown ---
     with nav_col_month:
-        pass
+        if st.session_state.get("selected_analysis") == "wsi":
+            ana_label = f"📊 {t('nav_wsi')}"
+        elif st.session_state.get("selected_analysis") == "water_balance":
+            ana_label = f"📊 {t('nav_water_balance')}"
+        elif st.session_state.get("selected_analysis") == "climate_et":
+            ana_label = f"📊 {t('nav_climate_et')}"
+        elif st.session_state.get("selected_analysis") == "irrigation":
+            ana_label = f"📊 {t('nav_irrigation')}"
+        else:
+            ana_label = f"📊 {t('nav_analysis')}"
+            
+        with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
+            if st.button(t("nav_wsi"), key="nav_wsi_btn", use_container_width=True):
+                st.session_state.selected_analysis = "wsi"
+                st.session_state.selected_parameter = "wsi" 
+                st.session_state.map_generated = False
+                st.rerun()
+            if st.button(t("nav_water_balance"), key="nav_wb_btn", use_container_width=True):
+                st.session_state.selected_analysis = "water_balance"
+                st.session_state.selected_parameter = "water_balance"
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- START DATE & END DATE ---
     try:
