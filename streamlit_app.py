@@ -2205,7 +2205,7 @@ def main():
     cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     sel_month = st.selectbox("Month", cal_months, index=0)
                     
-                    c1, c2 = st.columns(2)
+    c1, c2 = st.columns(2)
                     with c1:
                         if st.button("❌ Cancel", use_container_width=True):
                             st.session_state.active_cal = None
