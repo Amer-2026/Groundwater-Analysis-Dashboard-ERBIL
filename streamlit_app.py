@@ -2235,7 +2235,7 @@ def main():
                     st.session_state.map_generated = False
 
                 # Filter assets based on the chosen dates
-                start_ym = start_date.strftime("%Y_%m")
+            start_ym = start_date.strftime("%Y_%m")
                 end_ym = end_date.strftime("%Y_%m")
                 assets = [
                     a for a in assets
