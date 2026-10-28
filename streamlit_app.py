@@ -2011,7 +2011,7 @@ def main():
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1.1, 1, 1.1, 1.2, 1.3])
+    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 0.9, 1, 1.1, 1])
     
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
