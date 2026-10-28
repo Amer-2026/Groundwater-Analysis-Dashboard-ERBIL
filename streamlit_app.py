@@ -1938,7 +1938,6 @@ def main():
             min-width: 0 !important;
             width: 100% !important;
         }
-        }
     </style>
     """,
     unsafe_allow_html=True,
