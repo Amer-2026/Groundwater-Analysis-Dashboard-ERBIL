@@ -2193,7 +2193,7 @@ def main():
     @st.dialog("📅 Target Date")
     def show_calendar():
         active = st.session_state.get("active_cal")
-                    if not active:
+    if not active:
                         return
                     
                     st.write(f"Select new **{active.upper()} DATE**:")
