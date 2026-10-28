@@ -2176,15 +2176,15 @@ def main():
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
-    # Column 4: START DATE BUTTON
-    with nav_col_month:
+    # Column 5: START DATE BUTTON
+    with nav_col_range:
         start_display = st.session_state.date_range[0].strftime('%Y / %m / %d')
         if st.button(f"📅 START DATE: {start_display}", key="btn_start_cal_top", use_container_width=True):
             st.session_state.active_cal = "start"
             st.rerun()
 
-    # Column 5: END DATE BUTTON
-    with nav_col_range:
+    # Column 6: END DATE BUTTON
+    with nav_col_range6:
         end_display = st.session_state.date_range[1].strftime('%Y / %m / %d')
         if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
@@ -2241,7 +2241,7 @@ def main():
     st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
-    with nav_col6:
+    with nav_col7:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
