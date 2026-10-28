@@ -1924,9 +1924,20 @@ def main():
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
-        /* Prevent the top navigation bar from wrapping to a new line */
+        /* ===== FORCE TOP BAR TO ONE ROW ===== */
+        
+        /* Target the specific horizontal block that contains the Region button */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
+            gap: 0.5rem !important; 
+            align-items: center !important;
+        }
+
+        /* Make sure the columns don't have a minimum width that forces them to wrap */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
+            min-width: 0 !important;
+            width: 100% !important;
+        }
         }
     </style>
     """,
