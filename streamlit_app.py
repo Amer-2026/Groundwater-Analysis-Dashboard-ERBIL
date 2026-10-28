@@ -2210,7 +2210,7 @@ def main():
                         if st.button("❌ Cancel", use_container_width=True):
                             st.session_state.active_cal = None
                             st.rerun()
-                    with c2:
+    with c2:
                         if st.button("✔ Select", type="primary", use_container_width=True):
                             new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
                             if active == "start":
