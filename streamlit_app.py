@@ -2228,7 +2228,7 @@ def main():
     end_date = st.session_state.date_range[1]
                         
     # If the dates change, reset the map
-                if (start_date, end_date) != st.session_state.date_range:
+    if (start_date, end_date) != st.session_state.date_range:
                     st.session_state.date_range = (start_date, end_date)
                     st.session_state.regional_summary_data = None
                     st.session_state.time_series_data = None
