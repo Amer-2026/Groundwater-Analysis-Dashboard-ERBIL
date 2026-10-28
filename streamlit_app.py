@@ -2172,7 +2172,10 @@ def main():
                 # Initialize session state if empty
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
-
+                    
+    except Exception as e:
+        st.warning(f"Could not load dates: {e}")
+        
     # Column 4: START DATE BUTTON
     with nav_col_month:
         start_display = st.session_state.date_range[0].strftime('%Y / %m / %d')
