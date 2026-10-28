@@ -2210,7 +2210,7 @@ def main():
                         if st.button("❌ Cancel", use_container_width=True):
                             st.session_state.active_cal = None
                             st.rerun()
-    with c2:
+                    with c2:
                         if st.button("✔ Select", type="primary", use_container_width=True):
                             new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
                             if active == "start":
@@ -2220,22 +2220,22 @@ def main():
                             st.session_state.active_cal = None
                             st.rerun()
 
-    if st.session_state.get("active_cal"):
+                if st.session_state.get("active_cal"):
                     show_calendar()
 
-    # Get the dates for the map generation
-    start_date = st.session_state.date_range[0]
-    end_date = st.session_state.date_range[1]
-                        
-    # If the dates change, reset the map
-    if (start_date, end_date) != st.session_state.date_range:
+                # Get the dates for the map generation
+                start_date = st.session_state.date_range[0]
+                end_date = st.session_state.date_range[1]
+                                    
+                # If the dates change, reset the map
+                if (start_date, end_date) != st.session_state.date_range:
                     st.session_state.date_range = (start_date, end_date)
                     st.session_state.regional_summary_data = None
                     st.session_state.time_series_data = None
                     st.session_state.map_generated = False
 
                 # Filter assets based on the chosen dates
-            start_ym = start_date.strftime("%Y_%m")
+                start_ym = start_date.strftime("%Y_%m")
                 end_ym = end_date.strftime("%Y_%m")
                 assets = [
                     a for a in assets
@@ -2249,8 +2249,6 @@ def main():
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
-       
-
     # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col6:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
@@ -2258,7 +2256,6 @@ def main():
             st.session_state.current_parameter = st.session_state.selected_parameter
             
             # Set the map to display the START DATE month
-            #st.session_state.current_date = st.session_state.selected_date_str
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
