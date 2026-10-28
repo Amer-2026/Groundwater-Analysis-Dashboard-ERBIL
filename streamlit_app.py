@@ -1955,6 +1955,28 @@ def main():
             min-width: 0 !important;
             font-size: 13px !important; /* Slightly smaller text to fit */
         }
+        
+         /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        div[class*="st-key-btn_start_cal_top"] button,
+        div[class*="st-key-btn_end_cal_top"] button {
+            background-color: #cae9ff !important;
+            color: #0e1117 !important;
+            border: none !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            font-weight: 600 !important;
+            font-size: 13px !important; 
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        div[class*="st-key-btn_start_cal_top"] button:hover,
+        div[class*="st-key-btn_end_cal_top"] button:hover {
+            background-color: #a8d8f0 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -2151,18 +2173,19 @@ def main():
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
 
-                # Column 4: START DATE BUTTON
-                with nav_col_month:
-                     if st.button("📅 Start date", key="btn_start_cal", use_container_width=True):
-                        st.session_state.active_cal = "start"
-                        st.rerun()
+    # Column 4: START DATE BUTTON
+    with nav_col_month:
+        start_display = st.session_state.date_range[0].strftime('%Y / %m / %d')
+        if st.button(f"📅 START DATE: {start_display}", key="btn_start_cal_top", use_container_width=True):
+            st.session_state.active_cal = "start"
+            st.rerun()
 
-                # Column 5: END DATE BUTTON
-                with nav_col_range:
-                     if st.button("📅 End date", key="btn_end_cal", use_container_width=True):
-                        st.session_state.active_cal = "end"
-                        st.rerun()
-
+    # Column 5: END DATE BUTTON
+    with nav_col_range:
+        end_display = st.session_state.date_range[1].strftime('%Y / %m / %d')
+        if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
+            st.session_state.active_cal = "end"
+            st.rerun()
                 # The Popup Dialog
                 @st.dialog("📅 Target Date")
                 def show_calendar():
