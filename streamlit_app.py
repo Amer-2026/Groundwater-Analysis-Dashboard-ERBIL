@@ -2178,15 +2178,13 @@ def main():
 
     # Column 5: START DATE BUTTON
     with nav_col_range:
-        start_display = st.session_state.date_range[0].strftime('%Y / %m / %d')
-        if st.button(f"📅 START DATE: {start_display}", key="btn_start_cal_top", use_container_width=True):
+        if st.button("📅 Start date", key="btn_start_cal_top", use_container_width=True):
             st.session_state.active_cal = "start"
             st.rerun()
 
     # Column 6: END DATE BUTTON
     with nav_col6:
-        end_display = st.session_state.date_range[1].strftime('%Y / %m / %d')
-        if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
+        if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
 
