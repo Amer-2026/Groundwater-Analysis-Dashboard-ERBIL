@@ -2220,7 +2220,7 @@ def main():
                             st.session_state.active_cal = None
                             st.rerun()
 
-                if st.session_state.get("active_cal"):
+            if st.session_state.get("active_cal"):
                     show_calendar()
 
                 # Get the dates for the map generation
