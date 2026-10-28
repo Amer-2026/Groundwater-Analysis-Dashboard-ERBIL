@@ -2202,7 +2202,7 @@ def main():
     current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
     sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
                     
-                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                     sel_month = st.selectbox("Month", cal_months, index=0)
                     
                     c1, c2 = st.columns(2)
