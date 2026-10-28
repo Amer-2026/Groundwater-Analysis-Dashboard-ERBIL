@@ -2225,7 +2225,7 @@ def main():
 
     # Get the dates for the map generation
     start_date = st.session_state.date_range[0]
-                end_date = st.session_state.date_range[1]
+    end_date = st.session_state.date_range[1]
                         
                 # If the dates change, reset the map
                 if (start_date, end_date) != st.session_state.date_range:
