@@ -2034,12 +2034,8 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        if st.session_state.selected_parameter == "abstraction_mm":
-            abs_label = f"🔴 {t('nav_abstraction_mm')}"
-        elif st.session_state.selected_parameter == "abstraction_m3":
-            abs_label = f"🔴 {t('nav_abstraction_m3')}"
-        else:
-            abs_label = "⚪ Abstraction"
+        # Always show just "Abstraction" on the main button
+        abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
             
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
