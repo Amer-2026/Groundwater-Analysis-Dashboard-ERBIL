@@ -2175,7 +2175,7 @@ def main():
                     
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
-        
+
     # Column 4: START DATE BUTTON
     with nav_col_month:
         start_display = st.session_state.date_range[0].strftime('%Y / %m / %d')
@@ -2189,65 +2189,56 @@ def main():
         if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
+
     # The Popup Dialog
     @st.dialog("📅 Target Date")
     def show_calendar():
         active = st.session_state.get("active_cal")
-    if not active:
-                        return
-                    
-    st.write(f"Select new **{active.upper()} DATE**:")
-    st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
-    cal_years = [str(y) for y in range(2018, 2031)]
-    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
-    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
-                    
-    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    sel_month = st.selectbox("Month", cal_months, index=0)
-                    
-    c1, c2 = st.columns(2)
-    with c1:
-                        if st.button("❌ Cancel", use_container_width=True):
-                            st.session_state.active_cal = None
-                            st.rerun()
-    with c2:
-                        if st.button("✔ Select", type="primary", use_container_width=True):
-                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
-                            if active == "start":
-                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
-                            else:
-                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
-                            st.session_state.active_cal = None
-                            st.rerun()
+        if not active:
+            return
+        
+        st.write(f"Select new **{active.upper()} DATE**:")
+        st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
+        cal_years = [str(y) for y in range(2018, 2031)]
+        current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+        sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
+        
+        cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        sel_month = st.selectbox("Month", cal_months, index=0)
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("❌ Cancel", use_container_width=True):
+                st.session_state.active_cal = None
+                st.rerun()
+        with c2:
+            if st.button("✔ Select", type="primary", use_container_width=True):
+                new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
+                if active == "start":
+                    st.session_state.date_range = (new_date, st.session_state.date_range[1])
+                else:
+                    st.session_state.date_range = (st.session_state.date_range[0], new_date)
+                st.session_state.active_cal = None
+                st.rerun()
 
-                        if st.session_state.get("active_cal"):
-                        show_calendar()
+    if st.session_state.get("active_cal"):
+        show_calendar()
 
-                # Get the dates for the map generation
-                start_date = st.session_state.date_range[0]
-                end_date = st.session_state.date_range[1]
-                                    
-                # If the dates change, reset the map
-                if (start_date, end_date) != st.session_state.date_range:
-                    st.session_state.date_range = (start_date, end_date)
-                    st.session_state.regional_summary_data = None
-                    st.session_state.time_series_data = None
-                    st.session_state.map_generated = False
+    # Get the dates for the map generation
+    start_date = st.session_state.date_range[0]
+    end_date = st.session_state.date_range[1]
+                        
+    # Filter assets based on the chosen dates
+    start_ym = start_date.strftime("%Y_%m")
+    end_ym = end_date.strftime("%Y_%m")
+    assets = [
+        a for a in assets
+        if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+    ]
 
-                # Filter assets based on the chosen dates
-                start_ym = start_date.strftime("%Y_%m")
-                end_ym = end_date.strftime("%Y_%m")
-                assets = [
-                    a for a in assets
-                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                ]
-
-                # Save the available months for the map dropdown
-                ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-                st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
-
-    except Exception as e:
-        st.warning(f"Could not load dates: {e}")
+    # Save the available months for the map dropdown
+    ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+    st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col6:
@@ -2259,6 +2250,7 @@ def main():
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
+
     # ===== CUSTOM DATE RANGE TIMELINE =====
     if st.session_state.get("date_range"):
         start_dt = st.session_state.date_range[0]
@@ -2285,9 +2277,6 @@ def main():
         """
         st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
-
-    # NOTE: The old "# ---- Earth Engine ----" block that used to live here
-    # has been REMOVED — EE initialization now happens at the very top of main().
 
     # ---- Session state ----
     defaults = {
@@ -2356,6 +2345,7 @@ def main():
                         if st.button("📍 Specify Location", key="open_specify_location", use_container_width=True):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
+
                     # ===== Inline Location Form =====
                     if st.session_state.get("show_location_form", False):
                         with st.container(key="location_form_wrap"):
@@ -2401,52 +2391,52 @@ def main():
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
-                # Map the parameter name to the actual asset name in Earth Engine
-                search_param = st.session_state.current_parameter
-                if search_param == "recharge_mm":
-                    search_param = "recharge"  # Your GEE assets are named just "recharge"
-                
-                selected_asset = next(
-                    (
-                        a
-                        for a in assets
-                        if search_param in a and selected_year_month in a
-                    ),
-                    None,
-                )
-                if not selected_asset:
+                    # Map the parameter name to the actual asset name in Earth Engine
+                    search_param = st.session_state.current_parameter
+                    if search_param == "recharge_mm":
+                        search_param = "recharge"  # Your GEE assets are named just "recharge"
+                    
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if search_param in a and selected_year_month in a
+                        ),
+                        None,
+                    )
+                    if not selected_asset:
                         st.error(t("no_data_month"))
                         return
 
-                center_lat = float(cfg["center_lat"])
-                center_lon = float(cfg["center_lon"])
-                zoom = int(cfg["zoom"])
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    zoom = int(cfg["zoom"])
 
-                # If the user searched for a location, override the center
-                if st.session_state.get("search_pending"):
+                    # If the user searched for a location, override the center
+                    if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
                         center_lat = float(_search_lat)
                         center_lon = float(_search_lng)
                         zoom = 15
 
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
+                    m = create_base_map(center_lat, center_lon, zoom)
+                    ee_image = ee.Image(selected_asset)
 
-                opacity = st.session_state.get("opacity", 0.7)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = opacity
+                    opacity = st.session_state.get("opacity", 0.7)
+                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                    vis_params["opacity"] = opacity
 
-                add_ee_layer(
+                    add_ee_layer(
                         m,
                         ee_image,
                         vis_params,
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
-                )
-                add_colormap(m, vis_params, st.session_state.current_parameter)
+                    )
+                    add_colormap(m, vis_params, st.session_state.current_parameter)
 
-                # If the user searched, place a red marker at the location
-                if st.session_state.get("search_pending"):
+                    # If the user searched, place a red marker at the location
+                    if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
                                 st.session_state.get("search_lat"),
@@ -2454,29 +2444,29 @@ def main():
                             ],
                             popup=f"Searched: {st.session_state.get('search_lat'):.5f}, {st.session_state.get('search_lng'):.5f}",
                             tooltip="Searched location",
-                        icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
+                            icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
-                st.session_state["search_pending"] = False
-                folium.LayerControl().add_to(m)
+                    st.session_state["search_pending"] = False
+                    folium.LayerControl().add_to(m)
 
-                # Read all drawings from the map
-                map_data = st_folium(
+                    # Read all drawings from the map
+                    map_data = st_folium(
                         m,
                         width=None,
                         height=850,
                         returned_objects=["all_drawings"],
                     )
 
-                # Process the most recent drawing
-                drawings = map_data.get("all_drawings") or []
-                latest = None
-                for d in reversed(drawings):  # newest first
+                    # Process the most recent drawing
+                    drawings = map_data.get("all_drawings") or []
+                    latest = None
+                    for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
                             latest = d
                             break
 
-                if latest:
+                    if latest:
                         geom = latest["geometry"]
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
@@ -2532,7 +2522,7 @@ def main():
                     st.markdown(
                         f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                         unsafe_allow_html=True,
-                )
+                    )
                     try:
                         # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
@@ -2580,30 +2570,30 @@ def main():
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
-                    # Filter assets by the selected date range
+                            # Filter assets by the selected date range
                             if st.session_state.date_range:
                                 start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                        end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                        ranged_assets = [
-                            a for a in assets
-                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                        ]
-                    else:
-                        ranged_assets = assets
+                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                                ranged_assets = [
+                                    a for a in assets
+                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                                ]
+                            else:
+                                ranged_assets = assets
 
-                    try:
-                        summary = get_regional_summary(
-                            st.session_state.current_parameter,
-                            tuple(ranged_assets),
-                            int(cfg.get("native_scale_m", 20)),
-                        )
-                        if summary:
-                            st.session_state.regional_summary_data = summary
-                        else:
-                            st.session_state.regional_summary_data = []
-                    except Exception as e:
-                        st.error(f"Error computing regional summary: {e}")
-                        st.session_state.regional_summary_data = []
+                            try:
+                                summary = get_regional_summary(
+                                    st.session_state.current_parameter,
+                                    tuple(ranged_assets),
+                                    int(cfg.get("native_scale_m", 20)),
+                                )
+                                if summary:
+                                    st.session_state.regional_summary_data = summary
+                                else:
+                                    st.session_state.regional_summary_data = []
+                            except Exception as e:
+                                st.error(f"Error computing regional summary: {e}")
+                                st.session_state.regional_summary_data = []
 
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
@@ -2663,7 +2653,6 @@ def main():
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
                 st.error(traceback.format_exc())
-
 
     # ---- Footer ----
     with st.expander(t("about_tool")):
