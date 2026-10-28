@@ -2189,10 +2189,10 @@ def main():
         if st.button(f"📅 END DATE: {end_display}", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
-                # The Popup Dialog
-                @st.dialog("📅 Target Date")
-                def show_calendar():
-                    active = st.session_state.get("active_cal")
+    # The Popup Dialog
+    @st.dialog("📅 Target Date")
+    def show_calendar():
+        active = st.session_state.get("active_cal")
                     if not active:
                         return
                     
