@@ -1980,12 +1980,14 @@ def main():
         /* ===== RESET BUTTON STYLE ===== */
         div[class*="st-key-reset_btn"] button {
             background-color: #a8f368 !important; /* Green */
-            color: #1a0a2e !important; 
+            color: #1a0a2e !important; /* Dark text */
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
             padding: 0 10px !important;
+            font-size: 20px !important; /* Makes the emoji BIG */
+            font-weight: 700 !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
@@ -1993,22 +1995,21 @@ def main():
             box-shadow: none !important;
         }
 
-        /* Force the text container to be a nice size */
+        /* Force the text to be slightly smaller than the emoji so the emoji stands out */
         div[class*="st-key-reset_btn"] button p {
-            font-size: 16px !important;
+            font-size: 14px !important;
             font-weight: 600 !important;
+            margin-left: 5px !important;
+        }
+        
+        /* Force all text/icons inside to be black */
+        div[class*="st-key-reset_btn"] button * {
             color: #1a0a2e !important;
+            fill: #1a0a2e !important;
         }
         
-        /* Make the emoji HUGE inside the button */
-        div[class*="st-key-reset_btn"] button p span {
-            font-size: 24px !important; /* Increase this if you want it even bigger */
-            line-height: 1 !important;
-        }
-        
-        /* Hover effect */
         div[class*="st-key-reset_btn"] button:hover {
-            background-color: #8fd154 !important; 
+            background-color: #8fd154 !important; /* Darker green on hover */
         }
     </style>
     """,
