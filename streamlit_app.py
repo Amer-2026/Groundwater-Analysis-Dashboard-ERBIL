@@ -2048,7 +2048,16 @@ def main():
     # Place language selector AND reset button in the top-right of the banner
     lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1.2])
     
+    # Reset button FIRST (now in lang_col3)
     with lang_col3:
+        if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
+            # Clear all session state to return to initial view
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+
+    # Language selector SECOND (now in lang_col4)
+    with lang_col4:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2061,13 +2070,6 @@ def main():
             )
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
-            st.rerun()
-            
-    with lang_col4:
-        if st.button("🔄", key="reset_btn", help="Reset Dashboard"):
-            # Clear all session state to return to initial view
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
             st.rerun()
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
