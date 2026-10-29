@@ -2235,11 +2235,28 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
                 
-            if st.button(f"🌧️ {t('nav_climate_et')}", key="nav_climate_btn", use_container_width=True):
-                st.session_state.selected_analysis = "climate_et"
-                st.session_state.selected_parameter = "climate_et"
-                st.session_state.map_generated = False
-                st.rerun()
+            # Create a nested popover for Climate / ET
+            with st.popover(f"🌧️ {t('nav_climate_et')}", use_container_width=True):
+                if st.button(t("nav_aeti"), key="nav_aeti_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "aeti"
+                    st.session_state.selected_parameter = "aeti" 
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_pet"), key="nav_pet_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "pet"
+                    st.session_state.selected_parameter = "pet"
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_precip"), key="nav_precip_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "precip"
+                    st.session_state.selected_parameter = "precip"
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_pwl"), key="nav_pwl_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "pwl"
+                    st.session_state.selected_parameter = "pwl"
+                    st.session_state.map_generated = False
+                    st.rerun()
                 
             if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
                 st.session_state.selected_analysis = "irrigation"
