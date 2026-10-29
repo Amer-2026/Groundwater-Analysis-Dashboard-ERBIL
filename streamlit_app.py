@@ -1986,7 +1986,7 @@ def main():
             min-height: 38px !important;
             width: 100% !important;
             padding: 0 !important;
-            font-size: 84px !important; /* Bigger font for the emoji */
+            font-size: 36px !important; /* Bigger font for the emoji */
             font-weight: 600 !important;
             display: flex !important;
             justify-content: center !important;
