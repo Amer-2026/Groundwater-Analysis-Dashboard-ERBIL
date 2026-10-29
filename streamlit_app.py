@@ -39,7 +39,7 @@ def get_base64_image(image_path):
 TRANSLATIONS = {
     "en": {
         "page_title": "Groundwater Analysis",
-        "dashboard_header": "Groundwater Analysis Dashboard — Erbil Region",
+        "dashboard_header": "Groundwater Analysis Dashboard — kurdistan Region",
         "country": "Country / Area",
         "ee_init_failed": "Failed to initialize Earth Engine. Please check your credentials.",
         "ee_init_critical": "Critical Error Initializing Earth Engine",
