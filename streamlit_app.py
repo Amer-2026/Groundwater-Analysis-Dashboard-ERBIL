@@ -2008,30 +2008,39 @@ def main():
             border-color: #9a22d9 !important;
         }
 
-        /* ===== FORCE LANGUAGE BUTTON TO HAVE ROUNDED CORNERS ===== */
+        /* ===== FORCE LANGUAGE BUTTON TO MATCH RESET BUTTON ===== */
         
-        /* The outer wrapper (clips the sharp corners) */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] {
-            border-radius: 8px !important;
-            overflow: hidden !important;
+        /* 1. Target the EXACT container that Streamlit draws the border on */
+        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
+            background-color: transparent !important;
             border: none !important;
+            border-radius: 8px !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
 
-        /* The inner box (the purple color) */
+        /* 2. Target the actual selectbox box */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
+            border-radius: 8px !important; /* Force rounded corners */
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
         }
 
-        /* Force the text to be white */
+        /* 3. Force the text and arrow to be white */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        /* 4. Force the outer wrapper to clip the sharp corners */
+        div[class*="st-key-lang_wrap"] > div {
+            border-radius: 8px !important;
+            overflow: hidden !important;
         }
     </style>
     """,
