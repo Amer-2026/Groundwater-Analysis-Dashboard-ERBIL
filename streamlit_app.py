@@ -2505,8 +2505,27 @@ def main():
 
                     # Map the parameter name to the actual asset name in Earth Engine
                     search_param = st.session_state.current_parameter
+
+                    # Look for the correct asset name based on the selected parameter
                     if search_param == "recharge_mm":
-                        search_param = "recharge"  # Your GEE assets are named just "recharge"
+                        search_param = "recharge"  
+                    elif search_param == "aeti":
+                        search_param = "aeti"  # Make sure this matches your GEE asset name
+                    elif search_param == "pet":
+                        search_param = "pet"
+                    elif search_param == "precip":
+                        search_param = "precip"
+                    elif search_param == "pwl":
+                        search_param = "pwl"
+                    
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if search_param in a and selected_year_month in a
+                        ),
+                        None,
+                    )
                     
                     selected_asset = next(
                         (
