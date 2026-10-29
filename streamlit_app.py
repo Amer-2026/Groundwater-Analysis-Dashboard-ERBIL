@@ -1977,26 +1977,38 @@ def main():
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-                /* ===== RESET BUTTON STYLE ===== */
+        /* ===== RESET BUTTON STYLE ===== */
         div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important; /* Purple to match language */
-            color: white !important;
-            border-radius: 8px !important; /* Match the language button shape */
+            background-color: #a8f368 !important; /* Green */
+            color: #1a0a2e !important; 
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            padding: 0 !important;
-            font-size: 36px !important; /* Bigger font for the emoji */
-            font-weight: 600 !important;
+            padding: 0 10px !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
         }
+
+        /* Force the text container to be a nice size */
+        div[class*="st-key-reset_btn"] button p {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: #1a0a2e !important;
+        }
         
+        /* Make the emoji HUGE inside the button */
+        div[class*="st-key-reset_btn"] button p span {
+            font-size: 24px !important; /* Increase this if you want it even bigger */
+            line-height: 1 !important;
+        }
+        
+        /* Hover effect */
         div[class*="st-key-reset_btn"] button:hover {
-            background-color: #9a22d9 !important; /* Darker purple on hover */
+            background-color: #8fd154 !important; 
         }
     </style>
     """,
