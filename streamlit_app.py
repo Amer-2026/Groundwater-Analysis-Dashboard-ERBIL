@@ -620,12 +620,20 @@ PALETTES = {
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
     "recharge_mm": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
+    "aeti": ["#ffffcc", "#c2e699", "#78c679", "#31a354", "#006837"],
+    "pet": ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#d95f0e"],
+    "precip": ["#f7fbff", "#c6dbef", "#6baed6", "#2171b5", "#08306b"],
+    "pwl": ["#f7f4f9", "#d4b9da", "#c994c7", "#df65b0", "#ce1256"],
 }
 
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
     "recharge_mm": "mm/month",
+    "aeti": "mm/month",
+    "pet": "mm/month",
+    "precip": "mm/month",
+    "pwl": "mm/month",
 }
 
 
