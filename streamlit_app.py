@@ -2216,6 +2216,16 @@ def main():
             ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
+
+        
+        elif st.session_state.get("selected_analysis") == "aeti":
+            ana_label = f"🌧️ {t('nav_aeti')}"
+        elif st.session_state.get("selected_analysis") == "pet":
+            ana_label = f"🌧️ {t('nav_pet')}"
+        elif st.session_state.get("selected_analysis") == "precip":
+            ana_label = f"🌧️ {t('nav_precip')}"
+        elif st.session_state.get("selected_analysis") == "pwl":
+            ana_label = f"🌧️ {t('nav_pwl')}"
         else:
             ana_label = f"📊 {t('nav_analysis')}"
             
