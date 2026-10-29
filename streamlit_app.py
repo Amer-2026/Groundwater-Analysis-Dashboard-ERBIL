@@ -1977,21 +1977,13 @@ def main():
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-        /* ===== UNIFY LANGUAGE BUTTON WITH RESET BUTTON ===== */
-        
-        /* Target the outer container of the language selectbox */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] {
-            border-radius: 8px !important;
-            overflow: hidden !important;
-            border: none !important;
-        }
-
-        /* Target the inner box that actually holds the purple color */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
-            background-color: #B429F9 !important;
+        /* ===== FORCE RESET BUTTON TO BE PURPLE ===== */
+        div[class*="st-key-reset_btn"] button {
+            background-color: #B429F9 !important; 
+            background: #B429F9 !important;
             color: #ffffff !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; /* Rounds the corners */
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
@@ -2004,12 +1996,38 @@ def main():
             padding: 0 10px !important;
         }
 
-        /* Hover effect */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover {
-            background-color: #9a22d9 !important;
+        /* Force the text inside the reset button to be white */
+        div[class*="st-key-reset_btn"] button * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
         }
 
-        /* Force text and arrow to be white */
+        /* Hover state */
+        div[class*="st-key-reset_btn"] button:hover {
+            background-color: #9a22d9 !important;
+            border-color: #9a22d9 !important;
+        }
+
+        /* ===== FORCE LANGUAGE BUTTON TO HAVE ROUNDED CORNERS ===== */
+        
+        /* The outer wrapper (clips the sharp corners) */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] {
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            border: none !important;
+        }
+
+        /* The inner box (the purple color) */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+
+        /* Force the text to be white */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
