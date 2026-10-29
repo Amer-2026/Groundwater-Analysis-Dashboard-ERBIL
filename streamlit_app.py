@@ -1977,26 +1977,47 @@ def main():
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-        /* ===== RESET BUTTON STYLE ===== */
-        div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important; /* Purple to match language */
-            color: white !important;
-            border-radius: 8px !important; /* Match the language button shape */
+        /* ===== UNIFY RESET AND LANGUAGE BUTTONS ===== */
+        
+        /* Base style for BOTH buttons */
+        div[class*="st-key-reset_btn"] button,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+            background-color: #B429F9 !important; /* Purple */
+            color: #ffffff !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; /* Rounded edges for both */
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            padding: 0 !important;
-            font-size: 36px !important; /* Bigger font for the emoji */
-            font-weight: 600 !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            border: none !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
             box-shadow: none !important;
+            outline: none !important;
+            padding: 0 10px !important;
         }
-        
-        div[class*="st-key-reset_btn"] button:hover {
-            background-color: #9a22d9 !important; /* Darker purple on hover */
+
+        /* Hover state for BOTH buttons */
+        div[class*="st-key-reset_btn"] button:hover,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover {
+            background-color: #9a22d9 !important;
+            border-color: #9a22d9 !important;
+        }
+
+        /* Force the text inside BOTH buttons to be white and the same size */
+        div[class*="st-key-reset_btn"] button *,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            font-size: 14px !important;
+        }
+
+        /* Make sure the emoji icon is the right size */
+        div[class*="st-key-reset_btn"] button p span {
+            font-size: 18px !important; 
+            margin-right: 5px !important;
         }
     </style>
     """,
@@ -2067,7 +2088,7 @@ def main():
     st.markdown(banner_html, unsafe_allow_html=True)
 
     # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1.2])
+    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1])
     
     # Reset button FIRST (now in lang_col3)
     with lang_col3:
