@@ -1979,30 +1979,23 @@ def main():
         }
         /* ===== RESET BUTTON STYLE ===== */
         div[class*="st-key-reset_btn"] button {
-            background-color: #a8f368 !important; /* Green */
+            background-color: #a8f368 !important; /* Green to match other buttons */
             color: #1a0a2e !important; /* Dark text */
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            padding: 0 10px !important;
-            font-size: 20px !important; /* Makes the emoji BIG */
-            font-weight: 700 !important;
+            padding: 0 !important;
+            font-size: 16px !important; /* Perfect size for the icon */
+            font-weight: 600 !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
         }
-
-        /* Force the text to be slightly smaller than the emoji so the emoji stands out */
-        div[class*="st-key-reset_btn"] button p {
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            margin-left: 5px !important;
-        }
         
-        /* Force all text/icons inside to be black */
+        /* Force the text and icon to be dark */
         div[class*="st-key-reset_btn"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
