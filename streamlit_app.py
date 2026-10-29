@@ -92,8 +92,8 @@ For support or more information, please contact the development team.""",
         "time_series_title": "Time Series for {parameter} at ({lat}, {lon})",
         "legend": "{parameter} Legend",
         "layer": "Layer",
-        "abstraction_mm": "Abstraction (mm)",
-        "abstraction_m3": "Abstraction (m³)",
+        "abstraction_mm": "(mm)",
+        "abstraction_m3": "(m³)",
         "": "",
         "error_get_assets": "Error in get_ee_assets",
         "error_parse_date": "Error parsing date from asset",
@@ -105,11 +105,11 @@ For support or more information, please contact the development team.""",
         "summary_title": "Regional mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
-        "nav_abstraction_mm": "Abstraction (mm)",
-        "nav_abstraction_m3": "Abstraction (m³)",
+        "nav_abstraction_mm": "(mm)",
+        "nav_abstraction_m3": "(m³)",
         "nav_recharge_mm": "Recharge (mm)",
         "nav_recharge_m3": "Recharge (m³)",
-        "info_abstraction": "Abstraction is the total volume of groundwater extracted for irrigation. It is calculated by multiplying the crop water requirement by the irrigated area.",
+        "info_abstraction": "is the total volume of groundwater extracted for irrigation. It is calculated by multiplying the crop water requirement by the irrigated area.",
         "info_recharge": "Recharge is the amount of water that infiltrates the soil and reaches the aquifer. It comes from rainfall and irrigation return flows.",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
@@ -2192,10 +2192,16 @@ def main():
         abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
             
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
+            
+            # NEW INFO BUTTON
+            with st.popover(f"ℹ️ {t('nav_abstraction_mm')} - Info", use_container_width=True):
+                st.write(t("info_abstraction"))
+
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
                 st.rerun()
+                
             if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
@@ -2209,12 +2215,18 @@ def main():
             rc_label = f"🔴 {t('nav_recharge_m3')}"
         else:
             rc_label = "⚪ Recharge"
-            
+
         with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
+            
+            # NEW INFO BUTTON
+            with st.popover(f"ℹ️ Recharge - Info", use_container_width=True):
+                st.write(t("info_recharge"))
+
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
                 st.rerun()
+                
             if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_m3"
                 st.session_state.map_generated = False
@@ -2226,12 +2238,9 @@ def main():
             ana_label = f"🌵 {t('nav_wsi')}"
         elif st.session_state.get("selected_analysis") == "water_balance":
             ana_label = f"⚖️ {t('nav_water_balance')}"
-        elif st.session_state.get("selected_analysis") == "climate_et":
-            ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
 
-        
         elif st.session_state.get("selected_analysis") == "aeti":
             ana_label = f"🌧️ {t('nav_aeti')}"
         elif st.session_state.get("selected_analysis") == "pet":
@@ -2247,12 +2256,20 @@ def main():
         with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
             
             # These are the options INSIDE the dropdown
+            # INFO BUTTON FOR WSI
+            with st.popover(f"ℹ️ {t('nav_wsi')} - Info", use_container_width=True):
+                st.write(t("info_wsi"))
+
             if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
                 st.session_state.selected_analysis = "wsi"
                 st.session_state.selected_parameter = "wsi" 
                 st.session_state.map_generated = False
                 st.rerun()
                 
+            # INFO BUTTON FOR WATER BALANCE
+            with st.popover(f"ℹ️ {t('nav_water_balance')} - Info", use_container_width=True):
+                st.write(t("info_water_balance"))
+
             if st.button(f"⚖️ {t('nav_water_balance')}", key="nav_wb_btn", use_container_width=True):
                 st.session_state.selected_analysis = "water_balance"
                 st.session_state.selected_parameter = "water_balance"
