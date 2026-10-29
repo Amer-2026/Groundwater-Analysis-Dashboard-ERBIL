@@ -1977,15 +1977,21 @@ def main():
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-        /* ===== UNIFY RESET AND LANGUAGE BUTTONS ===== */
+        /* ===== UNIFY LANGUAGE BUTTON WITH RESET BUTTON ===== */
         
-        /* Base style for BOTH buttons */
-        div[class*="st-key-reset_btn"] button,
+        /* Target the outer container of the language selectbox */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] {
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            border: none !important;
+        }
+
+        /* Target the inner box that actually holds the purple color */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
-            background-color: #B429F9 !important; /* Purple */
+            background-color: #B429F9 !important;
             color: #ffffff !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; /* Rounded edges for both */
+            border-radius: 8px !important; /* Rounds the corners */
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
@@ -1995,29 +2001,19 @@ def main():
             font-size: 14px !important;
             font-weight: 600 !important;
             box-shadow: none !important;
-            outline: none !important;
             padding: 0 10px !important;
         }
 
-        /* Hover state for BOTH buttons */
-        div[class*="st-key-reset_btn"] button:hover,
+        /* Hover effect */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover {
             background-color: #9a22d9 !important;
-            border-color: #9a22d9 !important;
         }
 
-        /* Force the text inside BOTH buttons to be white and the same size */
-        div[class*="st-key-reset_btn"] button *,
+        /* Force text and arrow to be white */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-size: 14px !important;
-        }
-
-        /* Make sure the emoji icon is the right size */
-        div[class*="st-key-reset_btn"] button p span {
-            font-size: 18px !important; 
-            margin-right: 5px !important;
         }
     </style>
     """,
