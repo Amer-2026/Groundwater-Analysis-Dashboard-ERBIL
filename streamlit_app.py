@@ -2046,7 +2046,7 @@ def main():
     st.markdown(banner_html, unsafe_allow_html=True)
 
     # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 0.5])
+    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1.2])
     
     with lang_col3:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
