@@ -2131,7 +2131,7 @@ def main():
     st.markdown(banner_html, unsafe_allow_html=True)
 
     # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([4, 0.5, 1, 1])
+    lang_col1, lang_col2, lang_col3, lang_col4, lang_col5 = st.columns([2.5, 1, 1, 1, 1])
     
     # Reset button FIRST (now in lang_col3)
     with lang_col3:
@@ -2141,8 +2141,13 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-    # Language selector SECOND (now in lang_col4)
+    # NEW INFO BUTTON
     with lang_col4:
+        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+            st.session_state.show_info_modal = True
+
+    # Language selector THIRD (now in lang_col5)
+    with lang_col5:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2342,6 +2347,42 @@ def main():
                 st.rerun()
 
     if st.session_state.get("active_cal"):
+         show_calendar()
+        
+    # Info Popup Dialog
+    @st.dialog("ℹ️ Dashboard Guide & Definitions", width="large")
+    def show_info_modal():
+        # Create tabs for organized reading
+        tab1, tab2, tab3 = st.tabs(["📊 Parameters", "📈 Analysis", "ℹ️ About Data"])
+        
+        with tab1:
+            st.markdown(f"**{t('nav_abstraction_mm')}**")
+            st.write(t("info_abstraction"))
+            st.divider()
+            st.markdown(f"**{t('nav_recharge_mm')}**")
+            st.write(t("info_recharge"))
+            
+        with tab2:
+            st.markdown(f"**{t('nav_wsi')}**")
+            st.write(t("info_wsi"))
+            st.divider()
+            st.markdown(f"**{t('nav_water_balance')}**")
+            st.write(t("info_water_balance"))
+            st.divider()
+            st.markdown(f"**{t('nav_climate_et')}**")
+            st.write("Climate and Evapotranspiration data from WaPOR v3, including AETI, PET, Precipitation, and PWL.")
+            
+        with tab3:
+            st.markdown(t("about_text"))
+            
+        # Close button
+        if st.button("Close", type="primary", use_container_width=True):
+            st.session_state.show_info_modal = False
+            st.rerun()
+
+    # Trigger the modal
+    if st.session_state.get("show_info_modal"):
+        show_info_modal()
         show_calendar()
 
     # Get the dates for the map generation
