@@ -2165,6 +2165,28 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+                /* ===== THE ULTIMATE FONT UNIFY ===== */
+        
+        /* 1. Force ALL text inside the custom buttons to be bold */
+        div[class*="st-key-info_btn"] button p,
+        div[class*="st-key-reset_btn"] button p,
+        div[class*="st-key-loc_dropdown"] button p,
+        div[class*="st-key-abs_dropdown"] button p,
+        div[class*="st-key-rc_dropdown"] button p,
+        div[class*="st-key-analysis_dropdown"] button p,
+        div[class*="st-key-btn_start_cal_top"] button p,
+        div[class*="st-key-btn_end_cal_top"] button p,
+        div[class*="st-key-top_generate"] button p {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        /* 2. Force the Language Selectbox text to be the exact same size and weight */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
