@@ -2064,7 +2064,7 @@ def main():
         }
         /* ===== INFO BUTTON STYLE (YELLOW) ===== */
         div[class*="st-key-info_btn"] button {
-            background-color: #fbc02d !important; /* Yellow */
+            background-color: #fff95b  !important; /* Yellow */
             color: #1a0a2e !important; 
             border-radius: 8px !important; 
             height: 38px !important;
