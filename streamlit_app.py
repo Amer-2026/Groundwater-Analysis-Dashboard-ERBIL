@@ -2062,32 +2062,32 @@ def main():
             border-radius: 8px !important;
             overflow: hidden !important;
         }
-        /* ===== INFO BUTTON STYLE (YELLOW) ===== */
+        /* ===== INFO BUTTON STYLE (GREEN) ===== */
         div[class*="st-key-info_btn"] button {
-            background-color: #fff95b  !important; /* Yellow */
+            background-color: #a8f368 !important; /* Green */
             color: #1a0a2e !important; 
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            padding: 0 !important;
+            padding: 0 10px !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
-            font-size: 16px !important;
+            font-size: 14px !important; /* Same size as Reset */
             font-weight: 600 !important;
         }
         
         div[class*="st-key-info_btn"] button:hover {
-            background-color: #f9a825 !important; /* Darker yellow on hover */
+            background-color: #8fd154 !important; 
         }
         
         div[class*="st-key-info_btn"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
-            font-size: 18px !important;
+            font-size: 14px !important; /* Same size for the icon */
         }     
     </style>
     """,
