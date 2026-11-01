@@ -2179,17 +2179,13 @@ def main():
     with c5:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
-        with st.container(key="lang_wrap"):
-            selected_label = st.selectbox(
-                "🌐",
-                options=list(lang_options.keys()),
-                index=list(lang_options.keys()).index(current_label),
-                key="lang_selector_banner",
-                label_visibility="collapsed",
-            )
-        if lang_options[selected_label] != st.session_state.lang:
-            st.session_state.lang = lang_options[selected_label]
-            st.rerun()
+        
+        # Use a popover button instead of selectbox for perfect styling
+        with st.popover(f"🌐 {current_label}", use_container_width=True, key="lang_dropdown"):
+            for label, code in lang_options.items():
+                if st.button(label, key=f"lang_{code}", use_container_width=True):
+                    st.session_state.lang = code
+                    st.rerun()
             
     st.markdown('</div>', unsafe_allow_html=True)
 
