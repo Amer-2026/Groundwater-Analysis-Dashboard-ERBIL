@@ -2093,7 +2093,6 @@ def main():
 
         div[class*="st-key-lang_wrap"] span {
             font-weight: 700 !important;
-        } 
         }
     """
     
