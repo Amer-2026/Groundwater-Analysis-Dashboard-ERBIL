@@ -2170,7 +2170,7 @@ def main():
 
     # NEW INFO BUTTON
     with lang_col3:
-        if st.button("ℹ️", key="info_btn", use_container_width=True, help="Dashboard Info"):
+        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
             st.session_state.show_info_modal = True
 
     # Language selector THIRD (now in lang_col5)
