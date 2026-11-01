@@ -2194,24 +2194,23 @@ def main():
 """
     st.markdown(banner_html, unsafe_allow_html=True)
 
-    # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4, lang_col5 = st.columns([2.5, 1, 1, 1, 1])
+    # Create a flex container for the top-right buttons
+    st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
-    # Reset button FIRST (now in lang_col3)
-    with lang_col4:
-        if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
-            # Clear all session state to return to initial view
+    # Use columns for layout, but force them onto one line with CSS
+    c1, c2, c3, c4, c5 = st.columns([2.5, 1, 0.8, 1, 1])
+    
+    with c3:
+        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+            st.session_state.show_info_modal = True
+            
+    with c4:
+        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
-
-    # NEW INFO BUTTON
-    with lang_col3:
-        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
-            st.session_state.show_info_modal = True
-
-    # Language selector THIRD (now in lang_col5)
-    with lang_col5:
+            
+    with c5:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2225,6 +2224,8 @@ def main():
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
+            
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
