@@ -594,7 +594,7 @@ def create_base_map(center_lat, center_lon, zoom):
     .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
         cursor: default !important;
     }
-    </style>
+    
     """
     m.get_root().html.add_child(folium.Element(border_css))
 
@@ -2121,6 +2121,32 @@ def main():
         div[class*="st-key-lang_wrap"] > div {
             border-radius: 8px !important;
             overflow: hidden !important;
+        }
+        /* ===== UNIFY ALL BUTTON FONTS TO BE BOLD ===== */
+        
+        /* 1. Green buttons (Abstraction, Recharge, Info, Generate, etc.) */
+        div[class*="st-key-info_btn"] button *,
+        div[class*="st-key-abs_dropdown"] button *,
+        div[class*="st-key-rc_dropdown"] button *,
+        div[class*="st-key-analysis_dropdown"] button *,
+        div[class*="st-key-btn_start_cal_top"] button *,
+        div[class*="st-key-btn_end_cal_top"] button *,
+        div[class*="st-key-top_generate"] button * {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        /* 2. Purple buttons (Region, Reset, Language) */
+        div[class*="st-key-loc_dropdown"] button *,
+        div[class*="st-key-reset_btn"] button *,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        /* 3. Ensure the button text inside standard Streamlit buttons is also bold */
+        .stButton > button p {
+            font-weight: 700 !important;
         }
     </style>
     """,
