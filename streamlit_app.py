@@ -2088,7 +2088,43 @@ def main():
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
             font-size: 14px !important; /* Same size for the icon */
-        }     
+        /* ===== MAKE INFO BUTTON PHYSICALLY SMALLER ===== */
+        
+        /* Target the container that holds the Info button */
+        div[class*="st-key-info_btn"] {
+            width: 70% !important; /* Shrinks the button width */
+            margin-left: auto !important; /* Aligns it to the right */
+            margin-right: 5px !important; /* Gives a little space before Reset */
+        }
+
+        /* Ensure the button inside respects the smaller width */
+        div[class*="st-key-info_btn"] button {
+            width: 100% !important;
+            background-color: #a8f368 !important; 
+            color: #1a0a2e !important; 
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            padding: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        
+        div[class*="st-key-info_btn"] button:hover {
+            background-color: #8fd154 !important; 
+        }
+        
+        div[class*="st-key-info_btn"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-size: 16px !important;
+        }
+        
     </style>
     """,
     unsafe_allow_html=True,
