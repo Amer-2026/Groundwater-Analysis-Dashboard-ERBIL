@@ -2148,6 +2148,23 @@ def main():
         .stButton > button p {
             font-weight: 700 !important;
         }
+                /* Force the Info and Reset button text inside the <p> tag to be bold */
+        div[class*="st-key-info_btn"] button p,
+        div[class*="st-key-reset_btn"] button p {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        /* Force the text inside the dropdowns (Region, etc.) to be bold */
+        div[class*="st-key-loc_dropdown"] button p,
+        div[class*="st-key-abs_dropdown"] button p,
+        div[class*="st-key-rc_dropdown"] button p,
+        div[class*="st-key-analysis_dropdown"] button p,
+        div[class*="st-key-btn_start_cal_top"] button p,
+        div[class*="st-key-btn_end_cal_top"] button p {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
