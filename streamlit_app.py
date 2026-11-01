@@ -2075,9 +2075,25 @@ def main():
             font-size: 14px !important;
             color: #ffffff !important;
         }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+        /* ===== THE ULTIMATE LANGUAGE BOLD FIX ===== */
+        div[class*="st-key-lang_wrap"] * {
             font-weight: 700 !important;
-        }    
+            font-family: inherit !important;
+        }
+
+        div[class*="st-key-lang_wrap"] [data-baseweb="select"] div {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+        }
+
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+        }
+
+        div[class*="st-key-lang_wrap"] span {
+            font-weight: 700 !important;
+        } 
         }
     """
     
