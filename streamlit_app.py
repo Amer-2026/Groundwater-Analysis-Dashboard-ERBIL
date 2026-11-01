@@ -2062,6 +2062,33 @@ def main():
             border-radius: 8px !important;
             overflow: hidden !important;
         }
+        /* ===== INFO BUTTON STYLE (YELLOW) ===== */
+        div[class*="st-key-info_btn"] button {
+            background-color: #fbc02d !important; /* Yellow */
+            color: #1a0a2e !important; 
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+        }
+        
+        div[class*="st-key-info_btn"] button:hover {
+            background-color: #f9a825 !important; /* Darker yellow on hover */
+        }
+        
+        div[class*="st-key-info_btn"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-size: 18px !important;
+        }     
     </style>
     """,
     unsafe_allow_html=True,
@@ -2134,7 +2161,7 @@ def main():
     lang_col1, lang_col2, lang_col3, lang_col4, lang_col5 = st.columns([2.5, 1, 0.6, 1, 1])
     
     # Reset button FIRST (now in lang_col3)
-    with lang_col3:
+    with lang_col4:
         if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
             # Clear all session state to return to initial view
             for key in list(st.session_state.keys()):
@@ -2142,8 +2169,8 @@ def main():
             st.rerun()
 
     # NEW INFO BUTTON
-    with lang_col4:
-        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+    with lang_col3:
+        if st.button("ℹ️", key="info_btn", use_container_width=True, help="Dashboard Info"):
             st.session_state.show_info_modal = True
 
     # Language selector THIRD (now in lang_col5)
