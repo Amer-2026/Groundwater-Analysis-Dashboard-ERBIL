@@ -2187,6 +2187,22 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+                /* ===== FORCE LANGUAGE BUTTON TO BE BOLD ===== */
+        
+        /* Target the text inside the selectbox */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+            font-weight: 700 !important;
+        }
+
+        /* Target the actual text value */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
+            font-weight: 700 !important;
+        }
+
+        /* Target the input element inside (if it exists) */
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
