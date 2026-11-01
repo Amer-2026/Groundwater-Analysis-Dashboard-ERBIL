@@ -1932,51 +1932,29 @@ def main():
             align-items: center !important;
             gap: 8px !important;
         }
-
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
             content: "" !important;
             display: inline-block !important;
             width: 20px !important;
             height: 20px !important;
-            /* Point this to your image on GitHub */
             background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
             background-size: contain !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
+
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
-            gap: 0.3rem !important; /* Reduced gap to fit 7 buttons */
+            gap: 0.3rem !important; 
             align-items: center !important;
         }
-
-        /* Allow columns to shrink */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
             min-width: 0 !important;
             width: 100% !important;
         }
 
-        /* Force the Date Inputs to shrink and fit inside their columns */
-        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"],
-        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] {
-            width: 100% !important;
-            min-width: 0 !important;
-        }
-        
-        /* Override Streamlit's default minimum width for date inputs */
-        div[data-testid="stDateInput"] > div > div {
-            min-width: 0 !important;
-        }
-        
-        /* Ensure the input text doesn't push the width out */
-        div[data-testid="stDateInput"] input {
-            text-overflow: ellipsis !important;
-            min-width: 0 !important;
-            font-size: 13px !important; /* Slightly smaller text to fit */
-        }
-        
-         /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
             background-color: #cae9ff !important;
@@ -1985,59 +1963,24 @@ def main():
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            font-weight: 600 !important;
-            font-size: 13px !important; 
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
         }
-
         div[class*="st-key-btn_start_cal_top"] button:hover,
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-        /* ===== FORCE RESET BUTTON TO BE PURPLE ===== */
-        div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important; 
-            background: #B429F9 !important;
-            color: #ffffff !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            box-shadow: none !important;
-            padding: 0 10px !important;
-        }
 
-        /* Force the text inside the reset button to be white */
-        div[class*="st-key-reset_btn"] button * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-        }
-
-        /* Hover state */
-        div[class*="st-key-reset_btn"] button:hover {
-            background-color: #9a22d9 !important;
-            border-color: #9a22d9 !important;
-        }
-
-        /* ===== TOP RIGHT BUTTONS (Clean Layout) ===== */
-        
-        /* 1. Force the row to stay on one line */
+        /* ===== TOP RIGHT BUTTONS (Reset, Info, Language) ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
             flex-wrap: nowrap !important;
             align-items: center !important;
             gap: 8px !important;
         }
 
-        /* 2. INFO BUTTON (Green) */
+        /* Info Button */
         div[class*="st-key-info_btn"] button {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -2051,24 +1994,19 @@ def main():
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
         }
-        
         div[class*="st-key-info_btn"] button:hover {
             background-color: #8fd154 !important;
         }
-        
         div[class*="st-key-info_btn"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
-            font-size: 16px !important;
         }
 
-        /* 3. RESET BUTTON (Purple) */
+        /* Reset Button */
         div[class*="st-key-reset_btn"] button {
             background-color: #B429F9 !important;
-            color: #1a0a2e !important; /* Dark text */
+            color: #1a0a2e !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
@@ -2078,22 +2016,16 @@ def main():
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
-            font-size: 14px !important; /* Match font size */
-            font-weight: 600 !important; /* Match font weight */
         }
-        
         div[class*="st-key-reset_btn"] button:hover {
             background-color: #9a22d9 !important;
         }
-        
-        /* Force the text and icon inside the button to be dark */
         div[class*="st-key-reset_btn"] button * {
-            color: #1a0a2e !important; /* Dark text */
-            fill: #1a0a2e !important;  /* Dark icon */
-            font-size: 14px !important;
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
         }
 
-        /* 4. LANGUAGE BUTTON (Purple with rounded corners) */
+        /* Language Button */
         div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
             background-color: transparent !important;
             border: none !important;
@@ -2101,7 +2033,6 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
-
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2110,64 +2041,16 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
-
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
         }
-
         div[class*="st-key-lang_wrap"] > div {
             border-radius: 8px !important;
             overflow: hidden !important;
         }
-        /* ===== UNIFY ALL BUTTON FONTS TO BE BOLD ===== */
-        
-        /* 1. Green buttons (Abstraction, Recharge, Info, Generate, etc.) */
-        div[class*="st-key-info_btn"] button *,
-        div[class*="st-key-abs_dropdown"] button *,
-        div[class*="st-key-rc_dropdown"] button *,
-        div[class*="st-key-analysis_dropdown"] button *,
-        div[class*="st-key-btn_start_cal_top"] button *,
-        div[class*="st-key-btn_end_cal_top"] button *,
-        div[class*="st-key-top_generate"] button * {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
 
-        /* 2. Purple buttons (Region, Reset, Language) */
-        div[class*="st-key-loc_dropdown"] button *,
-        div[class*="st-key-reset_btn"] button *,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-
-        /* 3. Ensure the button text inside standard Streamlit buttons is also bold */
-        .stButton > button p {
-            font-weight: 700 !important;
-        }
-                /* Force the Info and Reset button text inside the <p> tag to be bold */
-        div[class*="st-key-info_btn"] button p,
-        div[class*="st-key-reset_btn"] button p {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-
-        /* Force the text inside the dropdowns (Region, etc.) to be bold */
-        div[class*="st-key-loc_dropdown"] button p,
-        div[class*="st-key-abs_dropdown"] button p,
-        div[class*="st-key-rc_dropdown"] button p,
-        div[class*="st-key-analysis_dropdown"] button p,
-        div[class*="st-key-btn_start_cal_top"] button p,
-        div[class*="st-key-btn_end_cal_top"] button p {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-                /* ===== THE ULTIMATE FONT UNIFY ===== */
-        
-        /* 1. Force ALL text inside the custom buttons to be bold */
+        /* ===== THE ULTIMATE FONT UNIFY (BOLD) ===== */
         div[class*="st-key-info_btn"] button p,
         div[class*="st-key-reset_btn"] button p,
         div[class*="st-key-loc_dropdown"] button p,
@@ -2176,37 +2059,17 @@ def main():
         div[class*="st-key-analysis_dropdown"] button p,
         div[class*="st-key-btn_start_cal_top"] button p,
         div[class*="st-key-btn_end_cal_top"] button p,
-        div[class*="st-key-top_generate"] button p {
+        div[class*="st-key-top_generate"] button p,
+        .stButton > button p {
             font-weight: 700 !important;
             font-size: 14px !important;
         }
 
-        /* 2. Force the Language Selectbox text to be the exact same size and weight */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-                /* ===== FORCE LANGUAGE BUTTON TO BE BOLD ===== */
-        
-        /* Target the text inside the selectbox */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
-            font-weight: 700 !important;
-        }
-
-        /* Target the actual text value */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
             font-weight: 700 !important;
+            font-size: 14px !important;
         }
-
-        /* Target the input element inside (if it exists) */
-        div[class*="st-key-lang_wrap"] input {
-            font-weight: 700 !important;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 
     # ---- TOP BAR: language + country ----
