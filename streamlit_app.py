@@ -2124,8 +2124,68 @@ def main():
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
             font-size: 16px !important;
+        /* ===== TOP RIGHT BUTTONS (Flexbox Layout) ===== */
+        
+        /* Force the columns to stay on one line */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+
+        /* Style the Info Button (Green & Smaller) */
+        div[class*="st-key-info_btn"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
         }
         
+        div[class*="st-key-info_btn"] button:hover {
+            background-color: #8fd154 !important;
+        }
+        
+        div[class*="st-key-info_btn"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-size: 16px !important;
+        }
+
+        /* Style the Reset Button (Purple) */
+        div[class*="st-key-reset_btn"] button {
+            background-color: #B429F9 !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+        
+        div[class*="st-key-reset_btn"] button:hover {
+            background-color: #9a22d9 !important;
+        }
+        
+        div[class*="st-key-reset_btn"] button * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
