@@ -2069,7 +2069,10 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-
+    """
+    
+    # Render the CSS safely
+    st.markdown(css_content, unsafe_allow_html=True)
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
