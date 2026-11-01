@@ -2140,20 +2140,21 @@ def main():
 
     region_b64 = get_base64_image("region_icon.png")
 
-    banner_html = f"""
-<div class="banner">
-<div class="banner-inner">
-<div style="display: flex; gap: 0px;">
-    {logo1_html}
-    {logo2_html}
-</div>
-<div class="banner-title">
-<h1>💧 {t('dashboard_header')}</h1>
-<div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-<div class="welcome">{t('welcome_subtitle')}</div>
-</div>
-</div>
-"""
+    banner_html = (
+        '<div class="banner">'
+        '<div class="banner-inner">'
+        '<div style="display: flex; gap: 0px;">'
+        + logo1_html + logo2_html +
+        '</div>'
+        '<div class="banner-title">'
+        '<h1>&#128167; ' + t('dashboard_header') + '</h1>'
+        '<div class="subtitle">' + cfg.get('name_en', '') + ' | ' + datetime.now().strftime('%Y') + '</div>'
+        '<div class="welcome">' + t('welcome_subtitle') + '</div>'
+        '</div>'
+        '</div>'
+        '</div>'
+    )
+
     st.markdown(banner_html, unsafe_allow_html=True)
 
     # Create a flex container for the top-right buttons
