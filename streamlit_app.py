@@ -2088,6 +2088,7 @@ def main():
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
             font-size: 14px !important; /* Same size for the icon */
+            
         /* ===== MAKE INFO BUTTON PHYSICALLY SMALLER ===== */
         
         /* Target the container that holds the Info button */
