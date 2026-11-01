@@ -2068,6 +2068,16 @@ def main():
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
             font-weight: 700 !important;
             font-size: 14px !important;
+            
+        /* ===== FORCE LANGUAGE BUTTON TEXT TO BE BOLD ===== */
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+            font-weight: 700 !important;
+        }    
         }
     """
     
