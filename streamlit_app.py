@@ -1141,7 +1141,7 @@ def main():
 
     # ---- DARK THEME CSS ----
     st.markdown(
-        """
+        f"""
         <style>
         /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button {
