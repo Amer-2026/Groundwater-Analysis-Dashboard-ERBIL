@@ -2113,6 +2113,15 @@ def main():
     # Load logos for the banner
     logo1_b64 = get_base64_image("logo1.png")
     logo2_b64 = get_base64_image("logo2.png")
+    region_b64 = get_base64_image("region_icon.png")
+    
+    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
+    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
+
+    banner_html = f"""<div class="banner"><div class="banner-inner"><div style="display: flex; gap: 0px;">{logo1_html}{logo2_html}</div><div class="banner-title"><h1>💧 {t('dashboard_header')}</h1><div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div><div class="welcome">{t('welcome_subtitle')}</div></div></div></div>"""
+    
+    st.markdown(banner_html, unsafe_allow_html=True)
+    logo2_b64 = get_base64_image("logo2.png")
     logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
     logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
