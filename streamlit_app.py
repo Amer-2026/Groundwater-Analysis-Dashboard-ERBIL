@@ -2028,112 +2028,16 @@ def main():
             border-color: #9a22d9 !important;
         }
 
-        /* ===== FORCE LANGUAGE BUTTON TO MATCH RESET BUTTON ===== */
+        /* ===== TOP RIGHT BUTTONS (Clean Layout) ===== */
         
-        /* 1. Target the EXACT container that Streamlit draws the border on */
-        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
-            background-color: transparent !important;
-            border: none !important;
-            border-radius: 8px !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        /* 2. Target the actual selectbox box */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; /* Force rounded corners */
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-        }
-
-        /* 3. Force the text and arrow to be white */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-        }
-
-        /* 4. Force the outer wrapper to clip the sharp corners */
-        div[class*="st-key-lang_wrap"] > div {
-            border-radius: 8px !important;
-            overflow: hidden !important;
-        }
-        /* ===== INFO BUTTON STYLE (GREEN) ===== */
-        div[class*="st-key-info_btn"] button {
-            background-color: #a8f368 !important; /* Green */
-            color: #1a0a2e !important; 
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            padding: 0 10px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            border: none !important;
-            box-shadow: none !important;
-            font-size: 14px !important; /* Same size as Reset */
-            font-weight: 600 !important;
-        }
-        
-        div[class*="st-key-info_btn"] button:hover {
-            background-color: #8fd154 !important; 
-        }
-        
-        div[class*="st-key-info_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-            font-size: 14px !important; /* Same size for the icon */
-            
-        /* ===== MAKE INFO BUTTON PHYSICALLY SMALLER ===== */
-        
-        /* Target the container that holds the Info button */
-        div[class*="st-key-info_btn"] {
-            width: 70% !important; /* Shrinks the button width */
-            margin-left: auto !important; /* Aligns it to the right */
-            margin-right: 5px !important; /* Gives a little space before Reset */
-        }
-
-        /* Ensure the button inside respects the smaller width */
-        div[class*="st-key-info_btn"] button {
-            width: 100% !important;
-            background-color: #a8f368 !important; 
-            color: #1a0a2e !important; 
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            padding: 0 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            border: none !important;
-            box-shadow: none !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-        }
-        
-        div[class*="st-key-info_btn"] button:hover {
-            background-color: #8fd154 !important; 
-        }
-        
-        div[class*="st-key-info_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-            font-size: 16px !important;
-        /* ===== TOP RIGHT BUTTONS (Flexbox Layout) ===== */
-        
-        /* Force the columns to stay on one line */
+        /* 1. Force the row to stay on one line */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
             flex-wrap: nowrap !important;
             align-items: center !important;
-            gap: 10px !important;
+            gap: 8px !important;
         }
 
-        /* Style the Info Button (Green & Smaller) */
+        /* 2. INFO BUTTON (Green) */
         div[class*="st-key-info_btn"] button {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -2161,7 +2065,7 @@ def main():
             font-size: 16px !important;
         }
 
-        /* Style the Reset Button (Purple) */
+        /* 3. RESET BUTTON (Purple) */
         div[class*="st-key-reset_btn"] button {
             background-color: #B429F9 !important;
             color: #ffffff !important;
@@ -2185,6 +2089,36 @@ def main():
         div[class*="st-key-reset_btn"] button * {
             color: #ffffff !important;
             fill: #ffffff !important;
+        }
+
+        /* 4. LANGUAGE BUTTON (Purple with rounded corners) */
+        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
+            background-color: transparent !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+        }
+
+        div[class*="st-key-lang_wrap"] > div {
+            border-radius: 8px !important;
+            overflow: hidden !important;
         }
     </style>
     """,
