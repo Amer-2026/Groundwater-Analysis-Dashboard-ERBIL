@@ -2460,7 +2460,7 @@ def main():
             '</div>'
             '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">'
                 '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
-                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>'
+                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
             '</div>'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + end_str +
