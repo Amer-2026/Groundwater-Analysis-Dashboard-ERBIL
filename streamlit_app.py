@@ -2068,7 +2068,7 @@ def main():
         /* 3. RESET BUTTON (Purple) */
         div[class*="st-key-reset_btn"] button {
             background-color: #B429F9 !important;
-            color: #ffffff !important;
+            color: #1a0a2e !important; /* Dark text */
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
@@ -2078,17 +2078,19 @@ def main():
             align-items: center !important;
             border: none !important;
             box-shadow: none !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
+            font-size: 14px !important; /* Match font size */
+            font-weight: 600 !important; /* Match font weight */
         }
         
         div[class*="st-key-reset_btn"] button:hover {
             background-color: #9a22d9 !important;
         }
         
+        /* Force the text and icon inside the button to be dark */
         div[class*="st-key-reset_btn"] button * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
+            color: #1a0a2e !important; /* Dark text */
+            fill: #1a0a2e !important;  /* Dark icon */
+            font-size: 14px !important;
         }
 
         /* 4. LANGUAGE BUTTON (Purple with rounded corners) */
