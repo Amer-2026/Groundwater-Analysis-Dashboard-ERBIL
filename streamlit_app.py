@@ -2076,22 +2076,20 @@ def main():
             color: #ffffff !important;
         }
         /* ===== THE ULTIMATE LANGUAGE BOLD FIX ===== */
-        div[class*="st-key-lang_wrap"] * {
-            font-weight: 700 !important;
-            font-family: inherit !important;
-        }
-
-        div[class*="st-key-lang_wrap"] [data-baseweb="select"] div {
-            font-weight: 700 !important;
-            color: #ffffff !important;
-        }
-
         div[class*="st-key-lang_wrap"] input {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important; /* Forces font family */
             font-weight: 700 !important;
+            font-size: 14px !important;
             color: #ffffff !important;
+        }
+
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+            font-weight: 700 !important;
         }
 
         div[class*="st-key-lang_wrap"] span {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
     """
