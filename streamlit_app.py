@@ -2164,7 +2164,7 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5 = st.columns([4, 1, 0.4, 0.4, 0.4])
+    c1, c2, c3, c4, c5 = st.columns([3, 1, 0.4, 0.4, 0.4])
     
     with c3:
         if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
