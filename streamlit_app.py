@@ -2095,6 +2095,44 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
+                /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
+            background-color: #B429F9 !important;
+            color: #ffffff !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            font-weight: 700 !important;
+        }
+
+        /* The dropdown menu (white background) */
+        div[data-baseweb="popover"] > div {
+            background-color: #ffffff !important;
+            border: 1px solid #444 !important;
+            border-radius: 8px !important;
+        }
+
+        /* The options inside the dropdown */
+        div[data-baseweb="popover"] li {
+            color: #1a0a2e !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            padding: 10px !important;
+        }
+
+        /* Hover effect on the options */
+        div[data-baseweb="popover"] li:hover {
+            background-color: #e0e0e0 !important;
+            cursor: pointer !important;
+        }
     """
     
     # Render the CSS safely
