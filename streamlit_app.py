@@ -2133,6 +2133,10 @@ def main():
             background-color: #e0e0e0 !important;
             cursor: pointer !important;
         }
+        /* Hide the placeholder 'Region' option inside the dropdown menu */
+        div[data-baseweb="popover"] li:first-child {
+            display: none !important;
+        }  
     """
     
     # Render the CSS safely
