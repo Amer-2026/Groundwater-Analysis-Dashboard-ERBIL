@@ -2216,17 +2216,31 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-    # --- Column 1: Region Dropdown ---
+    # --- Column 1: Region Dropdown (Native Selectbox) ---
     with nav_col1:
-        loc_label = f"{t('nav_region')}"
-            
-        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
-                st.session_state.selected_location = "national"
-                st.rerun()
+        region_options = {
+            "subnational": t("nav_subnational"),
+            "national": t("nav_national")
+        }
+        
+        # Get the current index based on session state
+        current_region = st.session_state.get("selected_location", "subnational")
+        current_index = list(region_options.keys()).index(current_region)
+        
+        # Display the selectbox
+        selected_region = st.selectbox(
+            t("nav_region"),
+            options=list(region_options.keys()),
+            index=current_index,
+            format_func=lambda x: region_options[x],
+            key="region_selector",
+            label_visibility="collapsed"
+        )
+        
+        # Update session state if changed
+        if selected_region != current_region:
+            st.session_state.selected_location = selected_region
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
