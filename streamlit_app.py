@@ -2169,17 +2169,26 @@ def main():
     # Use columns for layout, but force them onto one line with CSS
     c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
     
+    # Info Button (c3)
     with c3:
         if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
             st.session_state.show_info_modal = True
             
+    # Reset Button (c4)
     with c4:
         if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
-            
+
+    # NEW Download Button (c5)
     with c5:
+        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
+            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
+            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
+            
+    # Language Selector (c6)
+    with c6:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
