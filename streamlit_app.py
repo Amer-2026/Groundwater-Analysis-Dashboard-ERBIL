@@ -2256,19 +2256,26 @@ def main():
 
     # --- Column 1: Region Dropdown (Native Selectbox) ---
     with nav_col1:
+        # Add "Region" as the default placeholder option
         region_options = {
+            "region": t("nav_region"),           # Placeholder
             "subnational": t("nav_subnational"),
             "national": t("nav_national")
         }
         
-        # Get the current index based on session state
-        current_region = st.session_state.get("selected_location", "subnational")
-        current_index = list(region_options.keys()).index(current_region)
+        # Get the current state (defaults to 'region' if not set)
+        current_region = st.session_state.get("selected_location", "region")
         
-        # Display the selectbox
+        # Ensure the key exists in our dictionary
+        keys = list(region_options.keys())
+        if current_region not in keys:
+            current_region = "region"
+            
+        current_index = keys.index(current_region)
+        
         selected_region = st.selectbox(
             t("nav_region"),
-            options=list(region_options.keys()),
+            options=keys,
             index=current_index,
             format_func=lambda x: region_options[x],
             key="region_selector",
