@@ -2095,29 +2095,52 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
-                /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
+        /* ===== REGION BUTTON (Purple Popover) ===== */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
             color: #ffffff !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+            box-shadow: none !important;
         }
-
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+        
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-weight: 700 !important;
         }
 
-        /* The dropdown menu (white background) */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover {
+            background-color: #9a22d9 !important;
+        }
+
+        /* ===== THE WHITE MENU ===== */
         div[data-baseweb="popover"] > div {
             background-color: #ffffff !important;
-            border: 1px solid #444 !important;
+            border: 1px solid #c6c5c1 !important;
             border-radius: 8px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
+        }
+
+        /* The green options inside the white menu */
+        div[data-baseweb="popover"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 6px !important;
+            margin-bottom: 5px !important;
+            font-weight: 700 !important;
+        }
+        
+        div[data-baseweb="popover"] button:hover {
+            background-color: #8fd154 !important;
         }
 
         /* The options inside the dropdown */
@@ -2255,37 +2278,28 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-    # --- Column 1: Region Dropdown (Native Selectbox) ---
+    # --- Column 1: Region Dropdown (Custom Popover) ---
     with nav_col1:
-        # Check if a region has been selected yet
+        # Determine what to display on the main button
         current_loc = st.session_state.get("selected_location", None)
-        
-        # If nothing is selected, show "Region". 
-        # If something is selected, show the translated name.
         if current_loc == "subnational":
             display_text = t("nav_subnational")
         elif current_loc == "national":
             display_text = t("nav_national")
         else:
-            display_text = t("nav_region") # Default title
+            display_text = t("nav_region")
             
-        # Create the selectbox with ONLY the two valid options
-        selected_region = st.selectbox(
-            t("nav_region"),
-            options=["subnational", "national"],
-            index=None, # Start empty so it shows the placeholder
-            format_func=lambda x: t(f"nav_{x}"),
-            key="region_selector",
-            label_visibility="collapsed",
-            placeholder=display_text # This is the magic! It shows the title without being in the list
-        )
-        
-        # If the user makes a selection, save it and reload
-        if selected_region is not None:
-            if selected_region != current_loc:
-                st.session_state.selected_location = selected_region
+        # Create a popover to act as the dropdown
+        with st.popover(display_text, use_container_width=True, key="loc_dropdown"):
+            # Option 1
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
                 st.rerun()
-
+            # Option 2
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
+                
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         # Always show just "Abstraction" on the main button
