@@ -2133,10 +2133,7 @@ def main():
             background-color: #e0e0e0 !important;
             cursor: pointer !important;
         }
-        /* Hide the placeholder 'Region' option inside the dropdown menu */
-        div[data-baseweb="popover"] li:first-child {
-            display: none !important;
-        }  
+ 
     """
     
     # Render the CSS safely
@@ -2260,36 +2257,34 @@ def main():
 
     # --- Column 1: Region Dropdown (Native Selectbox) ---
     with nav_col1:
-        # Add "Region" as the default placeholder option
-        region_options = {
-            "region": t("nav_region"),           # Placeholder
-            "subnational": t("nav_subnational"),
-            "national": t("nav_national")
-        }
+        # Check if a region has been selected yet
+        current_loc = st.session_state.get("selected_location", None)
         
-        # Get the current state (defaults to 'region' if not set)
-        current_region = st.session_state.get("selected_location", "region")
-        
-        # Ensure the key exists in our dictionary
-        keys = list(region_options.keys())
-        if current_region not in keys:
-            current_region = "region"
+        # If nothing is selected, show "Region". 
+        # If something is selected, show the translated name.
+        if current_loc == "subnational":
+            display_text = t("nav_subnational")
+        elif current_loc == "national":
+            display_text = t("nav_national")
+        else:
+            display_text = t("nav_region") # Default title
             
-        current_index = keys.index(current_region)
-        
+        # Create the selectbox with ONLY the two valid options
         selected_region = st.selectbox(
             t("nav_region"),
-            options=keys,
-            index=current_index,
-            format_func=lambda x: region_options[x],
+            options=["subnational", "national"],
+            index=None, # Start empty so it shows the placeholder
+            format_func=lambda x: t(f"nav_{x}"),
             key="region_selector",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            placeholder=display_text # This is the magic! It shows the title without being in the list
         )
         
-        # Update session state if changed
-        if selected_region != current_region:
-            st.session_state.selected_location = selected_region
-            st.rerun()
+        # If the user makes a selection, save it and reload
+        if selected_region is not None:
+            if selected_region != current_loc:
+                st.session_state.selected_location = selected_region
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
