@@ -2280,7 +2280,7 @@ def main():
 
     # --- Column 1: Region Dropdown (Custom Popover) ---
     with nav_col1:
-        # Check if a region has been selected yet
+        # Get the current value (None if not set)
         current_loc = st.session_state.get("selected_location")
         
         # Determine the title
@@ -2291,7 +2291,7 @@ def main():
         else:
             display_text = t("nav_region")
             
-        # Create the dropdown menu
+        # Create the popover (the dropdown menu)
         with st.popover(display_text, use_container_width=True, key="loc_dropdown"):
             if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
                 st.session_state.selected_location = "subnational"
