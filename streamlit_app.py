@@ -2563,6 +2563,7 @@ def main():
         "time_series_data": None,
         "current_country": selected_country,
         "regional_summary_data": None,
+        "selected_location": None,  # <--- ADD THIS LINE
     }
     for key, default in defaults.items():
         if key not in st.session_state:
