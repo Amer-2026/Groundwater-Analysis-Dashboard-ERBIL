@@ -2095,11 +2095,10 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
-        /* ===== REGION POPOVER BUTTONS (Sub-National / National) ===== */
+        /* ===== REGION POPOVER BUTTONS (WHITE & GREY) ===== */
         
-        /* 1. Default State: White Background, Dark Text */
-        div[class*="st-key-nav_sub"] button,
-        div[class*="st-key-nav_nat"] button {
+        /* Target the button inside the popover container */
+        div[data-testid="stPopoverBody"] .stButton > button {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 1px solid #e0e0e0 !important;
@@ -2108,17 +2107,15 @@ def main():
             font-weight: 600 !important;
         }
 
-        /* 2. Hover State: Grey Background */
-        div[class*="st-key-nav_sub"] button:hover,
-        div[class*="st-key-nav_nat"] button:hover {
+        /* Hover state */
+        div[data-testid="stPopoverBody"] .stButton > button:hover {
             background-color: #d1d5db !important; /* Light Grey */
             color: #1a0a2e !important;
             border-color: #9ca3af !important;
         }
 
-        /* 3. Force text and icons inside to be dark */
-        div[class*="st-key-nav_sub"] button *,
-        div[class*="st-key-nav_nat"] button * {
+        /* Force text and icons inside to be dark */
+        div[data-testid="stPopoverBody"] .stButton > button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
@@ -2247,13 +2244,13 @@ def main():
     with nav_col1:
         loc_label = f"{t('nav_region')}"
             
-        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
-                st.session_state.selected_location = "national"
-                st.rerun()
+    with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+        if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+            st.session_state.selected_location = "subnational"
+            st.rerun()
+        if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+            st.session_state.selected_location = "national"
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
