@@ -579,15 +579,29 @@ UNITS = {
 def get_image_min_max(asset_id):
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    minmax = img.reduceRegion(
+    
+    # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
+    valid_img = img.updateMask(img.neq(0))
+    
+    minmax = valid_img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
         maxPixels=1e9,
+        bestEffort=True
     ).getInfo()
-    min_key = next(key for key in minmax if key.endswith("_min"))
-    max_key = next(key for key in minmax if key.endswith("_max"))
-    return minmax[min_key], minmax[max_key]
+    
+    min_key = next((key for key in minmax if key.endswith("_min")), None)
+    max_key = next((key for key in minmax if key.endswith("_max")), None)
+    
+    min_val = minmax.get(min_key) if min_key else None
+    max_val = minmax.get(max_key) if max_key else None
+    
+    # Fallback to a default range if everything is masked or min==max
+    if min_val is None or max_val is None or min_val == max_val:
+        return 0, 100  # Recharge usually falls between 0 and 100 mm
+        
+    return min_val, max_val
 
 
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
@@ -644,8 +658,17 @@ def get_image_min_max(asset_id):
 
 
 def get_vis_params(parameter, asset_id):
-    min_val, max_val = get_image_min_max(asset_id)
+    # 1. Get the palette
     palette = PALETTES.get(parameter, PALETTES["recharge"])
+    
+    # 2. FORCE the visual range for Recharge
+    if parameter == "recharge":
+        # Recharge is usually small numbers (0 to 100 mm/month)
+        # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
+        return {"min": 0, "max": 100, "palette": palette}
+        
+    # 3. For Abstraction (mm & m3), let it calculate dynamically
+    min_val, max_val = get_image_min_max(asset_id)
     return {"min": min_val, "max": max_val, "palette": palette}
 
 def selection_to_ee_geometry(selection):
@@ -777,14 +800,6 @@ def get_time_series_data(point, parameter, assets):
     ee_geom = ee.Geometry.Point([point[1], point[0]])
     return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
 
-
-def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
-    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
-
-    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
-    Larger `scale` (100 m) keeps it fast for areas/lines.
-    """
-    images = _collection_with_dates(assets, parameter)
 
     def compute_mean(img):
         return ee.Feature(
@@ -1042,56 +1057,7 @@ def main():
         layout="wide",
         initial_sidebar_state="collapsed",
     )
-    # ===== JavaScript: override the Specify Location button colors =====
-    # components.html() is used because st.markdown strips <script> tags.
-    components.html(
-        """
-        <script>
-        (function() {
-            function styleButton(doc) {
-                try {
-                    const buttons = doc.querySelectorAll('button');
-                    for (const b of buttons) {
-                        const text = b.innerText.trim();
-                        if (text === '📍 Specify Location') {
-                            b.style.setProperty('background-color', '#ffffff', 'important');
-                            b.style.setProperty('background', '#ffffff', 'important');
-                            b.style.setProperty('color', '#000000', 'important');
-                            b.style.setProperty('border', '2px solid #c6c5c1', 'important');
-                            b.style.setProperty('border-radius', '8px', 'important');
-                            b.style.setProperty('font-weight', '700', 'important');
-                            b.style.setProperty('padding', '0.2rem 0.7rem', 'important');
-                            b.style.setProperty('min-height', '26px', 'important');
-                            b.style.setProperty('height', '26px', 'important');
-                            b.style.setProperty('font-size', '13px', 'important');
-                            b.style.setProperty('line-height', '1', 'important');
-                            b.querySelectorAll('*').forEach(el => {
-                                el.style.setProperty('color', '#000000', 'important');
-                                el.style.setProperty('background-color', 'transparent', 'important');
-                            });
-                        }
-                    }
-                } catch (e) {
-                    console.log('styleButton error:', e);
-                }
-            }
-            function run() {
-                styleButton(document);
-                try { styleButton(window.parent.document); } catch (e) {}
-            }
-            run();
-            // Poll frequently for the first few seconds, then slow down
-            let __styleInterval = setInterval(run, 150);
-            setTimeout(function() {
-                clearInterval(__styleInterval);
-                // Keep checking every 500ms forever (cheap and reliable)
-                setInterval(run, 500);
-            }, 5000);
-        })();
-        </script>
-        """,
-        height=0,
-    )
+
 
 
 
@@ -1693,47 +1659,43 @@ def main():
         }
         
 
-        /* ===== Specify Location button — white bg, black text ===== */
-        div[data-testid="stButton"] button[key="open_specify_location"] {
-           background-color: #ffffff !important;
-           background: #ffffff !important;
-           color: #000000 !important;
-           border: 2px solid #c6c5c1 !important;
-           border-radius: 8px !important;
-           font-weight: 700 !important;
-           padding: 0.3rem 0.8rem !important;
-           min-height: 32px !important;
-           height: 32px !important;
-       }
-               /* Higher-specificity override to beat Streamlit's default button */
-        html body div[data-testid="stButton"] > button[key="open_specify_location"],
-        html body div.stButton > button[key="open_specify_location"],
+        /* ===== Specify Location button — force light blue like date picker ===== */
+        div[class*="st-key-open_specify_location"] button,
+        div[class*="st-key-open_specify_location"] .stButton > button,
+        html body div[class*="st-key-open_specify_location"] button,
+        html body div[class*="st-key-open_specify_location"] .stButton > button,
         html body button[key="open_specify_location"] {
-            background-color: #ffffff !important;
-            background: #ffffff !important;
-            color: #000000 !important;
-            border: 2px solid #c6c5c1 !important;
+            background-color: #cae9ff !important;
+            background: #cae9ff !important;
+            color: #0e1117 !important;
+            border: none !important;
             border-radius: 8px !important;
-            font-weight: 700 !important;
-            padding: 0.2rem 0.7rem !important;
-            min-height: 26px !important;
-            height: 26px !important;
-            font-size: 13px !important;
-            line-height: 1 !important;
+            font-weight: 600 !important;
+            padding: 0 !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            font-size: 14px !important;
+            line-height: 38px !important;
+            box-shadow: none !important;
+            transform: none !important;
         }
-       div[data-testid="stButton"] button[key="open_specify_location"] p,
-        div[data-testid="stButton"] button[key="open_specify_location"] p,
-        div[data-testid="stButton"] button[key="open_specify_location"] span,
-        div[data-testid="stButton"] button[key="open_specify_location"] div {
-            color: #000000 !important;
+
+        div[class*="st-key-open_specify_location"] button:hover,
+        html body div[class*="st-key-open_specify_location"] button:hover,
+        html body button[key="open_specify_location"]:hover {
+            background-color: #a8d8f0 !important;
+            background: #a8d8f0 !important;
+            color: #0e1117 !important;
+            box-shadow: 0 2px 15px rgba(168, 216, 240, 0.4) !important;
+            transform: none !important;
         }
-        div[data-testid="stButton"] button[key="open_specify_location"]:hover {
-            background-color: #f0f0f0 !important;
-            background: #f0f0f0 !important;
+
+        div[class*="st-key-open_specify_location"] button *,
+        html body div[class*="st-key-open_specify_location"] button * {
+            color: #0e1117 !important;
+            background-color: transparent !important;
         }
-        div[data-testid="stButton"] button[key="open_specify_location"]:hover * {
-            color: #000000 !important;
-        }
+
 
             /* ===== Inline Location Form — white card ===== */
         div[class*="st-key-location_form_wrap"] {
@@ -2047,6 +2009,7 @@ def main():
                             "📍 Specify Location",
                             key="open_specify_location",
                             use_container_width=True,
+                            type="primary",       # ← Add this line
                         ):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
@@ -2269,24 +2232,30 @@ def main():
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
-                            # Filter assets by the selected date range
+                    # Filter assets by the selected date range
                             if st.session_state.date_range:
                                 start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                                ranged_assets = [
-                                    a for a in assets
-                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                                ]
-                            else:
-                                ranged_assets = assets
+                        end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                        ranged_assets = [
+                            a for a in assets
+                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                        ]
+                    else:
+                        ranged_assets = assets
 
-                            summary = get_regional_summary(
-                                st.session_state.current_parameter,
-                                tuple(ranged_assets),
-                                int(cfg.get("native_scale_m", 20)),
-                            )
-                            if summary:
-                                st.session_state.regional_summary_data = summary
+                    try:
+                        summary = get_regional_summary(
+                            st.session_state.current_parameter,
+                            tuple(ranged_assets),
+                            int(cfg.get("native_scale_m", 20)),
+                        )
+                        if summary:
+                            st.session_state.regional_summary_data = summary
+                        else:
+                            st.session_state.regional_summary_data = []
+                    except Exception as e:
+                        st.error(f"Error computing regional summary: {e}")
+                        st.session_state.regional_summary_data = []
 
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
