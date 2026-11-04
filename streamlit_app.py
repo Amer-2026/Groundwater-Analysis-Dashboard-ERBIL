@@ -2239,14 +2239,21 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # Inject CSS targeting the exact column
         st.markdown("""
         <style>
-        /* Fix the vertical alignment (Changed 0px to 8px) */
-        div[data-testid="stSelectbox"] {
-            margin-top: 8px !important;
-            padding-top: 0px !important;
+        /* Force the column to align to the bottom */
+        div[data-testid="column"]:has(div[data-testid="stSelectbox"]) {
+            display: flex !important;
+            align-items: flex-end !important;
         }
+        
+        /* Remove the margin that pushed it down */
+        div[data-testid="stSelectbox"] {
+            margin-top: 0px !important;
+            padding-top: 0px !important;
+            width: 100% !important;
+        }
+        
         /* Fix the purple background */
         div[data-testid="stSelectbox"] > div > div {
             background-color: #B429F9 !important;
@@ -2255,13 +2262,15 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
         }
+        
         /* Fix the text color */
         div[data-testid="stSelectbox"] > div > div * {
             color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        /* Fix the white square bug (target the arrow icon specifically) */
+        
+        /* Fix the arrow icon */
         div[data-testid="stSelectbox"] > div > div svg {
             fill: #ffffff !important;
             background-color: transparent !important;
