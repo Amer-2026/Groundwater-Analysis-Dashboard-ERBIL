@@ -2093,6 +2093,31 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
+                /* ===== REGION POPOVER BUTTONS (Sub-National / National) ===== */
+        /* 1. Default State: White Background, Dark Text */
+        div[class*="st-key-nav_sub"] button,
+        div[class*="st-key-nav_nat"] button {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            transition: all 0.2s ease !important;
+            font-weight: 600 !important;
+        }
+
+        /* 2. Hover State: Grey Background */
+        div[class*="st-key-nav_sub"] button:hover,
+        div[class*="st-key-nav_nat"] button:hover {
+            background-color: #d1d5db !important; /* Light Grey */
+            color: #1a0a2e !important;
+            border-color: #9ca3af !important;
+        }
+
+        /* 3. Force text inside to be dark */
+        div[class*="st-key-nav_sub"] button *,
+        div[class*="st-key-nav_nat"] button * {
+            color: #1a0a2e !important;
+        }
     """
     
     # Render the CSS safely
