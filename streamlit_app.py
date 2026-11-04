@@ -1888,57 +1888,42 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION BUTTON (Native Purple Selectbox) ===== */
+        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
         
-        /* 1. Main Purple Button & Alignment */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+        /* Target the exact button inside the popover container */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
+            background: #B429F9 !important;
+            color: #ffffff !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
+            border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
             box-shadow: none !important;
-            margin-top: 4px !important; /* Nudges it down to align with green buttons */
+            outline: none !important;
         }
 
-        /* 2. Force White Text and Icons */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+        /* Force text to be white */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
         }
 
-        /* 3. Kill the Green Hover Flash */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #9a22d9 !important; /* Darker purple on hover */
+        /* Hover state */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
+            background-color: #9a22d9 !important;
+            background: #9a22d9 !important;
             border-color: #9a22d9 !important;
-        }
-
-        /* 4. The Dropdown List Box (White background) */
-        div[data-baseweb="popover"] ul[role="listbox"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 5px !important;
-        }
-
-        /* 5. The Options inside the dropdown */
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border-radius: 6px !important;
-            padding: 8px 12px !important;
-            font-weight: 600 !important;
-            margin-bottom: 2px !important;
-        }
-
-        /* 6. The Hover effect for the dropdown list (Dark Grey) */
-        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
-            background-color: #d1d5db !important;
-            color: #1a0a2e !important;
-            cursor: pointer !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
         /* ===== CUSTOM REGION BUTTON ICON ===== */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
@@ -2231,65 +2216,16 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        if "selected_location" not in st.session_state:
-            st.session_state.selected_location = "subnational"
-
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
-
-        st.markdown("""
-        <style>
-        /* Force the column to align to the bottom */
-        div[data-testid="column"]:has(div[data-testid="stSelectbox"]) {
-            display: flex !important;
-            align-items: flex-end !important;
-        }
-        
-        /* Remove the margin that pushed it down */
-        div[data-testid="stSelectbox"] {
-            margin-top: 0px !important;
-            padding-top: 0px !important;
-            width: 100% !important;
-        }
-        
-        /* Fix the purple background */
-        div[data-testid="stSelectbox"] > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-        }
-        
-        /* Fix the text color */
-        div[data-testid="stSelectbox"] > div > div * {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        
-        /* Fix the arrow icon */
-        div[data-testid="stSelectbox"] > div > div svg {
-            fill: #ffffff !important;
-            background-color: transparent !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-        selected_label = st.selectbox(
-            "Region", 
-            options=loc_labels,
-            index=current_index,
-            key="region_selector",
-            label_visibility="collapsed"
-        )
-
-        new_location = loc_options[loc_labels.index(selected_label)]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        loc_label = f"{t('nav_region')}"
             
+        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
+
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         # Always show just "Abstraction" on the main button
