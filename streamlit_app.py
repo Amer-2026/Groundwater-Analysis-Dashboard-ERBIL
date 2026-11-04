@@ -2230,7 +2230,7 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-    # --- Column 1: Region Dropdown ---
+   # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
@@ -2239,15 +2239,32 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # We added the key="region_wrap" here!
-        with st.container(key="region_wrap"):
-            selected_label = st.selectbox(
-                "Region", 
-                options=loc_labels,
-                index=current_index,
-                key="region_selector",
-                label_visibility="collapsed"
-            )
+        # We inject a tiny CSS block directly above the button to force the exact colors
+        st.markdown("""
+        <style>
+        div[data-testid="stSelectbox"] > div > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+        }
+        div[data-testid="stSelectbox"] > div > div * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        selected_label = st.selectbox(
+            "Region", 
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
 
         new_location = loc_options[loc_labels.index(selected_label)]
         if new_location != st.session_state.selected_location:
