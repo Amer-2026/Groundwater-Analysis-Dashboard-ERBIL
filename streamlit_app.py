@@ -119,11 +119,6 @@ For support or more information, please contact the development team.""",
         "nav_water_balance": "Water Balance",
         "nav_climate_et": "Climate / ET",
         "nav_irrigation": "Irrigation Efficiency",
-        "nav_aeti": "Actual Evapotranspiration (AETI)",
-        "nav_pet": "Potential Evapotranspiration (PET)",
-        "nav_precip": "Precipitation",
-        "nav_pwl": "Potential Water Loss (PWL)",
-        "nav_download": "Download",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -215,10 +210,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_water_balance": "التوازن المائي",
         "nav_climate_et": "المناخ / التبخر-النتح",
         "nav_irrigation": "كفاءة الري",
-        "nav_aeti": "التبخر-النتح الفعلي (AETI)",
-        "nav_pet": "التبخر-النتح المحتمل (PET)",
-        "nav_precip": "هطول الأمطار",
-        "nav_pwl": "فقدان المياه المحتمل (PWL)",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -309,10 +300,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_water_balance": "هاوسەنگی ئاو",
         "nav_climate_et": "کەشوهەوا / هەڵمبوون",
         "nav_irrigation": "کاریگەری ئاودێری",
-        "nav_aeti": "هەڵمبوونی ڕاستەقینە (AETI)",
-        "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
-        "nav_precip": "بارانبارین",
-        "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -595,7 +582,7 @@ def create_base_map(center_lat, center_lon, zoom):
     .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
         cursor: default !important;
     }
-    
+    </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
 
@@ -621,20 +608,12 @@ PALETTES = {
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
     "recharge_mm": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
-    "aeti": ["#ffffcc", "#c2e699", "#78c679", "#31a354", "#006837"],
-    "pet": ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#d95f0e"],
-    "precip": ["#f7fbff", "#c6dbef", "#6baed6", "#2171b5", "#08306b"],
-    "pwl": ["#f7f4f9", "#d4b9da", "#c994c7", "#df65b0", "#ce1256"],
 }
 
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
     "recharge_mm": "mm/month",
-    "aeti": "mm/month",
-    "pet": "mm/month",
-    "precip": "mm/month",
-    "pwl": "mm/month",
 }
 
 
@@ -1141,7 +1120,8 @@ def main():
         st.stop()
 
     # ---- DARK THEME CSS ----
-    css_content = """
+    st.markdown(
+        """
         <style>
         /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button {
@@ -1888,57 +1868,42 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION BUTTON (Native Purple Selectbox) ===== */
+        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
         
-        /* 1. Main Purple Button & Alignment */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+        /* Target the exact button inside the popover container */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
+            background: #B429F9 !important;
+            color: #ffffff !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
+            border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
             box-shadow: none !important;
-            margin-top: 4px !important; /* Nudges it down to align with green buttons */
+            outline: none !important;
         }
 
-        /* 2. Force White Text and Icons */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+        /* Force text to be white */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
         }
 
-        /* 3. Kill the Green Hover Flash */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #9a22d9 !important; /* Darker purple on hover */
+        /* Hover state */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
+            background-color: #9a22d9 !important;
+            background: #9a22d9 !important;
             border-color: #9a22d9 !important;
-        }
-
-        /* 4. The Dropdown List Box (White background) */
-        div[data-baseweb="popover"] ul[role="listbox"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 5px !important;
-        }
-
-        /* 5. The Options inside the dropdown */
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border-radius: 6px !important;
-            padding: 8px 12px !important;
-            font-weight: 600 !important;
-            margin-bottom: 2px !important;
-        }
-
-        /* 6. The Hover effect for the dropdown list (Dark Grey) */
-        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
-            background-color: #d1d5db !important;
-            color: #1a0a2e !important;
-            cursor: pointer !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
         /* ===== CUSTOM REGION BUTTON ICON ===== */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
@@ -1947,29 +1912,51 @@ def main():
             align-items: center !important;
             gap: 8px !important;
         }
+
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
             content: "" !important;
             display: inline-block !important;
             width: 20px !important;
             height: 20px !important;
+            /* Point this to your image on GitHub */
             background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
             background-size: contain !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
-
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
-            gap: 0.3rem !important; 
+            gap: 0.3rem !important; /* Reduced gap to fit 7 buttons */
             align-items: center !important;
         }
+
+        /* Allow columns to shrink */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
             min-width: 0 !important;
             width: 100% !important;
         }
 
-        /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        /* Force the Date Inputs to shrink and fit inside their columns */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"],
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+        
+        /* Override Streamlit's default minimum width for date inputs */
+        div[data-testid="stDateInput"] > div > div {
+            min-width: 0 !important;
+        }
+        
+        /* Ensure the input text doesn't push the width out */
+        div[data-testid="stDateInput"] input {
+            text-overflow: ellipsis !important;
+            min-width: 0 !important;
+            font-size: 13px !important; /* Slightly smaller text to fit */
+        }
+        
+         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
             background-color: #cae9ff !important;
@@ -1978,69 +1965,52 @@ def main():
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            font-weight: 600 !important;
+            font-size: 13px !important; 
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
         }
+
         div[class*="st-key-btn_start_cal_top"] button:hover,
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-
-        /* ===== TOP RIGHT BUTTONS (Reset, Info, Language) ===== */
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-
-        /* Info Button */
-        div[class*="st-key-info_btn"] button {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            padding: 0 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        div[class*="st-key-info_btn"] button:hover {
-            background-color: #8fd154 !important;
-        }
-        div[class*="st-key-info_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-
-        /* Reset Button */
+        /* ===== FORCE RESET BUTTON TO BE PURPLE ===== */
         div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
+            background-color: #B429F9 !important; 
+            background: #B429F9 !important;
+            color: #ffffff !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            border: none !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
             box-shadow: none !important;
+            padding: 0 10px !important;
         }
+
+        /* Force the text inside the reset button to be white */
+        div[class*="st-key-reset_btn"] button * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
+
+        /* Hover state */
         div[class*="st-key-reset_btn"] button:hover {
             background-color: #9a22d9 !important;
-        }
-        div[class*="st-key-reset_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
+            border-color: #9a22d9 !important;
         }
 
-        /* Language Button */
+        /* ===== FORCE LANGUAGE BUTTON TO MATCH RESET BUTTON ===== */
+        
+        /* 1. Target the EXACT container that Streamlit draws the border on */
         div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
             background-color: transparent !important;
             border: none !important;
@@ -2048,70 +2018,35 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
+
+        /* 2. Target the actual selectbox box */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
+            border-radius: 8px !important; /* Force rounded corners */
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
         }
+
+        /* 3. Force the text and arrow to be white */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
         }
+
+        /* 4. Force the outer wrapper to clip the sharp corners */
         div[class*="st-key-lang_wrap"] > div {
             border-radius: 8px !important;
             overflow: hidden !important;
         }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
-        /* ===== THE ULTIMATE FONT UNIFY (BOLD) ===== */
-        div[class*="st-key-info_btn"] button p,
-        div[class*="st-key-reset_btn"] button p,
-        div[class*="st-key-loc_dropdown"] button p,
-        div[class*="st-key-abs_dropdown"] button p,
-        div[class*="st-key-rc_dropdown"] button p,
-        div[class*="st-key-analysis_dropdown"] button p,
-        div[class*="st-key-btn_start_cal_top"] button p,
-        div[class*="st-key-btn_end_cal_top"] button p,
-        div[class*="st-key-top_generate"] button p,
-        .stButton > button p {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            
-        /* ===== FORCE LANGUAGE BUTTON TEXT TO BE BOLD ===== */
-        div[class*="st-key-lang_wrap"] input {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
-        /* ===== THE ULTIMATE LANGUAGE BOLD FIX ===== */
-        div[class*="st-key-lang_wrap"] input {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important; /* Forces font family */
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
-
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-
-        div[class*="st-key-lang_wrap"] span {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-    """
-    
-    # Render the CSS safely
-    st.markdown(css_content, unsafe_allow_html=True)
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
@@ -2154,54 +2089,40 @@ def main():
     # Load logos for the banner
     logo1_b64 = get_base64_image("logo1.png")
     logo2_b64 = get_base64_image("logo2.png")
-    region_b64 = get_base64_image("region_icon.png")
-    
     logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
     logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
-    banner_html = (
-        '<div class="banner">'
-        '<div class="banner-inner">'
-        '<div style="display: flex; gap: 0px;">'
-        + logo1_html + logo2_html +
-        '</div>'
-        '<div class="banner-title">'
-        '<h1>&#128167; ' + t('dashboard_header') + '</h1>'
-        '<div class="subtitle">' + cfg.get('name_en', '') + ' | ' + datetime.now().strftime('%Y') + '</div>'
-        '<div class="welcome">' + t('welcome_subtitle') + '</div>'
-        '</div>'
-        '</div>'
-        '</div>'
-    )
+    region_b64 = get_base64_image("region_icon.png")
 
+    banner_html = f"""
+<div class="banner">
+<div class="banner-inner">
+<div style="display: flex; gap: 0px;">
+    {logo1_html}
+    {logo2_html}
+</div>
+<div class="banner-title">
+<h1>💧 {t('dashboard_header')}</h1>
+<div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+<div class="welcome">{t('welcome_subtitle')}</div>
+</div>
+</div>
+"""
     st.markdown(banner_html, unsafe_allow_html=True)
+
+    # Place language selector AND reset button in the top-right of the banner
+    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1])
     
-    # Create a flex container for the top-right buttons
-    st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
-    
-    # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
-    
-    # Info Button (c3)
-    with c3:
-        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
-            st.session_state.show_info_modal = True
-            
-    # Reset Button (c4)
-    with c4:
-        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
+    # Reset button FIRST (now in lang_col3)
+    with lang_col3:
+        if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
+            # Clear all session state to return to initial view
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (c5)
-    with c5:
-        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
-            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
-            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
-            
-    # Language Selector (c6)
-    with c6:
+    # Language selector SECOND (now in lang_col4)
+    with lang_col4:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2215,8 +2136,6 @@ def main():
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
-            
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
@@ -2231,65 +2150,16 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        if "selected_location" not in st.session_state:
-            st.session_state.selected_location = "subnational"
-
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
-
-        st.markdown("""
-        <style>
-        /* Force the column to align to the bottom */
-        div[data-testid="column"]:has(div[data-testid="stSelectbox"]) {
-            display: flex !important;
-            align-items: flex-end !important;
-        }
-        
-        /* Remove the margin that pushed it down */
-        div[data-testid="stSelectbox"] {
-            margin-top: 0px !important;
-            padding-top: 0px !important;
-            width: 100% !important;
-        }
-        
-        /* Fix the purple background */
-        div[data-testid="stSelectbox"] > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-        }
-        
-        /* Fix the text color */
-        div[data-testid="stSelectbox"] > div > div * {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        
-        /* Fix the arrow icon */
-        div[data-testid="stSelectbox"] > div > div svg {
-            fill: #ffffff !important;
-            background-color: transparent !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-        selected_label = st.selectbox(
-            "Region", 
-            options=loc_labels,
-            index=current_index,
-            key="region_selector",
-            label_visibility="collapsed"
-        )
-
-        new_location = loc_options[loc_labels.index(selected_label)]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        loc_label = f"{t('nav_region')}"
             
+        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
+
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         # Always show just "Abstraction" on the main button
@@ -2334,16 +2204,6 @@ def main():
             ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
-
-        
-        elif st.session_state.get("selected_analysis") == "aeti":
-            ana_label = f"🌧️ {t('nav_aeti')}"
-        elif st.session_state.get("selected_analysis") == "pet":
-            ana_label = f"🌧️ {t('nav_pet')}"
-        elif st.session_state.get("selected_analysis") == "precip":
-            ana_label = f"🌧️ {t('nav_precip')}"
-        elif st.session_state.get("selected_analysis") == "pwl":
-            ana_label = f"🌧️ {t('nav_pwl')}"
         else:
             ana_label = f"📊 {t('nav_analysis')}"
             
@@ -2363,28 +2223,11 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
                 
-            # Create a nested popover for Climate / ET
-            with st.popover(f"🌧️ {t('nav_climate_et')}", use_container_width=True):
-                if st.button(t("nav_aeti"), key="nav_aeti_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "aeti"
-                    st.session_state.selected_parameter = "aeti" 
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pet"), key="nav_pet_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pet"
-                    st.session_state.selected_parameter = "pet"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_precip"), key="nav_precip_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "precip"
-                    st.session_state.selected_parameter = "precip"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pwl"), key="nav_pwl_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pwl"
-                    st.session_state.selected_parameter = "pwl"
-                    st.session_state.map_generated = False
-                    st.rerun()
+            if st.button(f"🌧️ {t('nav_climate_et')}", key="nav_climate_btn", use_container_width=True):
+                st.session_state.selected_analysis = "climate_et"
+                st.session_state.selected_parameter = "climate_et"
+                st.session_state.map_generated = False
+                st.rerun()
                 
             if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
                 st.session_state.selected_analysis = "irrigation"
@@ -2452,42 +2295,6 @@ def main():
                 st.rerun()
 
     if st.session_state.get("active_cal"):
-         show_calendar()
-        
-    # Info Popup Dialog
-    @st.dialog("ℹ️ Dashboard Guide & Definitions", width="large")
-    def show_info_modal():
-        # Create tabs for organized reading
-        tab1, tab2, tab3 = st.tabs(["📊 Parameters", "📈 Analysis", "ℹ️ About Data"])
-        
-        with tab1:
-            st.markdown(f"**{t('nav_abstraction_mm')}**")
-            st.write(t("info_abstraction"))
-            st.divider()
-            st.markdown(f"**{t('nav_recharge_mm')}**")
-            st.write(t("info_recharge"))
-            
-        with tab2:
-            st.markdown(f"**{t('nav_wsi')}**")
-            st.write(t("info_wsi"))
-            st.divider()
-            st.markdown(f"**{t('nav_water_balance')}**")
-            st.write(t("info_water_balance"))
-            st.divider()
-            st.markdown(f"**{t('nav_climate_et')}**")
-            st.write("Climate and Evapotranspiration data from WaPOR v3, including AETI, PET, Precipitation, and PWL.")
-            
-        with tab3:
-            st.markdown(t("about_text"))
-            
-        # Close button
-        if st.button("Close", type="primary", use_container_width=True):
-            st.session_state.show_info_modal = False
-            st.rerun()
-
-    # Trigger the modal
-    if st.session_state.get("show_info_modal"):
-        show_info_modal()
         show_calendar()
 
     # Get the dates for the map generation
@@ -2526,22 +2333,22 @@ def main():
         start_str = start_dt.strftime("%d %b %Y").upper()
         end_str = end_dt.strftime("%d %b %Y").upper()
         
-    # HTML and CSS for the custom timeline bar
-    timeline_html = (
-        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
-            '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
-                '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
-            '</div>'
-            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">'
-                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
-                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
-            '</div>'
-            '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
-                '<span style="margin-right: 5px;">&#128197;</span> ' + end_str +
-            '</div>'
-        '</div>'
-    )
-    st.markdown(timeline_html, unsafe_allow_html=True)
+        # HTML and CSS for the custom timeline bar
+        timeline_html = f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">
+                📅 {start_str}
+            </div>
+            <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
+                <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+                <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+            </div>
+            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+                📅 {end_str}
+            </div>
+        </div>
+        """
+        st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # ---- Session state ----
@@ -2659,27 +2466,8 @@ def main():
 
                     # Map the parameter name to the actual asset name in Earth Engine
                     search_param = st.session_state.current_parameter
-
-                    # Look for the correct asset name based on the selected parameter
                     if search_param == "recharge_mm":
-                        search_param = "recharge"  
-                    elif search_param == "aeti":
-                        search_param = "aeti"  # Make sure this matches your GEE asset name
-                    elif search_param == "pet":
-                        search_param = "pet"
-                    elif search_param == "precip":
-                        search_param = "precip"
-                    elif search_param == "pwl":
-                        search_param = "pwl"
-                    
-                    selected_asset = next(
-                        (
-                            a
-                            for a in assets
-                            if search_param in a and selected_year_month in a
-                        ),
-                        None,
-                    )
+                        search_param = "recharge"  # Your GEE assets are named just "recharge"
                     
                     selected_asset = next(
                         (
