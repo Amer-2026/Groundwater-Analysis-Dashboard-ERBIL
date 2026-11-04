@@ -2242,9 +2242,9 @@ def main():
         # Inject CSS targeting the exact column
         st.markdown("""
         <style>
-        /* Fix the vertical alignment */
+        /* Fix the vertical alignment (Changed 0px to 8px) */
         div[data-testid="stSelectbox"] {
-            margin-top: 0px !important;
+            margin-top: 8px !important;
             padding-top: 0px !important;
         }
         /* Fix the purple background */
