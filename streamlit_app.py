@@ -39,7 +39,7 @@ def get_base64_image(image_path):
 TRANSLATIONS = {
     "en": {
         "page_title": "Groundwater Analysis",
-        "dashboard_header": "Groundwater Analysis Dashboard — kurdistan Region",
+        "dashboard_header": "Groundwater Analysis Dashboard — Erbil Region",
         "country": "Country / Area",
         "ee_init_failed": "Failed to initialize Earth Engine. Please check your credentials.",
         "ee_init_critical": "Critical Error Initializing Earth Engine",
@@ -92,8 +92,8 @@ For support or more information, please contact the development team.""",
         "time_series_title": "Time Series for {parameter} at ({lat}, {lon})",
         "legend": "{parameter} Legend",
         "layer": "Layer",
-        "abstraction_mm": "(mm)",
-        "abstraction_m3": "(m³)",
+        "abstraction_mm": "Abstraction (mm)",
+        "abstraction_m3": "Abstraction (m³)",
         "": "",
         "error_get_assets": "Error in get_ee_assets",
         "error_parse_date": "Error parsing date from asset",
@@ -105,12 +105,10 @@ For support or more information, please contact the development team.""",
         "summary_title": "Regional mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
-        "nav_abstraction_mm": "(mm)",
-        "nav_abstraction_m3": "(m³)",
+        "nav_abstraction_mm": "Abstraction (mm)",
+        "nav_abstraction_m3": "Abstraction (m³)",
         "nav_recharge_mm": "Recharge (mm)",
         "nav_recharge_m3": "Recharge (m³)",
-        "info_abstraction": "is the total volume of groundwater extracted for irrigation. It is calculated by multiplying the crop water requirement by the irrigated area.",
-        "info_recharge": "Recharge is the amount of water that infiltrates the soil and reaches the aquifer. It comes from rainfall and irrigation return flows.",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
         "nav_region": "Region",
@@ -206,8 +204,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_abstraction_m3": "السحب (م³)",
         "nav_recharge_mm": "التغذية الجوفية (مم)",
         "nav_recharge_m3": "التغذية الجوفية (م³)",
-        "info_abstraction": "السحب هو الحجم الإجمالي للمياه الجوفية المستخرجة للري. يتم حسابه بضرب احتياجات المحصول المائية في المساحة المروية.",
-        "info_recharge": "التغذية الجوفية هي كمية المياه التي تتسرب إلى التربة وتصل إلى الخزان الجوفي. تأتي من الأمطار وعوائد الري.",
         "nav__mm": "التغذية الجوفية (مم)",
         "nav__m3": "التغذية الجوفية (م³)",
         "nav_region": "المنطقة",
@@ -302,8 +298,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_abstraction_m3": "دەرهێنان (م³)",
         "nav_recharge_mm": "پڕبوونەوە (مم)",
         "nav_recharge_m3": "پڕبوونەوە (م³)",
-        "info_abstraction": "دەرهێنان کۆی قەبارەی ئاوی ژێرزەوییە کە بۆ ئاودێری دەرهێنراوە. بە لێکدانی پێداویستی ئاوی بەرهەم لە ڕووبەری ئاودێریکراو حساب دەکرێت.",
-        "info_recharge": "پڕبوونەوە بڕی ئاوە کە دەچێتە ناو خاک و دەگاتە ئاوی ژێرزەوی. لە باران و گەڕانەوەی ئاودێرییەوە دێت.",
         "nav__mm": "پڕبوونەوە (مم)",
         "nav__m3": "پڕبوونەوە (م³)",
         "nav_region": "ناوچە",
@@ -600,7 +594,7 @@ def create_base_map(center_lat, center_lon, zoom):
     .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
         cursor: default !important;
     }
-    </style>
+    
     """
     m.get_root().html.add_child(folium.Element(border_css))
 
@@ -1146,8 +1140,7 @@ def main():
         st.stop()
 
     # ---- DARK THEME CSS ----
-    st.markdown(
-        """
+    css_content = """
         <style>
         /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button {
@@ -1938,51 +1931,29 @@ def main():
             align-items: center !important;
             gap: 8px !important;
         }
-
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
             content: "" !important;
             display: inline-block !important;
             width: 20px !important;
             height: 20px !important;
-            /* Point this to your image on GitHub */
             background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
             background-size: contain !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
+
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
-            gap: 0.3rem !important; /* Reduced gap to fit 7 buttons */
+            gap: 0.3rem !important; 
             align-items: center !important;
         }
-
-        /* Allow columns to shrink */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
             min-width: 0 !important;
             width: 100% !important;
         }
 
-        /* Force the Date Inputs to shrink and fit inside their columns */
-        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"],
-        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] {
-            width: 100% !important;
-            min-width: 0 !important;
-        }
-        
-        /* Override Streamlit's default minimum width for date inputs */
-        div[data-testid="stDateInput"] > div > div {
-            min-width: 0 !important;
-        }
-        
-        /* Ensure the input text doesn't push the width out */
-        div[data-testid="stDateInput"] input {
-            text-overflow: ellipsis !important;
-            min-width: 0 !important;
-            font-size: 13px !important; /* Slightly smaller text to fit */
-        }
-        
-         /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
             background-color: #cae9ff !important;
@@ -1991,52 +1962,69 @@ def main():
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            font-weight: 600 !important;
-            font-size: 13px !important; 
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
         }
-
         div[class*="st-key-btn_start_cal_top"] button:hover,
         div[class*="st-key-btn_end_cal_top"] button:hover {
             background-color: #a8d8f0 !important;
         }
-        /* ===== FORCE RESET BUTTON TO BE PURPLE ===== */
+
+        /* ===== TOP RIGHT BUTTONS (Reset, Info, Language) ===== */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        /* Info Button */
+        div[class*="st-key-info_btn"] button {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        div[class*="st-key-info_btn"] button:hover {
+            background-color: #8fd154 !important;
+        }
+        div[class*="st-key-info_btn"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
+
+        /* Reset Button */
         div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important; 
-            background: #B429F9 !important;
-            color: #ffffff !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
+            background-color: #B429F9 !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
+            border: none !important;
             box-shadow: none !important;
-            padding: 0 10px !important;
         }
-
-        /* Force the text inside the reset button to be white */
-        div[class*="st-key-reset_btn"] button * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-        }
-
-        /* Hover state */
         div[class*="st-key-reset_btn"] button:hover {
             background-color: #9a22d9 !important;
-            border-color: #9a22d9 !important;
+        }
+        div[class*="st-key-reset_btn"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
         }
 
-        /* ===== FORCE LANGUAGE BUTTON TO MATCH RESET BUTTON ===== */
-        
-        /* 1. Target the EXACT container that Streamlit draws the border on */
+        /* Language Button */
         div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
             background-color: transparent !important;
             border: none !important;
@@ -2044,35 +2032,70 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
-
-        /* 2. Target the actual selectbox box */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; /* Force rounded corners */
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
         }
-
-        /* 3. Force the text and arrow to be white */
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
         }
-
-        /* 4. Force the outer wrapper to clip the sharp corners */
         div[class*="st-key-lang_wrap"] > div {
             border-radius: 8px !important;
             overflow: hidden !important;
         }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
+        /* ===== THE ULTIMATE FONT UNIFY (BOLD) ===== */
+        div[class*="st-key-info_btn"] button p,
+        div[class*="st-key-reset_btn"] button p,
+        div[class*="st-key-loc_dropdown"] button p,
+        div[class*="st-key-abs_dropdown"] button p,
+        div[class*="st-key-rc_dropdown"] button p,
+        div[class*="st-key-analysis_dropdown"] button p,
+        div[class*="st-key-btn_start_cal_top"] button p,
+        div[class*="st-key-btn_end_cal_top"] button p,
+        div[class*="st-key-top_generate"] button p,
+        .stButton > button p {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            
+        /* ===== FORCE LANGUAGE BUTTON TEXT TO BE BOLD ===== */
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
+        /* ===== THE ULTIMATE LANGUAGE BOLD FIX ===== */
+        div[class*="st-key-lang_wrap"] input {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important; /* Forces font family */
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
+
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+            font-weight: 700 !important;
+        }
+
+        div[class*="st-key-lang_wrap"] span {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+            font-weight: 700 !important;
+        }
+    """
+    
+    # Render the CSS safely
+    st.markdown(css_content, unsafe_allow_html=True)
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
@@ -2115,40 +2138,45 @@ def main():
     # Load logos for the banner
     logo1_b64 = get_base64_image("logo1.png")
     logo2_b64 = get_base64_image("logo2.png")
+    region_b64 = get_base64_image("region_icon.png")
+    
     logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
     logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
 
-    region_b64 = get_base64_image("region_icon.png")
+    banner_html = (
+        '<div class="banner">'
+        '<div class="banner-inner">'
+        '<div style="display: flex; gap: 0px;">'
+        + logo1_html + logo2_html +
+        '</div>'
+        '<div class="banner-title">'
+        '<h1>&#128167; ' + t('dashboard_header') + '</h1>'
+        '<div class="subtitle">' + cfg.get('name_en', '') + ' | ' + datetime.now().strftime('%Y') + '</div>'
+        '<div class="welcome">' + t('welcome_subtitle') + '</div>'
+        '</div>'
+        '</div>'
+        '</div>'
+    )
 
-    banner_html = f"""
-<div class="banner">
-<div class="banner-inner">
-<div style="display: flex; gap: 0px;">
-    {logo1_html}
-    {logo2_html}
-</div>
-<div class="banner-title">
-<h1>💧 {t('dashboard_header')}</h1>
-<div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-<div class="welcome">{t('welcome_subtitle')}</div>
-</div>
-</div>
-"""
     st.markdown(banner_html, unsafe_allow_html=True)
 
-    # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([4, 0.5, 1, 1])
+    # Create a flex container for the top-right buttons
+    st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
-    # Reset button FIRST (now in lang_col3)
-    with lang_col3:
-        if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
-            # Clear all session state to return to initial view
+    # Use columns for layout, but force them onto one line with CSS
+    c1, c2, c3, c4, c5 = st.columns([2.5, 1, 0.6, 0.6, 0.6])
+    
+    with c3:
+        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+            st.session_state.show_info_modal = True
+            
+    with c4:
+        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
-
-    # Language selector SECOND (now in lang_col4)
-    with lang_col4:
+            
+    with c5:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2162,6 +2190,8 @@ def main():
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
+            
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
@@ -2192,16 +2222,10 @@ def main():
         abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
             
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
-            
-            # NEW INFO BUTTON
-            with st.popover(f"ℹ️ {t('nav_abstraction_mm')} - Info", use_container_width=True):
-                st.write(t("info_abstraction"))
-
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
                 st.rerun()
-                
             if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
@@ -2215,18 +2239,12 @@ def main():
             rc_label = f"🔴 {t('nav_recharge_m3')}"
         else:
             rc_label = "⚪ Recharge"
-
-        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
             
-            # NEW INFO BUTTON
-            with st.popover(f"ℹ️ Recharge - Info", use_container_width=True):
-                st.write(t("info_recharge"))
-
+        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
                 st.rerun()
-                
             if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_m3"
                 st.session_state.map_generated = False
@@ -2238,9 +2256,12 @@ def main():
             ana_label = f"🌵 {t('nav_wsi')}"
         elif st.session_state.get("selected_analysis") == "water_balance":
             ana_label = f"⚖️ {t('nav_water_balance')}"
+        elif st.session_state.get("selected_analysis") == "climate_et":
+            ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
 
+        
         elif st.session_state.get("selected_analysis") == "aeti":
             ana_label = f"🌧️ {t('nav_aeti')}"
         elif st.session_state.get("selected_analysis") == "pet":
@@ -2256,20 +2277,12 @@ def main():
         with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
             
             # These are the options INSIDE the dropdown
-            # INFO BUTTON FOR WSI
-            with st.popover(f"ℹ️ {t('nav_wsi')} - Info", use_container_width=True):
-                st.write(t("info_wsi"))
-
             if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
                 st.session_state.selected_analysis = "wsi"
                 st.session_state.selected_parameter = "wsi" 
                 st.session_state.map_generated = False
                 st.rerun()
                 
-            # INFO BUTTON FOR WATER BALANCE
-            with st.popover(f"ℹ️ {t('nav_water_balance')} - Info", use_container_width=True):
-                st.write(t("info_water_balance"))
-
             if st.button(f"⚖️ {t('nav_water_balance')}", key="nav_wb_btn", use_container_width=True):
                 st.session_state.selected_analysis = "water_balance"
                 st.session_state.selected_parameter = "water_balance"
@@ -2365,6 +2378,42 @@ def main():
                 st.rerun()
 
     if st.session_state.get("active_cal"):
+         show_calendar()
+        
+    # Info Popup Dialog
+    @st.dialog("ℹ️ Dashboard Guide & Definitions", width="large")
+    def show_info_modal():
+        # Create tabs for organized reading
+        tab1, tab2, tab3 = st.tabs(["📊 Parameters", "📈 Analysis", "ℹ️ About Data"])
+        
+        with tab1:
+            st.markdown(f"**{t('nav_abstraction_mm')}**")
+            st.write(t("info_abstraction"))
+            st.divider()
+            st.markdown(f"**{t('nav_recharge_mm')}**")
+            st.write(t("info_recharge"))
+            
+        with tab2:
+            st.markdown(f"**{t('nav_wsi')}**")
+            st.write(t("info_wsi"))
+            st.divider()
+            st.markdown(f"**{t('nav_water_balance')}**")
+            st.write(t("info_water_balance"))
+            st.divider()
+            st.markdown(f"**{t('nav_climate_et')}**")
+            st.write("Climate and Evapotranspiration data from WaPOR v3, including AETI, PET, Precipitation, and PWL.")
+            
+        with tab3:
+            st.markdown(t("about_text"))
+            
+        # Close button
+        if st.button("Close", type="primary", use_container_width=True):
+            st.session_state.show_info_modal = False
+            st.rerun()
+
+    # Trigger the modal
+    if st.session_state.get("show_info_modal"):
+        show_info_modal()
         show_calendar()
 
     # Get the dates for the map generation
@@ -2403,22 +2452,22 @@ def main():
         start_str = start_dt.strftime("%d %b %Y").upper()
         end_str = end_dt.strftime("%d %b %Y").upper()
         
-        # HTML and CSS for the custom timeline bar
-        timeline_html = f"""
-        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
-            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">
-                📅 {start_str}
-            </div>
-            <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
-                <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
-                <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
-            </div>
-            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
-                📅 {end_str}
-            </div>
-        </div>
-        """
-        st.markdown(timeline_html, unsafe_allow_html=True)
+    # HTML and CSS for the custom timeline bar
+    timeline_html = (
+        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
+            '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
+                '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
+            '</div>'
+            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">'
+                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>'
+                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>'
+            '</div>'
+            '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
+                '<span style="margin-right: 5px;">&#128197;</span> ' + end_str +
+            '</div>'
+        '</div>'
+    )
+    st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # ---- Session state ----
