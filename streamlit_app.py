@@ -2216,13 +2216,25 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        loc_label = f"{t('nav_region')}"
+        # 1. Define the location text dynamically (defaults to Sub-National)
+        current_loc = st.session_state.get("selected_location", "subnational")
+        if current_loc == "national":
+            loc_display = t("nav_national")
+        else:
+            loc_display = t("nav_subnational")
+            
+        # 2. Add the emoji, but NO "Region" text
+        loc_label = f"📍 {loc_display}"
             
         with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+            # 3. Add a checkmark to show which one is selected (like the language button)
+            sub_btn_text = f"✅ {t('nav_subnational')}" if current_loc == "subnational" else t("nav_subnational")
+            nat_btn_text = f"✅ {t('nav_national')}" if current_loc == "national" else t("nav_national")
+
+            if st.button(sub_btn_text, key="nav_sub", use_container_width=True):
                 st.session_state.selected_location = "subnational"
                 st.rerun()
-            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+            if st.button(nat_btn_text, key="nav_nat", use_container_width=True):
                 st.session_state.selected_location = "national"
                 st.rerun()
 
