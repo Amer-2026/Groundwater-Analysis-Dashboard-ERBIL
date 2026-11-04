@@ -2097,25 +2097,37 @@ def main():
         }
         /* ===== REGION POPOVER BUTTONS (WHITE & GREY) ===== */
         
-        /* Target the button inside the popover container */
-        div[data-testid="stPopoverBody"] .stButton > button {
+        /* Target the exact keys you assigned: nav_sub and nav_nat */
+        div[class*="st-key-nav_sub"] button,
+        div[class*="st-key-nav_nat"] button {
             background-color: #ffffff !important;
+            background: #ffffff !important;
             color: #1a0a2e !important;
             border: 1px solid #e0e0e0 !important;
             border-radius: 8px !important;
+            height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
             transition: all 0.2s ease !important;
-            font-weight: 600 !important;
+            font-weight: 700 !important;
+            box-shadow: none !important;
         }
 
-        /* Hover state */
-        div[data-testid="stPopoverBody"] .stButton > button:hover {
+        /* Hover State: Grey Background */
+        div[class*="st-key-nav_sub"] button:hover,
+        div[class*="st-key-nav_nat"] button:hover {
             background-color: #d1d5db !important; /* Light Grey */
+            background: #d1d5db !important;
             color: #1a0a2e !important;
             border-color: #9ca3af !important;
+            box-shadow: none !important;
         }
 
         /* Force text and icons inside to be dark */
-        div[data-testid="stPopoverBody"] .stButton > button * {
+        div[class*="st-key-nav_sub"] button *,
+        div[class*="st-key-nav_nat"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
