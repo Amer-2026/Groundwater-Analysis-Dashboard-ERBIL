@@ -1891,7 +1891,7 @@ def main():
         /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
         
         /* Target the exact button inside the popover container */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
+        div[class*="st-key-loc_dropdown"] > div > button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
             background: #B429F9 !important;
             color: #ffffff !important;
