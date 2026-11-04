@@ -1888,31 +1888,50 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
-        /* Target the exact button inside the popover container */
-        div[class*="st-key-loc_dropdown"] > div > button[data-testid="stPopoverButton"] {
+        /* 1. The main button look (Purple) */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
-            background: #B429F9 !important;
-            color: #ffffff !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
             box-shadow: none !important;
-            outline: none !important;
+            display: flex !important;
+            align-items: center !important;
         }
 
-        /* Force text to be white */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
+        /* 2. Force the main button text to be white and bold */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+
+        /* 3. The Dropdown List Box (White background) */
+        div[data-baseweb="popover"] ul[role="listbox"] {
+            background-color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 5px !important;
+        }
+
+        /* 4. The Options inside the dropdown */
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 2px !important;
+        }
+
+        /* 5. The Hover effect (Dark Grey) */
+        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
+            background-color: #d1d5db !important;
+            color: #1a0a2e !important;
+            cursor: pointer !important;
         }
 
         /* Hover state */
@@ -2216,27 +2235,31 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        # 1. Define the location text dynamically (defaults to Sub-National)
-        current_loc = st.session_state.get("selected_location", "subnational")
-        if current_loc == "national":
-            loc_display = t("nav_national")
-        else:
-            loc_display = t("nav_subnational")
-            
-        # 2. Add the emoji, but NO "Region" text
-        loc_label = f"📍 {loc_display}"
-            
-        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            # 3. Add a checkmark to show which one is selected (like the language button)
-            sub_btn_text = f"✅ {t('nav_subnational')}" if current_loc == "subnational" else t("nav_subnational")
-            nat_btn_text = f"✅ {t('nav_national')}" if current_loc == "national" else t("nav_national")
+        # Initialize state if it doesn't exist
+        if "selected_location" not in st.session_state:
+            st.session_state.selected_location = "subnational"
 
-            if st.button(sub_btn_text, key="nav_sub", use_container_width=True):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-            if st.button(nat_btn_text, key="nav_nat", use_container_width=True):
-                st.session_state.selected_location = "national"
-                st.rerun()
+        # Create the list of options and their display names
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
+        
+        # Find the current index
+        current_index = loc_options.index(st.session_state.selected_location)
+
+        # Use a selectbox (just like the language button)
+        selected_label = st.selectbox(
+            "Region", # This label is hidden by CSS
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
+
+        # If the user changes the selection, update the session state and rerun
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
