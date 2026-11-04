@@ -26,6 +26,15 @@ import streamlit.components.v1 as components
 from folium.plugins import Fullscreen, MousePosition, Draw
 from streamlit_folium import st_folium
 
+import base64
+
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        return ""
+
 # ==================== Translations ====================
 TRANSLATIONS = {
     "en": {
@@ -85,7 +94,7 @@ For support or more information, please contact the development team.""",
         "layer": "Layer",
         "abstraction_mm": "Abstraction (mm)",
         "abstraction_m3": "Abstraction (m³)",
-        "recharge": "Recharge",
+        "": "",
         "error_get_assets": "Error in get_ee_assets",
         "error_parse_date": "Error parsing date from asset",
         "value_label": "Value",
@@ -98,7 +107,13 @@ For support or more information, please contact the development team.""",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
-        "nav_recharge": "Recharge",
+        "nav_recharge_mm": "Recharge (mm)",
+        "nav_recharge_m3": "Recharge (m³)",
+        "nav__mm": " (mm)",
+        "nav__m3": " (m³)",
+        "nav_region": "Region",
+        "nav_subnational": "Sub-National",
+        "nav_national": "National",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -165,7 +180,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "layer": "طبقة",
         "abstraction_mm": "السحب (مم)",
         "abstraction_m3": "السحب (م³)",
-        "recharge": "التغذية الجوفية",
+        "": "التغذية الجوفية",
         "error_get_assets": "خطأ في جلب الأصول",
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
@@ -178,7 +193,13 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "عرض البيانات الخام",
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
-        "nav_recharge": "التغذية الجوفية",
+        "nav_recharge_mm": "التغذية الجوفية (مم)",
+        "nav_recharge_m3": "التغذية الجوفية (م³)",
+        "nav__mm": "التغذية الجوفية (مم)",
+        "nav__m3": "التغذية الجوفية (م³)",
+        "nav_region": "المنطقة",
+        "nav_subnational": "دون الوطني",
+        "nav_national": "وطني",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -244,7 +265,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "layer": "چین",
         "abstraction_mm": "دەرهێنان (مم)",
         "abstraction_m3": "دەرهێنان (م³)",
-        "recharge": "پڕبوونەوە",
+        "": "پڕبوونەوە",
         "error_get_assets": "هەڵە لە هێنانی ئەستەکان",
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
@@ -257,7 +278,13 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "raw_data": "داتای خاو",
         "nav_abstraction_mm": "دەرهێنان (مم)",
         "nav_abstraction_m3": "دەرهێنان (م³)",
-        "nav_recharge": "پڕبوونەوە",
+        "nav_recharge_mm": "پڕبوونەوە (مم)",
+        "nav_recharge_m3": "پڕبوونەوە (م³)",
+        "nav__mm": "پڕبوونەوە (مم)",
+        "nav__m3": "پڕبوونەوە (م³)",
+        "nav_region": "ناوچە",
+        "nav_subnational": "ناوچەیی",
+        "nav_national": "نیشتمانی",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -564,14 +591,14 @@ PALETTES = {
     "abstraction_mm": ["#2b83ba", "#abdda4", "#ffffbf", "#fdae61", "#d7191c"],
     "abstraction_m3": ["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8",
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
-    "recharge": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
+    "recharge_mm": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
 }
 
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
-    "recharge": "mm/month",
+    "recharge_mm": "mm/month",
 }
 
 
@@ -599,7 +626,7 @@ def get_image_min_max(asset_id):
     
     # Fallback to a default range if everything is masked or min==max
     if min_val is None or max_val is None or min_val == max_val:
-        return 0, 100  # Recharge usually falls between 0 and 100 mm
+        return 0, 100  #  usually falls between 0 and 100 mm
         
     return min_val, max_val
 
@@ -659,11 +686,11 @@ def get_image_min_max(asset_id):
 
 def get_vis_params(parameter, asset_id):
     # 1. Get the palette
-    palette = PALETTES.get(parameter, PALETTES["recharge"])
+    palette = PALETTES.get(parameter, PALETTES[""])
     
-    # 2. FORCE the visual range for Recharge
-    if parameter == "recharge":
-        # Recharge is usually small numbers (0 to 100 mm/month)
+    # 2. FORCE the visual range for 
+    if parameter == "":
+        #  is usually small numbers (0 to 100 mm/month)
         # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
         return {"min": 0, "max": 100, "palette": palette}
         
@@ -969,7 +996,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
 
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
     """Create regional summary bar chart with optional download button as annotation"""
-    import base64
+
 
     df = pd.DataFrame(summary_data)
     if df.empty:
@@ -1127,19 +1154,19 @@ def main():
         /* COSMIC BLOOM BANNER - Static vibrant gradient */
         .banner {
             background: linear-gradient(135deg, 
-                #0a0a2e 0%,
-                #1a0533 10%,
-                #2d1b69 20%,
-                #4a1a8a 30%,
-                #7b2fbe 40%,
+                #4a1a8a 0%,
+                #7B2FBE 10%,
+                #26C5F3 20%,
+                #FF9A9E 30%,
+                #FF6B9D 40%,
                 #B429F9 50%,
-                #FF6B9D 60%,
-                #FF9A9E 70%,
-                #26C5F3 80%,
-                #7B2FBE 90%,
-                #4a1a8a 100%
+                #7b2fbe 60%,
+                #4a1a8a 70%,
+                #2d1b69 80%,
+                #1a0533 90%,
+                #0a0a2e 100%
             );
-            padding: 2rem 4rem 1.5rem 4rem;
+            padding: 1rem 3rem 1rem 3rem;
             margin: 0 !important;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
@@ -1169,14 +1196,15 @@ def main():
         .banner-inner {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start; /* Pushes everything to the left */
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 2rem;
             position: relative;
             z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+       /* max-width: 1200px;  <-- Remove or comment out this line */
+       /* margin: 0 auto;     <-- Remove or comment out this line */
+       margin-left: 20px; /* Optional: adds a little padding on the left */
+   }
 
         /* Title aligned to LEFT */
         .banner-title {
@@ -1586,12 +1614,13 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
             fill: #ffffff !important;
             color: #ffffff !important;
+        }
         /* ===== Parameter button selected/unselected state ===== */
 
         /* SELECTED — WHITE with blue border (higher specificity than .stButton rule) */
         div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]),
-        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]) {
+        div[class*="st-key-param__active"] .stButton > button:not([kind="primary"]) {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 2px solid #696eff !important;
@@ -1599,7 +1628,7 @@ def main():
         }
         div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]):hover,
         div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]):hover,
-        div[class*="st-key-param_recharge_active"] .stButton > button:not([kind="primary"]):hover {
+        div[class*="st-key-param__active"] .stButton > button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
         }
@@ -1607,13 +1636,13 @@ def main():
         /* UNSELECTED — green with dark text */
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]),
-        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]) {
+        div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
         }
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]):hover,
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]):hover,
-        div[class*="st-key-param_recharge_inactive"] .stButton > button:not([kind="primary"]):hover {
+        div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]):hover {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
@@ -1757,6 +1786,131 @@ def main():
             padding-top: 0 !important;
             margin-top: -20px !important;
         }
+        
+        /* 2. Hide the calendar icon inside the input */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] svg,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] svg {
+            display: none !important;
+        }
+        
+        /* 3. Ensure the input doesn't have unnecessary padding now that the icon is gone */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] > div > div,
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] > div > div {
+            padding-left: 10px !important;
+            justify-content: center !important;
+        }
+
+        /* 4. Create the fake label INSIDE the input area using CSS */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"]::before {
+            content: "START DATE  :  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"]::before {
+            content: "END DATE  :  ";
+            color: #0e1117;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        /* ===== ULTIMATE FIX FOR POPOVER BUTTONS ===== */
+        
+        /* 1. Force the background to be exactly #a8f368 */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+            background-color: #a8f368 !important;
+            background: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 10px !important;
+            box-shadow: none !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        /* 2. Force all text and icons inside to be black */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] *,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] span {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+
+        /* 3. Hover, Focus, Active states (to prevent the black flash) */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
+            border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
+        
+        /* Target the exact button inside the popover container */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
+            background-color: #B429F9 !important;
+            background: #B429F9 !important;
+            color: #ffffff !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        /* Force text to be white */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
+
+        /* Hover state */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
+            background-color: #9a22d9 !important;
+            background: #9a22d9 !important;
+            border-color: #9a22d9 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+                /* ===== CUSTOM REGION BUTTON ICON ===== */
+        
+        /* Make sure the button uses flexbox to align the icon and text */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 8px !important; /* Space between icon and text */
+        }
+
+        /* Insert the custom image before the text */
+        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
+            content: "" !important;
+            display: inline-block !important;
+            width: 20px !important;  /* Adjust size here */
+            height: 20px !important; /* Adjust size here */
+            background-image: url('data:image/png;base64,{region_b64}') !important;
+            background-size: contain !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -1800,20 +1954,30 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- COSMIC BLOOM BANNER - Full Width with Title Left ----
-    st.markdown(
-        f"""
-        <div class="banner">
-            <div class="banner-inner">
-                <div class="banner-title">
-                    <h1>💧 {t('dashboard_header')}</h1>
-                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                    <div class="welcome">{t('welcome_subtitle')}</div>
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+
+    # Load logos for the banner
+    logo1_b64 = get_base64_image("logo1.png")
+    logo2_b64 = get_base64_image("logo2.png")
+    logo1_html = f'<img src="data:image/png;base64,{logo1_b64}" style="height: 150px; margin-right: 20px;" alt="Logo 1">' if logo1_b64 else ""
+    logo2_html = f'<img src="data:image/png;base64,{logo2_b64}" style="height: 150px; margin-left: 20px;" alt="Logo 2">' if logo2_b64 else ""
+
+    region_b64 = get_base64_image("region_icon.png")
+
+    banner_html = f"""
+<div class="banner">
+<div class="banner-inner">
+<div style="display: flex; gap: 0px;">
+    {logo1_html}
+    {logo2_html}
+</div>
+<div class="banner-title">
+<h1>💧 {t('dashboard_header')}</h1>
+<div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+<div class="welcome">{t('welcome_subtitle')}</div>
+</div>
+</div>
+"""
+    st.markdown(banner_html, unsafe_allow_html=True)
 
     # Place language selector in the top-right of the banner using columns
     lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
@@ -1836,97 +2000,178 @@ def main():
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
     
-    _mm_active = st.session_state.selected_parameter == "abstraction_mm"
-    _m3_active = st.session_state.selected_parameter == "abstraction_m3"
-    _rc_active = st.session_state.selected_parameter == "recharge"
+    _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
+    _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
-    _mm_label = ("🔴 " if _mm_active else "⚪ ") + t("nav_abstraction_mm")
-    _m3_label = ("🔴 " if _m3_active else "⚪ ") + t("nav_abstraction_m3")
-    _rc_label = ("🔴 " if _rc_active else "⚪ ") + t("nav_recharge")
+    # Ensure session state defaults for the new region button
+    if "selected_location" not in st.session_state:
+        st.session_state.selected_location = "subnational"
 
-    with nav_col1:
-        with st.container(key=f"param_mm_{'active' if _mm_active else 'inactive'}"):
-            if st.button(_mm_label, key="nav_mm", use_container_width=True):
+        # Load the image as a Base64 string
+        region_b64 = get_base64_image("region_icon.png")
+        
+        # Inject a tiny CSS rule just for this button to show the image
+        st.markdown(
+            f"""
+            <style>
+            div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {{
+                content: "" !important;
+                display: inline-block !important;
+                width: 20px !important;
+                height: 20px !important;
+                background-image: url('data:image/png;base64,{region_b64}') !important;
+                background-size: contain !important;
+                background-repeat: no-repeat !important;
+                background-position: center !important;
+                margin-right: 8px !important;
+            }}
+            </style>
+            """, 
+            unsafe_allow_html=True
+        )
+
+        # Now just use the plain text for the button
+        loc_label = f"{t('nav_region')}"
+
+            
+        # Pass the combined string to the popover
+        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
+            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+                st.session_state.selected_location = "national"
+                st.rerun()
+
+    # --- Column 2: Abstraction Dropdown ---
+    with nav_col2:
+        if st.session_state.selected_parameter == "abstraction_mm":
+            abs_label = f"🔴 {t('nav_abstraction_mm')}"
+        elif st.session_state.selected_parameter == "abstraction_m3":
+            abs_label = f"🔴 {t('nav_abstraction_m3')}"
+        else:
+            abs_label = "⚪ Abstraction"
+            
+        # ADDED key="abs_dropdown"
+        with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
+            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
                 st.rerun()
-
-    with nav_col2:
-        with st.container(key=f"param_m3_{'active' if _m3_active else 'inactive'}"):
-            if st.button(_m3_label, key="nav_m3", use_container_width=True):
+            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_m3"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
                 st.rerun()
 
+    # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        with st.container(key=f"param_recharge_{'active' if _rc_active else 'inactive'}"):
-            if st.button(_rc_label, key="nav_recharge", use_container_width=True):
-                st.session_state.selected_parameter = "recharge"
+        if st.session_state.selected_parameter == "recharge_mm":
+            rc_label = f"🔴 {t('nav_recharge_mm')}"
+        elif st.session_state.selected_parameter == "recharge_m3":
+            rc_label = f"🔴 {t('nav_recharge_m3')}"
+        else:
+            rc_label = "⚪ Recharge"
+            
+        # ADDED key="rc_dropdown"
+        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
+            if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
+                st.session_state.selected_parameter = "recharge_mm"
                 st.session_state.map_generated = False
-                st.session_state.regional_summary_data = None
+                st.rerun()
+            if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
+                st.session_state.selected_parameter = "recharge_m3"
+                st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Date range picker (right column) + View month dropdown (left column) ---
-    # The range is read first, then the month options are rendered in the LEFT column.
-    with nav_col_range:
-        try:
-            asset_path = cfg["asset_path"]
-            assets = get_ee_assets(asset_path)   # ✅ EE already initialized
-            if assets:
-                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-                if asset_dates:
-                    min_date, max_date = min(asset_dates), max(asset_dates)
-
-                    # Initialize session range to full span on first load
-                    if st.session_state.date_range is None:
-                        st.session_state.date_range = (min_date.date(), max_date.date())
-
-                    picked = st.date_input(
-                        t("select_date_range"),
-                        value=st.session_state.date_range,
-                        min_value=min_date.date(),
-                        max_value=max_date.date(),
-                        key="top_date_range_selector",
-                        label_visibility="collapsed",
-                    )
-
-                    # Streamlit returns a single date until both ends are picked
-                    if isinstance(picked, (tuple, list)) and len(picked) == 2:
-                        st.session_state.date_range = (picked[0], picked[1])
-
-                        # Clear stale cached data so charts recompute for the new range
-                        st.session_state.regional_summary_data = None
-                        st.session_state.time_series_data = None
-
-                        # Narrow `assets` so all downstream code respects the range
-                        start_ym = picked[0].strftime("%Y_%m")
-                        end_ym = picked[1].strftime("%Y_%m")
-                        assets = [
-                            a for a in assets
-                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                        ]
-
-                        # Build month options from the ranged assets
-                        ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-                        st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
-        except Exception as e:
-            st.warning(f"Could not load dates: {e}")
-
-    # View month dropdown — positioned to the left of the date range
+    # --- Column 4: Placeholder (We will use this for dates later) ---
     with nav_col_month:
-        months_for_view = st.session_state.get("ranged_months_disp") or []
-        if months_for_view:
-            with st.container(key="view_month_wrap"):
-                view_month = st.selectbox(
-                    t("view_month"),
-                    options=months_for_view,
-                    index=len(months_for_view) - 1,
-                    key="view_month_selector",
-                    label_visibility="collapsed",
-                )
-            st.session_state.selected_date_str = view_month
+        pass
+
+    # --- START DATE & END DATE ---
+    try:
+        asset_path = cfg["asset_path"]
+        assets = get_ee_assets(asset_path)
+        if assets:
+            asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+            if asset_dates:
+                min_date, max_date = min(asset_dates), max(asset_dates)
+
+                # Initialize session state if empty
+                if st.session_state.date_range is None:
+                    st.session_state.date_range = (min_date.date(), max_date.date())
+
+                # Column 4: START DATE BUTTON
+                with nav_col_month:
+                     if st.button("📅 Start date", key="btn_start_cal", use_container_width=True):
+                        st.session_state.active_cal = "start"
+                        st.rerun()
+
+                # Column 5: END DATE BUTTON
+                with nav_col_range:
+                     if st.button("📅 End date", key="btn_end_cal", use_container_width=True):
+                        st.session_state.active_cal = "end"
+                        st.rerun()
+
+                # The Popup Dialog
+                @st.dialog("📅 Target Date")
+                def show_calendar():
+                    active = st.session_state.get("active_cal")
+                    if not active:
+                        return
+                    
+                    st.write(f"Select new **{active.upper()} DATE**:")
+                    st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
+                    cal_years = [str(y) for y in range(2018, 2031)]
+                    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+                    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
+                    
+                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    sel_month = st.selectbox("Month", cal_months, index=0)
+                    
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        if st.button("❌ Cancel", use_container_width=True):
+                            st.session_state.active_cal = None
+                            st.rerun()
+                    with c2:
+                        if st.button("✔ Select", type="primary", use_container_width=True):
+                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
+                            if active == "start":
+                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
+                            else:
+                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
+                            st.session_state.active_cal = None
+                            st.rerun()
+
+                if st.session_state.get("active_cal"):
+                    show_calendar()
+
+                # Get the dates for the map generation
+                start_date = st.session_state.date_range[0]
+                end_date = st.session_state.date_range[1]
+                        
+                # If the dates change, reset the map
+                if (start_date, end_date) != st.session_state.date_range:
+                    st.session_state.date_range = (start_date, end_date)
+                    st.session_state.regional_summary_data = None
+                    st.session_state.time_series_data = None
+                    st.session_state.map_generated = False
+
+                # Filter assets based on the chosen dates
+                start_ym = start_date.strftime("%Y_%m")
+                end_ym = end_date.strftime("%Y_%m")
+                assets = [
+                    a for a in assets
+                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                ]
+
+                # Save the available months for the map dropdown
+                ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+                st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
+
+    except Exception as e:
+        st.warning(f"Could not load dates: {e}")
+
        
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
@@ -1934,10 +2179,37 @@ def main():
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
-            st.session_state.current_date = st.session_state.selected_date_str
+            
+            # Set the map to display the START DATE month
+            #st.session_state.current_date = st.session_state.selected_date_str
+            st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
-
+    # ===== CUSTOM DATE RANGE TIMELINE =====
+    if st.session_state.get("date_range"):
+        start_dt = st.session_state.date_range[0]
+        end_dt = st.session_state.date_range[1]
+        
+        # Format the dates to look like the screenshot (e.g., "01 JAN 2020")
+        start_str = start_dt.strftime("%d %b %Y").upper()
+        end_str = end_dt.strftime("%d %b %Y").upper()
+        
+        # HTML and CSS for the custom timeline bar
+        timeline_html = f"""
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">
+                📅 {start_str}
+            </div>
+            <div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">
+                <div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+                <div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>
+            </div>
+            <div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 13px;">
+                📅 {end_str}
+            </div>
+        </div>
+        """
+        st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
 
     # NOTE: The old "# ---- Earth Engine ----" block that used to live here
@@ -1999,18 +2271,15 @@ def main():
                 with map_col:
                     # Map header row: title on left, Specify Location button on right
                     _h_col1, _h_col2 = st.columns([5, 1.2])
+                    
                     with _h_col1:
                         st.markdown(
                             f"<h3 style='margin:0; padding-top:4px;'>🗺️ {t('interactive_map')}</h3>",
                             unsafe_allow_html=True,
                         )
+                            
                     with _h_col2:
-                        if st.button(
-                            "📍 Specify Location",
-                            key="open_specify_location",
-                            use_container_width=True,
-                            type="primary",       # ← Add this line
-                        ):
+                        if st.button("📍 Specify Location", key="open_specify_location", use_container_width=True):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
                     # ===== Inline Location Form =====
@@ -2058,47 +2327,52 @@ def main():
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
-                    selected_asset = next(
-                        (
-                            a
-                            for a in assets
-                            if st.session_state.current_parameter in a and selected_year_month in a
-                        ),
-                        None,
-                    )
-                    if not selected_asset:
+                # Map the parameter name to the actual asset name in Earth Engine
+                search_param = st.session_state.current_parameter
+                if search_param == "recharge_mm":
+                    search_param = "recharge"  # Your GEE assets are named just "recharge"
+                
+                selected_asset = next(
+                    (
+                        a
+                        for a in assets
+                        if search_param in a and selected_year_month in a
+                    ),
+                    None,
+                )
+                if not selected_asset:
                         st.error(t("no_data_month"))
                         return
 
-                    center_lat = float(cfg["center_lat"])
-                    center_lon = float(cfg["center_lon"])
-                    zoom = int(cfg["zoom"])
+                center_lat = float(cfg["center_lat"])
+                center_lon = float(cfg["center_lon"])
+                zoom = int(cfg["zoom"])
 
-                    # If the user searched for a location, override the center
-                    if st.session_state.get("search_pending"):
+                # If the user searched for a location, override the center
+                if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
                         center_lat = float(_search_lat)
                         center_lon = float(_search_lng)
                         zoom = 15
 
-                    m = create_base_map(center_lat, center_lon, zoom)
-                    ee_image = ee.Image(selected_asset)
+                m = create_base_map(center_lat, center_lon, zoom)
+                ee_image = ee.Image(selected_asset)
 
-                    opacity = st.session_state.get("opacity", 0.7)
-                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                    vis_params["opacity"] = opacity
+                opacity = st.session_state.get("opacity", 0.7)
+                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                vis_params["opacity"] = opacity
 
-                    add_ee_layer(
+                add_ee_layer(
                         m,
                         ee_image,
                         vis_params,
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
-                    )
-                    add_colormap(m, vis_params, st.session_state.current_parameter)
+                )
+                add_colormap(m, vis_params, st.session_state.current_parameter)
 
-                    # If the user searched, place a red marker at the location
-                    if st.session_state.get("search_pending"):
+                # If the user searched, place a red marker at the location
+                if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
                                 st.session_state.get("search_lat"),
@@ -2108,27 +2382,27 @@ def main():
                             tooltip="Searched location",
                         icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
-                    st.session_state["search_pending"] = False
-                    folium.LayerControl().add_to(m)
+                st.session_state["search_pending"] = False
+                folium.LayerControl().add_to(m)
 
-                    # Read all drawings from the map
-                    map_data = st_folium(
+                # Read all drawings from the map
+                map_data = st_folium(
                         m,
                         width=None,
                         height=850,
                         returned_objects=["all_drawings"],
                     )
 
-                    # Process the most recent drawing
-                    drawings = map_data.get("all_drawings") or []
-                    latest = None
-                    for d in reversed(drawings):  # newest first
+                # Process the most recent drawing
+                drawings = map_data.get("all_drawings") or []
+                latest = None
+                for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
                             latest = d
                             break
 
-                    if latest:
+                if latest:
                         geom = latest["geometry"]
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
