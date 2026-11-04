@@ -1774,10 +1774,15 @@ def main():
         }
 
         /* Pull the metric row up to align with the top of the map */
-        div[data-testid="stMetric"] {
-            margin-top: -40px !important;
+        /* Align metric row top with the top of the map */
+        div[class*="st-key-stats_metrics_row"] {
+            margin-top: -50px !important;
             padding-top: 0 !important;
         }
+        #div[data-testid="stMetric"] {
+        #    margin-top: -40px !important;
+        #    padding-top: 0 !important;
+        #}
 
         /* Remove padding on the column container holding the metrics */
         div[data-testid="column"]:has(div[data-testid="stMetric"]) {
