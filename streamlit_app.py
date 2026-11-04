@@ -1888,22 +1888,19 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
-        
-        /* 1. The main button look (Purple) */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
+        /* ===== REGION BUTTON (Matches Language Button) ===== */
+        /* 1. The Purple Button */
+        div[class*="st-key-region_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            display: flex !important;
-            align-items: center !important;
         }
 
-        /* 2. Force the main button text to be white and bold */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+        /* 2. The White Text */
+        div[class*="st-key-region_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
@@ -2235,32 +2232,28 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        # Initialize state if it doesn't exist
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # Create the list of options and their display names
         loc_options = ["subnational", "national"]
         loc_labels = [t("nav_subnational"), t("nav_national")]
-        
-        # Find the current index
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # Use a selectbox (just like the language button)
-        selected_label = st.selectbox(
-            "Region", # This label is hidden by CSS
-            options=loc_labels,
-            index=current_index,
-            key="region_selector",
-            label_visibility="collapsed"
-        )
+        # We added the key="region_wrap" here!
+        with st.container(key="region_wrap"):
+            selected_label = st.selectbox(
+                "Region", 
+                options=loc_labels,
+                index=current_index,
+                key="region_selector",
+                label_visibility="collapsed"
+            )
 
-        # If the user changes the selection, update the session state and rerun
         new_location = loc_options[loc_labels.index(selected_label)]
         if new_location != st.session_state.selected_location:
             st.session_state.selected_location = new_location
             st.rerun()
-
+            
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         # Always show just "Abstraction" on the main button
