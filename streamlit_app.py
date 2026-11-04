@@ -123,6 +123,9 @@ For support or more information, please contact the development team.""",
         "nav_pet": "Potential Evapotranspiration (PET)",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
+        "nav_download": "Download",
+        "download_data": "Data (CSV)",
+        "download_report": "Report (PDF)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -2164,19 +2167,28 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5 = st.columns([2.5, 1, 0.6, 0.6, 0.6])
+    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
     
+    # Info Button (c3)
     with c3:
         if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
             st.session_state.show_info_modal = True
             
+    # Reset Button (c4)
     with c4:
         if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
-            
+
+    # NEW Download Button (c5)
     with c5:
+        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
+            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
+            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
+            
+    # Language Selector (c6)
+    with c6:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -2458,9 +2470,9 @@ def main():
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
             '</div>'
-            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #8b6d39, #b89955); margin: 0 20px; border-radius: 2px; position: relative;">'
-                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>'
-                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #b89955; border-radius: 50%;"></div>'
+            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">' 
+                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
+                '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
             '</div>'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + end_str +
