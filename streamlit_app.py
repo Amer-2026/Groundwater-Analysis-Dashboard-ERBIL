@@ -2095,41 +2095,30 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
-        /* ===== REGION POPOVER BUTTONS (WHITE & GREY) ===== */
-        
-        /* Target the exact keys you assigned: nav_sub and nav_nat */
+        /* ===== REGION POPOVER BUTTONS (Sub-National / National) ===== */
+        /* 1. Default State: White Background, Dark Text */
         div[class*="st-key-nav_sub"] button,
         div[class*="st-key-nav_nat"] button {
             background-color: #ffffff !important;
-            background: #ffffff !important;
             color: #1a0a2e !important;
             border: 1px solid #e0e0e0 !important;
             border-radius: 8px !important;
-            height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
             transition: all 0.2s ease !important;
-            font-weight: 700 !important;
-            box-shadow: none !important;
+            font-weight: 600 !important;
         }
 
-        /* Hover State: Grey Background */
+        /* 2. Hover State: Grey Background */
         div[class*="st-key-nav_sub"] button:hover,
         div[class*="st-key-nav_nat"] button:hover {
             background-color: #d1d5db !important; /* Light Grey */
-            background: #d1d5db !important;
             color: #1a0a2e !important;
             border-color: #9ca3af !important;
-            box-shadow: none !important;
         }
 
-        /* Force text and icons inside to be dark */
+        /* 3. Force text inside to be dark */
         div[class*="st-key-nav_sub"] button *,
         div[class*="st-key-nav_nat"] button * {
             color: #1a0a2e !important;
-            fill: #1a0a2e !important;
         }
     """
     
