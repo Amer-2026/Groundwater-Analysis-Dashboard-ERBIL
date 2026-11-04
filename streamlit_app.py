@@ -1888,33 +1888,43 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION BUTTON (Matches Language Button) ===== */
-        /* 1. The Purple Button */
-        div[class*="st-key-region_wrap"] div[data-baseweb="select"] > div {
+        /* ===== REGION BUTTON (Native Purple Selectbox) ===== */
+        
+        /* 1. Main Purple Button & Alignment */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
+            margin-top: 4px !important; /* Nudges it down to align with green buttons */
         }
 
-        /* 2. The White Text */
-        div[class*="st-key-region_wrap"] div[data-baseweb="select"] * {
+        /* 2. Force White Text and Icons */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
 
-        /* 3. The Dropdown List Box (White background) */
+        /* 3. Kill the Green Hover Flash */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; /* Darker purple on hover */
+            border-color: #9a22d9 !important;
+        }
+
+        /* 4. The Dropdown List Box (White background) */
         div[data-baseweb="popover"] ul[role="listbox"] {
             background-color: #ffffff !important;
             border-radius: 8px !important;
             padding: 5px !important;
         }
 
-        /* 4. The Options inside the dropdown */
+        /* 5. The Options inside the dropdown */
         div[data-baseweb="popover"] ul[role="listbox"] li {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
@@ -1924,22 +1934,11 @@ def main():
             margin-bottom: 2px !important;
         }
 
-        /* 5. The Hover effect (Dark Grey) */
+        /* 6. The Hover effect for the dropdown list (Dark Grey) */
         div[data-baseweb="popover"] ul[role="listbox"] li:hover {
             background-color: #d1d5db !important;
             color: #1a0a2e !important;
             cursor: pointer !important;
-        }
-
-        /* Hover state */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
-            background-color: #9a22d9 !important;
-            background: #9a22d9 !important;
-            border-color: #9a22d9 !important;
-            box-shadow: none !important;
-            outline: none !important;
         }
         /* ===== CUSTOM REGION BUTTON ICON ===== */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
