@@ -114,6 +114,11 @@ For support or more information, please contact the development team.""",
         "nav_region": "Region",
         "nav_subnational": "Sub-National",
         "nav_national": "National",
+        "nav_analysis": "Analysis",
+        "nav_wsi": "Water Stress Index",
+        "nav_water_balance": "Water Balance",
+        "nav_climate_et": "Climate / ET",
+        "nav_irrigation": "Irrigation Efficiency",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -200,6 +205,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_region": "المنطقة",
         "nav_subnational": "دون الوطني",
         "nav_national": "وطني",
+        "nav_analysis": "التحليل",
+        "nav_wsi": "مؤشر الإجهاد المائي",
+        "nav_water_balance": "التوازن المائي",
+        "nav_climate_et": "المناخ / التبخر-النتح",
+        "nav_irrigation": "كفاءة الري",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -285,6 +295,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_region": "ناوچە",
         "nav_subnational": "ناوچەیی",
         "nav_national": "نیشتمانی",
+        "nav_analysis": "شیکردنەوە",
+        "nav_wsi": "پێوەرەی کێشەی ئاو",
+        "nav_water_balance": "هاوسەنگی ئاو",
+        "nav_climate_et": "کەشوهەوا / هەڵمبوون",
+        "nav_irrigation": "کاریگەری ئاودێری",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1909,6 +1924,80 @@ def main():
             background-repeat: no-repeat !important;
             background-position: center !important;
         }
+        /* ===== FORCE TOP BAR TO ONE ROW ===== */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
+            flex-wrap: nowrap !important;
+            gap: 0.3rem !important; /* Reduced gap to fit 7 buttons */
+            align-items: center !important;
+        }
+
+        /* Allow columns to shrink */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
+            min-width: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Force the Date Inputs to shrink and fit inside their columns */
+        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"],
+        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+        
+        /* Override Streamlit's default minimum width for date inputs */
+        div[data-testid="stDateInput"] > div > div {
+            min-width: 0 !important;
+        }
+        
+        /* Ensure the input text doesn't push the width out */
+        div[data-testid="stDateInput"] input {
+            text-overflow: ellipsis !important;
+            min-width: 0 !important;
+            font-size: 13px !important; /* Slightly smaller text to fit */
+        }
+        
+         /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        div[class*="st-key-btn_start_cal_top"] button,
+        div[class*="st-key-btn_end_cal_top"] button {
+            background-color: #cae9ff !important;
+            color: #0e1117 !important;
+            border: none !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            font-weight: 600 !important;
+            font-size: 13px !important; 
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        div[class*="st-key-btn_start_cal_top"] button:hover,
+        div[class*="st-key-btn_end_cal_top"] button:hover {
+            background-color: #a8d8f0 !important;
+        }
+        /* ===== RESET BUTTON STYLE ===== */
+        div[class*="st-key-reset_btn"] button {
+            background-color: #B429F9 !important; /* Purple to match language */
+            color: white !important;
+            border-radius: 8px !important; /* Match the language button shape */
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 !important;
+            font-size: 36px !important; /* Bigger font for the emoji */
+            font-weight: 600 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        
+        div[class*="st-key-reset_btn"] button:hover {
+            background-color: #9a22d9 !important; /* Darker purple on hover */
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -1977,9 +2066,19 @@ def main():
 """
     st.markdown(banner_html, unsafe_allow_html=True)
 
-    # Place language selector in the top-right of the banner using columns
-    lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
+    # Place language selector AND reset button in the top-right of the banner
+    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1.2])
+    
+    # Reset button FIRST (now in lang_col3)
     with lang_col3:
+        if st.button("🔄 Reset", key="reset_btn", help="Reset Dashboard", use_container_width=True):
+            # Clear all session state to return to initial view
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+
+    # Language selector SECOND (now in lang_col4)
+    with lang_col4:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
@@ -1996,7 +2095,7 @@ def main():
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6 = st.columns([1, 1, 1, 1.2, 1.4, 1.4])
+    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6, nav_col7 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
     
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
@@ -2019,12 +2118,8 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        if st.session_state.selected_parameter == "abstraction_mm":
-            abs_label = f"🔴 {t('nav_abstraction_mm')}"
-        elif st.session_state.selected_parameter == "abstraction_m3":
-            abs_label = f"🔴 {t('nav_abstraction_m3')}"
-        else:
-            abs_label = "⚪ Abstraction"
+        # Always show just "Abstraction" on the main button
+        abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
             
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
@@ -2055,9 +2150,46 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Column 4: Placeholder (We will use this for dates later) ---
+    # --- Column 4: Analysis Dropdown ---
     with nav_col_month:
-        pass
+        if st.session_state.get("selected_analysis") == "wsi":
+            ana_label = f"🌵 {t('nav_wsi')}"
+        elif st.session_state.get("selected_analysis") == "water_balance":
+            ana_label = f"⚖️ {t('nav_water_balance')}"
+        elif st.session_state.get("selected_analysis") == "climate_et":
+            ana_label = f"🌧️ {t('nav_climate_et')}"
+        elif st.session_state.get("selected_analysis") == "irrigation":
+            ana_label = f"🚜 {t('nav_irrigation')}"
+        else:
+            ana_label = f"📊 {t('nav_analysis')}"
+            
+        # This is the popover (the dropdown menu)
+        with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
+            
+            # These are the options INSIDE the dropdown
+            if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
+                st.session_state.selected_analysis = "wsi"
+                st.session_state.selected_parameter = "wsi" 
+                st.session_state.map_generated = False
+                st.rerun()
+                
+            if st.button(f"⚖️ {t('nav_water_balance')}", key="nav_wb_btn", use_container_width=True):
+                st.session_state.selected_analysis = "water_balance"
+                st.session_state.selected_parameter = "water_balance"
+                st.session_state.map_generated = False
+                st.rerun()
+                
+            if st.button(f"🌧️ {t('nav_climate_et')}", key="nav_climate_btn", use_container_width=True):
+                st.session_state.selected_analysis = "climate_et"
+                st.session_state.selected_parameter = "climate_et"
+                st.session_state.map_generated = False
+                st.rerun()
+                
+            if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
+                st.session_state.selected_analysis = "irrigation"
+                st.session_state.selected_parameter = "irrigation"
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- START DATE & END DATE ---
     try:
@@ -2071,92 +2203,83 @@ def main():
                 # Initialize session state if empty
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
-
-                # Column 4: START DATE BUTTON
-                with nav_col_month:
-                     if st.button("📅 Start date", key="btn_start_cal", use_container_width=True):
-                        st.session_state.active_cal = "start"
-                        st.rerun()
-
-                # Column 5: END DATE BUTTON
-                with nav_col_range:
-                     if st.button("📅 End date", key="btn_end_cal", use_container_width=True):
-                        st.session_state.active_cal = "end"
-                        st.rerun()
-
-                # The Popup Dialog
-                @st.dialog("📅 Target Date")
-                def show_calendar():
-                    active = st.session_state.get("active_cal")
-                    if not active:
-                        return
                     
-                    st.write(f"Select new **{active.upper()} DATE**:")
-                    st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
-                    cal_years = [str(y) for y in range(2018, 2031)]
-                    current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
-                    sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
-                    
-                    cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-                    sel_month = st.selectbox("Month", cal_months, index=0)
-                    
-                    c1, c2 = st.columns(2)
-                    with c1:
-                        if st.button("❌ Cancel", use_container_width=True):
-                            st.session_state.active_cal = None
-                            st.rerun()
-                    with c2:
-                        if st.button("✔ Select", type="primary", use_container_width=True):
-                            new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
-                            if active == "start":
-                                st.session_state.date_range = (new_date, st.session_state.date_range[1])
-                            else:
-                                st.session_state.date_range = (st.session_state.date_range[0], new_date)
-                            st.session_state.active_cal = None
-                            st.rerun()
-
-                if st.session_state.get("active_cal"):
-                    show_calendar()
-
-                # Get the dates for the map generation
-                start_date = st.session_state.date_range[0]
-                end_date = st.session_state.date_range[1]
-                        
-                # If the dates change, reset the map
-                if (start_date, end_date) != st.session_state.date_range:
-                    st.session_state.date_range = (start_date, end_date)
-                    st.session_state.regional_summary_data = None
-                    st.session_state.time_series_data = None
-                    st.session_state.map_generated = False
-
-                # Filter assets based on the chosen dates
-                start_ym = start_date.strftime("%Y_%m")
-                end_ym = end_date.strftime("%Y_%m")
-                assets = [
-                    a for a in assets
-                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                ]
-
-                # Save the available months for the map dropdown
-                ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
-                st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
-
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
-       
+    # Column 5: START DATE BUTTON
+    with nav_col_range:
+        if st.button("📅 Start date", key="btn_start_cal_top", use_container_width=True):
+            st.session_state.active_cal = "start"
+            st.rerun()
+
+    # Column 6: END DATE BUTTON
+    with nav_col6:
+        if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
+            st.session_state.active_cal = "end"
+            st.rerun()
+
+    # The Popup Dialog
+    @st.dialog("📅 Target Date")
+    def show_calendar():
+        active = st.session_state.get("active_cal")
+        if not active:
+            return
+        
+        st.write(f"Select new **{active.upper()} DATE**:")
+        st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
+        cal_years = [str(y) for y in range(2018, 2031)]
+        current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+        sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
+        
+        cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        sel_month = st.selectbox("Month", cal_months, index=0)
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("❌ Cancel", use_container_width=True):
+                st.session_state.active_cal = None
+                st.rerun()
+        with c2:
+            if st.button("✔ Select", type="primary", use_container_width=True):
+                new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
+                if active == "start":
+                    st.session_state.date_range = (new_date, st.session_state.date_range[1])
+                else:
+                    st.session_state.date_range = (st.session_state.date_range[0], new_date)
+                st.session_state.active_cal = None
+                st.rerun()
+
+    if st.session_state.get("active_cal"):
+        show_calendar()
+
+    # Get the dates for the map generation
+    start_date = st.session_state.date_range[0]
+    end_date = st.session_state.date_range[1]
+                        
+    # Filter assets based on the chosen dates
+    start_ym = start_date.strftime("%Y_%m")
+    end_ym = end_date.strftime("%Y_%m")
+    assets = [
+        a for a in assets
+        if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+    ]
+
+    # Save the available months for the map dropdown
+    ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
+    st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
     # Generate Analysis button - type="primary" so it gets the purple/blue color
-    with nav_col6:
+    with nav_col7:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             
             # Set the map to display the START DATE month
-            #st.session_state.current_date = st.session_state.selected_date_str
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
+
     # ===== CUSTOM DATE RANGE TIMELINE =====
     if st.session_state.get("date_range"):
         start_dt = st.session_state.date_range[0]
@@ -2183,9 +2306,6 @@ def main():
         """
         st.markdown(timeline_html, unsafe_allow_html=True)
     st.markdown("---")
-
-    # NOTE: The old "# ---- Earth Engine ----" block that used to live here
-    # has been REMOVED — EE initialization now happens at the very top of main().
 
     # ---- Session state ----
     defaults = {
@@ -2254,6 +2374,7 @@ def main():
                         if st.button("📍 Specify Location", key="open_specify_location", use_container_width=True):
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
+
                     # ===== Inline Location Form =====
                     if st.session_state.get("show_location_form", False):
                         with st.container(key="location_form_wrap"):
@@ -2299,52 +2420,52 @@ def main():
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
-                # Map the parameter name to the actual asset name in Earth Engine
-                search_param = st.session_state.current_parameter
-                if search_param == "recharge_mm":
-                    search_param = "recharge"  # Your GEE assets are named just "recharge"
-                
-                selected_asset = next(
-                    (
-                        a
-                        for a in assets
-                        if search_param in a and selected_year_month in a
-                    ),
-                    None,
-                )
-                if not selected_asset:
+                    # Map the parameter name to the actual asset name in Earth Engine
+                    search_param = st.session_state.current_parameter
+                    if search_param == "recharge_mm":
+                        search_param = "recharge"  # Your GEE assets are named just "recharge"
+                    
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if search_param in a and selected_year_month in a
+                        ),
+                        None,
+                    )
+                    if not selected_asset:
                         st.error(t("no_data_month"))
                         return
 
-                center_lat = float(cfg["center_lat"])
-                center_lon = float(cfg["center_lon"])
-                zoom = int(cfg["zoom"])
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    zoom = int(cfg["zoom"])
 
-                # If the user searched for a location, override the center
-                if st.session_state.get("search_pending"):
+                    # If the user searched for a location, override the center
+                    if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
                         center_lat = float(_search_lat)
                         center_lon = float(_search_lng)
                         zoom = 15
 
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
+                    m = create_base_map(center_lat, center_lon, zoom)
+                    ee_image = ee.Image(selected_asset)
 
-                opacity = st.session_state.get("opacity", 0.7)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = opacity
+                    opacity = st.session_state.get("opacity", 0.7)
+                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                    vis_params["opacity"] = opacity
 
-                add_ee_layer(
+                    add_ee_layer(
                         m,
                         ee_image,
                         vis_params,
                         f"{t(st.session_state.current_parameter)} {t('layer')}",
-                )
-                add_colormap(m, vis_params, st.session_state.current_parameter)
+                    )
+                    add_colormap(m, vis_params, st.session_state.current_parameter)
 
-                # If the user searched, place a red marker at the location
-                if st.session_state.get("search_pending"):
+                    # If the user searched, place a red marker at the location
+                    if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
                                 st.session_state.get("search_lat"),
@@ -2352,29 +2473,29 @@ def main():
                             ],
                             popup=f"Searched: {st.session_state.get('search_lat'):.5f}, {st.session_state.get('search_lng'):.5f}",
                             tooltip="Searched location",
-                        icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
+                            icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
-                st.session_state["search_pending"] = False
-                folium.LayerControl().add_to(m)
+                    st.session_state["search_pending"] = False
+                    folium.LayerControl().add_to(m)
 
-                # Read all drawings from the map
-                map_data = st_folium(
+                    # Read all drawings from the map
+                    map_data = st_folium(
                         m,
                         width=None,
                         height=850,
                         returned_objects=["all_drawings"],
                     )
 
-                # Process the most recent drawing
-                drawings = map_data.get("all_drawings") or []
-                latest = None
-                for d in reversed(drawings):  # newest first
+                    # Process the most recent drawing
+                    drawings = map_data.get("all_drawings") or []
+                    latest = None
+                    for d in reversed(drawings):  # newest first
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
                             latest = d
                             break
 
-                if latest:
+                    if latest:
                         geom = latest["geometry"]
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
@@ -2430,7 +2551,7 @@ def main():
                     st.markdown(
                         f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                         unsafe_allow_html=True,
-                )
+                    )
                     try:
                         # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
@@ -2478,30 +2599,30 @@ def main():
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
-                    # Filter assets by the selected date range
+                            # Filter assets by the selected date range
                             if st.session_state.date_range:
                                 start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                        end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                        ranged_assets = [
-                            a for a in assets
-                            if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                        ]
-                    else:
-                        ranged_assets = assets
+                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                                ranged_assets = [
+                                    a for a in assets
+                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                                ]
+                            else:
+                                ranged_assets = assets
 
-                    try:
-                        summary = get_regional_summary(
-                            st.session_state.current_parameter,
-                            tuple(ranged_assets),
-                            int(cfg.get("native_scale_m", 20)),
-                        )
-                        if summary:
-                            st.session_state.regional_summary_data = summary
-                        else:
-                            st.session_state.regional_summary_data = []
-                    except Exception as e:
-                        st.error(f"Error computing regional summary: {e}")
-                        st.session_state.regional_summary_data = []
+                            try:
+                                summary = get_regional_summary(
+                                    st.session_state.current_parameter,
+                                    tuple(ranged_assets),
+                                    int(cfg.get("native_scale_m", 20)),
+                                )
+                                if summary:
+                                    st.session_state.regional_summary_data = summary
+                                else:
+                                    st.session_state.regional_summary_data = []
+                            except Exception as e:
+                                st.error(f"Error computing regional summary: {e}")
+                                st.session_state.regional_summary_data = []
 
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
@@ -2561,7 +2682,6 @@ def main():
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
                 st.error(traceback.format_exc())
-
 
     # ---- Footer ----
     with st.expander(t("about_tool")):
