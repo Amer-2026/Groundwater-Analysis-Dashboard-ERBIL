@@ -1393,12 +1393,12 @@ def main():
 
         /* Add spacing between sections - using h3 tags inside divs */
         .stats-section {
-            margin-top: -9px !important;
+            margin-top: 0 !important;
         }
 
         .stats-section h3 {
-            margin-top: -9px !important;
-            padding-top: 0 !important;
+            margin-top: 0 !important;
+            padding-top: 4px !important;
             margin-bottom: 10px !important;
         }
 
@@ -1769,10 +1769,32 @@ def main():
         div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
             background-color: #f0f0f0 !important;
         }
+                div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
+            background-color: #f0f0f0 !important;
+        }
+
+        /* Pull the metric row up to align with the top of the map */
+        div[data-testid="stMetric"] {
+            margin-top: -40px !important;
+            padding-top: 0 !important;
+        }
+
+        /* Remove padding on the column container holding the metrics */
+        div[data-testid="column"]:has(div[data-testid="stMetric"]) {
+            padding-top: 0 !important;
+            margin-top: -20px !important;
+        }
+
+        /* Also remove padding on the horizontal block that contains the metric columns */
+        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
+            padding-top: 0 !important;
+            margin-top: -20px !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
     # ---- TOP BAR: language + country ----
     configs = load_country_configs()
@@ -2003,7 +2025,8 @@ def main():
         else:
             try:
                 # 50% / 50% split
-                map_col, stats_col = st.columns([1, 1])
+                with st.container(key="map_stats_row"):
+                    map_col, stats_col = st.columns([1, 1])
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
@@ -2115,7 +2138,7 @@ def main():
                             ],
                             popup=f"Searched: {st.session_state.get('search_lat'):.5f}, {st.session_state.get('search_lng'):.5f}",
                             tooltip="Searched location",
-                            icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
+                        icon=folium.Icon(color="red", icon="map-marker", prefix="fa"),
                         ).add_to(m)
                     st.session_state["search_pending"] = False
                     folium.LayerControl().add_to(m)
@@ -2190,11 +2213,10 @@ def main():
 
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
-                    # Statistics
                     st.markdown(
-                        f'<div class="stats-section" style="margin-top:0;"><h3 style="margin-top:0; padding-top:4px;">📊 {t("statistics")}</h3></div>',
+                        f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                         unsafe_allow_html=True,
-                    )
+                )
                     try:
                         # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
@@ -2216,7 +2238,8 @@ def main():
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
 
-                        stat_cols = st.columns(3)
+                        with st.container(key="stats_metrics_row"):
+                            stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
                                 t('minimum'),
