@@ -119,6 +119,10 @@ For support or more information, please contact the development team.""",
         "nav_water_balance": "Water Balance",
         "nav_climate_et": "Climate / ET",
         "nav_irrigation": "Irrigation Efficiency",
+        "nav_aeti": "Actual Evapotranspiration (AETI)",
+        "nav_pet": "Potential Evapotranspiration (PET)",
+        "nav_precip": "Precipitation",
+        "nav_pwl": "Potential Water Loss (PWL)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -210,6 +214,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_water_balance": "التوازن المائي",
         "nav_climate_et": "المناخ / التبخر-النتح",
         "nav_irrigation": "كفاءة الري",
+        "nav_aeti": "التبخر-النتح الفعلي (AETI)",
+        "nav_pet": "التبخر-النتح المحتمل (PET)",
+        "nav_precip": "هطول الأمطار",
+        "nav_pwl": "فقدان المياه المحتمل (PWL)",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -300,6 +308,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_water_balance": "هاوسەنگی ئاو",
         "nav_climate_et": "کەشوهەوا / هەڵمبوون",
         "nav_irrigation": "کاریگەری ئاودێری",
+        "nav_aeti": "هەڵمبوونی ڕاستەقینە (AETI)",
+        "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
+        "nav_precip": "بارانبارین",
+        "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -608,12 +620,20 @@ PALETTES = {
                         "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027"],
     "recharge_mm": ["#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b",
                   "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850"],
+    "aeti": ["#ffffcc", "#c2e699", "#78c679", "#31a354", "#006837"],
+    "pet": ["#fff7bc", "#fee391", "#fec44f", "#fe9929", "#d95f0e"],
+    "precip": ["#f7fbff", "#c6dbef", "#6baed6", "#2171b5", "#08306b"],
+    "pwl": ["#f7f4f9", "#d4b9da", "#c994c7", "#df65b0", "#ce1256"],
 }
 
 UNITS = {
     "abstraction_mm": "mm/month",
     "abstraction_m3": "m³/month",
     "recharge_mm": "mm/month",
+    "aeti": "mm/month",
+    "pet": "mm/month",
+    "precip": "mm/month",
+    "pwl": "mm/month",
 }
 
 
@@ -2111,7 +2131,7 @@ def main():
     st.markdown(banner_html, unsafe_allow_html=True)
 
     # Place language selector AND reset button in the top-right of the banner
-    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([3, 1, 1, 1])
+    lang_col1, lang_col2, lang_col3, lang_col4 = st.columns([4, 0.5, 1, 1])
     
     # Reset button FIRST (now in lang_col3)
     with lang_col3:
@@ -2204,6 +2224,16 @@ def main():
             ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
+
+        
+        elif st.session_state.get("selected_analysis") == "aeti":
+            ana_label = f"🌧️ {t('nav_aeti')}"
+        elif st.session_state.get("selected_analysis") == "pet":
+            ana_label = f"🌧️ {t('nav_pet')}"
+        elif st.session_state.get("selected_analysis") == "precip":
+            ana_label = f"🌧️ {t('nav_precip')}"
+        elif st.session_state.get("selected_analysis") == "pwl":
+            ana_label = f"🌧️ {t('nav_pwl')}"
         else:
             ana_label = f"📊 {t('nav_analysis')}"
             
@@ -2223,11 +2253,28 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
                 
-            if st.button(f"🌧️ {t('nav_climate_et')}", key="nav_climate_btn", use_container_width=True):
-                st.session_state.selected_analysis = "climate_et"
-                st.session_state.selected_parameter = "climate_et"
-                st.session_state.map_generated = False
-                st.rerun()
+            # Create a nested popover for Climate / ET
+            with st.popover(f"🌧️ {t('nav_climate_et')}", use_container_width=True):
+                if st.button(t("nav_aeti"), key="nav_aeti_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "aeti"
+                    st.session_state.selected_parameter = "aeti" 
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_pet"), key="nav_pet_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "pet"
+                    st.session_state.selected_parameter = "pet"
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_precip"), key="nav_precip_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "precip"
+                    st.session_state.selected_parameter = "precip"
+                    st.session_state.map_generated = False
+                    st.rerun()
+                if st.button(t("nav_pwl"), key="nav_pwl_btn", use_container_width=True):
+                    st.session_state.selected_analysis = "pwl"
+                    st.session_state.selected_parameter = "pwl"
+                    st.session_state.map_generated = False
+                    st.rerun()
                 
             if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
                 st.session_state.selected_analysis = "irrigation"
@@ -2466,8 +2513,27 @@ def main():
 
                     # Map the parameter name to the actual asset name in Earth Engine
                     search_param = st.session_state.current_parameter
+
+                    # Look for the correct asset name based on the selected parameter
                     if search_param == "recharge_mm":
-                        search_param = "recharge"  # Your GEE assets are named just "recharge"
+                        search_param = "recharge"  
+                    elif search_param == "aeti":
+                        search_param = "aeti"  # Make sure this matches your GEE asset name
+                    elif search_param == "pet":
+                        search_param = "pet"
+                    elif search_param == "precip":
+                        search_param = "precip"
+                    elif search_param == "pwl":
+                        search_param = "pwl"
+                    
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if search_param in a and selected_year_month in a
+                        ),
+                        None,
+                    )
                     
                     selected_asset = next(
                         (
