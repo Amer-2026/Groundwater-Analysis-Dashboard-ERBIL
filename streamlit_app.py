@@ -2230,7 +2230,7 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-   # --- Column 1: Region Dropdown ---
+    # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
@@ -2239,9 +2239,15 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # We inject a tiny CSS block directly above the button to force the exact colors
+        # Inject CSS targeting the exact column
         st.markdown("""
         <style>
+        /* Fix the vertical alignment */
+        div[data-testid="stSelectbox"] {
+            margin-top: 0px !important;
+            padding-top: 0px !important;
+        }
+        /* Fix the purple background */
         div[data-testid="stSelectbox"] > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2249,11 +2255,16 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
         }
+        /* Fix the text color */
         div[data-testid="stSelectbox"] > div > div * {
             color: #ffffff !important;
-            fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        /* Fix the white square bug (target the arrow icon specifically) */
+        div[data-testid="stSelectbox"] > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
         }
         </style>
         """, unsafe_allow_html=True)
