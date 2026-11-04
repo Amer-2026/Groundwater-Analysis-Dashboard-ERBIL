@@ -2248,10 +2248,10 @@ def main():
         loc_label = f"{t('nav_region')}"
             
     with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-        if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
+        if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True, help="white-btn"):
             st.session_state.selected_location = "subnational"
             st.rerun()
-        if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
+        if st.button(t("nav_national"), key="nav_nat", use_container_width=True, help="white-btn"):
             st.session_state.selected_location = "national"
             st.rerun()
 
