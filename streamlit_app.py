@@ -1890,23 +1890,21 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-                /* ===== CUSTOM REGION BUTTON ICON ===== */
-        
-        /* Make sure the button uses flexbox to align the icon and text */
+        /* ===== CUSTOM REGION BUTTON ICON ===== */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            gap: 8px !important; /* Space between icon and text */
+            gap: 8px !important;
         }
 
-        /* Insert the custom image before the text */
         div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
             content: "" !important;
             display: inline-block !important;
-            width: 20px !important;  /* Adjust size here */
-            height: 20px !important; /* Adjust size here */
-            background-image: url('data:image/png;base64,{region_b64}') !important;
+            width: 20px !important;
+            height: 20px !important;
+            /* Point this to your image on GitHub */
+            background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
             background-size: contain !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
@@ -2007,34 +2005,10 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-        # Load the image as a Base64 string
-        region_b64 = get_base64_image("region_icon.png")
-        
-        # Inject a tiny CSS rule just for this button to show the image
-        st.markdown(
-            f"""
-            <style>
-            div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {{
-                content: "" !important;
-                display: inline-block !important;
-                width: 20px !important;
-                height: 20px !important;
-                background-image: url('data:image/png;base64,{region_b64}') !important;
-                background-size: contain !important;
-                background-repeat: no-repeat !important;
-                background-position: center !important;
-                margin-right: 8px !important;
-            }}
-            </style>
-            """, 
-            unsafe_allow_html=True
-        )
-
-        # Now just use the plain text for the button
+    # --- Column 1: Region Dropdown ---
+    with nav_col1:
         loc_label = f"{t('nav_region')}"
-
             
-        # Pass the combined string to the popover
         with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
             if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
                 st.session_state.selected_location = "subnational"
@@ -2052,7 +2026,6 @@ def main():
         else:
             abs_label = "⚪ Abstraction"
             
-        # ADDED key="abs_dropdown"
         with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
             if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
                 st.session_state.selected_parameter = "abstraction_mm"
@@ -2072,7 +2045,6 @@ def main():
         else:
             rc_label = "⚪ Recharge"
             
-        # ADDED key="rc_dropdown"
         with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
             if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
                 st.session_state.selected_parameter = "recharge_mm"
