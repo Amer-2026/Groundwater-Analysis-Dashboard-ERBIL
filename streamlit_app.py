@@ -1926,7 +1926,7 @@ def main():
             background-color: #e0e0e0 !important;
             cursor: pointer !important;
         }
-    """
+        """
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
