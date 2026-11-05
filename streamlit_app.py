@@ -1926,23 +1926,6 @@ def main():
             background-color: #e0e0e0 !important;
             cursor: pointer !important;
         }
-        /* ===== CUSTOM REGION BUTTON ICON ===== */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
-            content: "" !important;
-            display: inline-block !important;
-            width: 20px !important;
-            height: 20px !important;
-            background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
-            background-size: contain !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-        }
 
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
