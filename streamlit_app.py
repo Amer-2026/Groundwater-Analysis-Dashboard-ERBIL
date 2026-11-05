@@ -1891,7 +1891,7 @@ def main():
         /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
-            color: #ffffff !important;
+            color: #B429F9  !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
