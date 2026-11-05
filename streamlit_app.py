@@ -1565,7 +1565,7 @@ def main():
             color: #9ca3af !important;
         }
         
-               /* ========== DATE RANGE PICKER STYLING ========== */
+        /* ========== DATE RANGE PICKER STYLING ========== */
         div[data-testid="stDateInput"] > div > div {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -1761,7 +1761,7 @@ def main():
         }
 
 
-            /* ===== Inline Location Form — white card ===== */
+         /* ===== Inline Location Form — white card ===== */
         div[class*="st-key-location_form_wrap"] {
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
@@ -1901,8 +1901,8 @@ def main():
         }
 
         div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
+            color: #B429F9 !important;
+            fill: #B429F9 !important;
             font-weight: 700 !important;
         }
 
