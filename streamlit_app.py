@@ -1888,53 +1888,31 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
+        /* ===== BULLETPROOF REGION SELECTBOX PURPLE FIX ===== */
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
+            border-color: #B429F9 !important;
             color: #ffffff !important;
-            border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            box-shadow: none !important;
-            margin-top: 4px !important; /* Aligns with the green buttons */
         }
 
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+        /* Target the inner divs and spans explicitly */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div > div,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] span,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] svg {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
         }
 
-        /* Hover state (Darker purple to avoid green flash) */
+        /* Nuke the green hover */
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus,
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:active {
-            background-color: #9a22d9 !important;
-            border-color: #9a22d9 !important;
-        }
-
-        /* The dropdown menu (white background) */
-        div[data-baseweb="popover"] > div {
-            background-color: #ffffff !important;
-            border: 1px solid #444 !important;
-            border-radius: 8px !important;
-        }
-
-        /* The options inside the dropdown */
-        div[data-baseweb="popover"] li {
-            color: #1a0a2e !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            padding: 10px !important;
-        }
-
-        /* Hover effect on the options */
-        div[data-baseweb="popover"] li:hover {
-            background-color: #e0e0e0 !important;
-            cursor: pointer !important;
+            background-color: #B429F9 !important;
+            border-color: #B429F9 !important;
         }
        
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
