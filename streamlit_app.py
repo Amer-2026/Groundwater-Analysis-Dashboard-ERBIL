@@ -1898,12 +1898,22 @@ def main():
             min-height: 38px !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+            box-shadow: none !important;
+            margin-top: 4px !important; /* Aligns with the green buttons */
         }
 
         div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
+        }
+
+        /* Hover state (Darker purple to avoid green flash) */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:active {
+            background-color: #9a22d9 !important;
+            border-color: #9a22d9 !important;
         }
 
         /* The dropdown menu (white background) */
@@ -2198,31 +2208,31 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-    # --- Column 1: Region Dropdown (Native Selectbox) ---
+    # --- Column 1: Region Dropdown ---
     with nav_col1:
-        region_options = {
-            "subnational": t("nav_subnational"),
-            "national": t("nav_national")
-        }
-        
-        # Get the current index based on session state
-        current_region = st.session_state.get("selected_location", "subnational")
-        current_index = list(region_options.keys()).index(current_region)
-        
-        # Display the selectbox
-        selected_region = st.selectbox(
-            t("nav_region"),
-            options=list(region_options.keys()),
-            index=current_index,
-            format_func=lambda x: region_options[x],
-            key="region_selector",
-            label_visibility="collapsed"
-        )
-        
-        # Update session state if changed
-        if selected_region != current_region:
-            st.session_state.selected_location = selected_region
-            st.rerun()
+        # Initialize state if it doesn't exist
+        if "selected_location" not in st.session_state:
+            st.session_state.selected_location = "subnational"
+
+        # Determine the current label
+        current_loc = st.session_state.selected_location
+        loc_label_text = t("nav_subnational") if current_loc == "subnational" else t("nav_national")
+
+        # Use a popover button (easier to style than selectbox)
+        with st.popover(f"📍 {loc_label_text}", use_container_width=True, key="region_popover"):
+            # Use a radio button inside the popover to act as the list
+            location_choice = st.radio(
+                "Select Region",
+                options=["subnational", "national"],
+                format_func=lambda x: t("nav_subnational") if x == "subnational" else t("nav_national"),
+                index=0 if current_loc == "subnational" else 1,
+                label_visibility="collapsed"
+            )
+            
+            # If they change the radio button, update state and rerun
+            if location_choice != current_loc:
+                st.session_state.selected_location = location_choice
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
