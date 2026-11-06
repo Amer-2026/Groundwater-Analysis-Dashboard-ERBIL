@@ -1891,19 +1891,29 @@ def main():
         /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
         div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
-            color: #B429F9  !important;
+            color: #ffffff !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+            box-shadow: none !important;
+            margin-top: 4px !important; /* Aligns with the green buttons */
         }
 
         div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
-            color: #B429F9 !important;
-            fill: #B429F9 !important;
+            color: #ffffff !important;
+            fill: #ffffff !important;
             font-weight: 700 !important;
+        }
+
+        /* Hover state (Darker purple to avoid green flash) */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:active {
+            background-color: #9a22d9 !important;
+            border-color: #9a22d9 !important;
         }
 
         /* The dropdown menu (white background) */
