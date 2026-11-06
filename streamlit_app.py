@@ -5,7 +5,7 @@ A single, configurable Streamlit app serving all country deployments
 (Jordan, Iraq, Palestine, ...). Country settings live in config/*.json —
 to add a new country you only add a config file and the GEE assets.
 
-Data: monthly abstraction (mm, m3) and recharge images stored as
+Data: monthly abstraction (mm, m3) and rech arge images stored as
 Google Earth Engine assets named  <parameter>_<YYYY>_<MM>.
 
 Authentication: a GEE service-account key stored in Streamlit secrets
