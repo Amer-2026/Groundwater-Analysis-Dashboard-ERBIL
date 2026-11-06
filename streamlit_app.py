@@ -1888,55 +1888,71 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== STYLE THE REGION SELECTBOX (Purple) ===== */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
+        /* ===== BULLETPROOF REGION POPOVER BUTTON ===== */
+        
+        /* 1. Style the main button (Forces Purple) */
+        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"] {
             background-color: #B429F9 !important;
-            color: #ffffff !important;
+            background: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
+            color: #ffffff !important;
             font-weight: 700 !important;
-            font-size: 14px !important;
-            box-shadow: none !important;
-            margin-top: 4px !important; /* Aligns with the green buttons */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            margin-top: 4px !important; /* Aligns with green buttons */
         }
 
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+        /* Force text to white */
+        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
-            font-weight: 700 !important;
         }
 
         /* Hover state (Darker purple to avoid green flash) */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus,
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:active {
+        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:active {
             background-color: #9a22d9 !important;
             border-color: #9a22d9 !important;
         }
 
-        /* The dropdown menu (white background) */
-        div[data-baseweb="popover"] > div {
+        /* 2. Style the Radio Buttons inside the popover (White background, dark text) */
+        div[data-testid="stPopoverBody"] div[role="radiogroup"] {
             background-color: #ffffff !important;
-            border: 1px solid #444 !important;
             border-radius: 8px !important;
-        }
-
-        /* The options inside the dropdown */
-        div[data-baseweb="popover"] li {
-            color: #1a0a2e !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
             padding: 10px !important;
         }
 
+        div[data-testid="stPopoverBody"] div[role="radiogroup"] label {
+            background-color: #ffffff !important;
+            padding: 10px 15px !important;
+            border-radius: 6px !important;
+            margin-bottom: 5px !important;
+            border: 1px solid transparent !important;
+        }
+
+        /* Force text inside the list to be dark */
+        div[data-testid="stPopoverBody"] div[role="radiogroup"] label * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-weight: 600 !important;
+        }
+
         /* Hover effect on the options */
-        div[data-baseweb="popover"] li:hover {
-            background-color: #e0e0e0 !important;
+        div[data-testid="stPopoverBody"] div[role="radiogroup"] label:hover {
+            background-color: #d1d5db !important;
             cursor: pointer !important;
         }
-       
+
+        /* Hide the radio circle (so it just looks like a button) */
+        div[data-testid="stPopoverBody"] div[role="radiogroup"] label > div:first-child {
+            display: none !important;
+        }
         /* ===== FORCE TOP BAR TO ONE ROW ===== */
         div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
             flex-wrap: nowrap !important;
