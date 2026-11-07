@@ -1947,7 +1947,7 @@ def main():
             color: #1a0a2e !important;
             cursor: pointer !important;
         }
-                /* ===== ABSTRACTION SELECTBOX (Green) ===== */
+        /* ===== ABSTRACTION SELECTBOX (Green) ===== */
         
         /* 1. The Main Green Button */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
@@ -2021,6 +2021,43 @@ def main():
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
+        /* ===== ANALYSIS POPOVER BUTTON (Green) ===== */
+        
+        /* 1. Force the main button to be Green */
+        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"] {
+            background-color: #a8f368 !important;
+            background: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            margin-top: 0px !important; /* Alignment */
+        }
+
+        /* Force text and icons inside to be dark */
+        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"] * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
+
+        /* Hover state (Darker green to prevent black/green flash) */
+        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:hover,
+        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:focus,
+        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
+            border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
