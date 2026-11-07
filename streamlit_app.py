@@ -2021,41 +2021,42 @@ def main():
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
-        /* ===== ANALYSIS POPOVER BUTTON (Green) ===== */
+        /* ===== ANALYSIS SELECTBOX (Green) ===== */
         
-        /* 1. Force the main button to be Green */
-        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"] {
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div {
             background-color: #a8f368 !important;
-            background: #a8f368 !important;
             border: 1px solid #a8f368 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div * {
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            margin-top: 0px !important; /* Alignment */
         }
-
-        /* Force text and icons inside to be dark */
-        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"] * {
-            color: #1a0a2e !important;
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div svg {
             fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div div {
+            background-color: transparent !important;
         }
 
-        /* Hover state (Darker green to prevent black/green flash) */
-        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:hover,
-        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:focus,
-        div[class*="st-key-analysis_dropdown"] button[data-testid="stPopoverButton"]:active {
-            background-color: #8fd154 !important;
-            background: #8fd154 !important;
+        /* 3. Hover State (Slightly darker green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:active {
+            background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
-            box-shadow: none !important;
-            outline: none !important;
         }
         
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
@@ -2401,109 +2402,45 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
 
-    # --- Column 4: Analysis Dropdown ---
+    # --- Column 4: Analysis Dropdown (Flat Selectbox) ---
     with nav_col_month:
-        if st.session_state.get("selected_analysis") == "wsi":
-            ana_label = f"🌵 {t('nav_wsi')}"
-        elif st.session_state.get("selected_analysis") == "water_balance":
-            ana_label = f"⚖️ {t('nav_water_balance')}"
-        elif st.session_state.get("selected_analysis") == "climate_et":
-            ana_label = f"🌧️ {t('nav_climate_et')}"
-        elif st.session_state.get("selected_analysis") == "irrigation":
-            ana_label = f"🚜 {t('nav_irrigation')}"
-        elif st.session_state.get("selected_analysis") == "aeti":
-            ana_label = f"🌧️ {t('nav_aeti')}"
-        elif st.session_state.get("selected_analysis") == "pet":
-            ana_label = f"🌧️ {t('nav_pet')}"
-        elif st.session_state.get("selected_analysis") == "precip":
-            ana_label = f"🌧️ {t('nav_precip')}"
-        elif st.session_state.get("selected_analysis") == "pwl":
-            ana_label = f"🌧️ {t('nav_pwl')}"
-        else:
-            ana_label = f"📊 {t('nav_analysis')}"
-
-        # Inject CSS directly before the popover to force the green color
-        st.markdown("""
-        <style>
-        /* Force the exact popover button to be green and aligned */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
-            background-color: #a8f368 !important;
-            background: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            margin-top: 0px !important;
-            box-shadow: none !important;
-        }
+        # Define all options in one flat list
+        ana_options = ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]
         
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-        
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
-            background-color: #8fd154 !important;
-            background: #8fd154 !important;
-            border-color: #8fd154 !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        ana_labels = [
+            t("nav_wsi"),
+            t("nav_water_balance"),
+            t("nav_aeti"),
+            t("nav_pet"),
+            t("nav_precip"),
+            t("nav_pwl"),
+            t("nav_irrigation")
+        ]
 
-        # Keep the popover to allow sub-menus
-        with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
+        # Find current index
+        current_ana = st.session_state.get("selected_analysis", "none")
+        if current_ana not in ana_options:
+            current_ana = "wsi" # Default fallback
+            st.session_state.selected_analysis = current_ana
             
-            if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
-                st.session_state.selected_analysis = "wsi"
-                st.session_state.selected_parameter = "wsi" 
-                st.session_state.map_generated = False
-                st.rerun()
-                
-            if st.button(f"⚖️ {t('nav_water_balance')}", key="nav_wb_btn", use_container_width=True):
-                st.session_state.selected_analysis = "water_balance"
-                st.session_state.selected_parameter = "water_balance"
-                st.session_state.map_generated = False
-                st.rerun()
-                
-            # Create a nested popover for Climate / ET
-            with st.popover(f"🌧️ {t('nav_climate_et')}", use_container_width=True):
-                if st.button(t("nav_aeti"), key="nav_aeti_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "aeti"
-                    st.session_state.selected_parameter = "aeti" 
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pet"), key="nav_pet_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pet"
-                    st.session_state.selected_parameter = "pet"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_precip"), key="nav_precip_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "precip"
-                    st.session_state.selected_parameter = "precip"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pwl"), key="nav_pwl_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pwl"
-                    st.session_state.selected_parameter = "pwl"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                
-            if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
-                st.session_state.selected_analysis = "irrigation"
-                st.session_state.selected_parameter = "irrigation"
-                st.session_state.map_generated = False
-                st.rerun()
+        current_ana_idx = ana_options.index(current_ana)
+
+        # Create the selectbox
+        selected_ana_label = st.selectbox(
+            "Analysis", 
+            options=ana_labels,
+            index=current_ana_idx,
+            key="analysis_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        new_ana = ana_options[ana_labels.index(selected_ana_label)]
+        if new_ana != current_ana:
+            st.session_state.selected_analysis = new_ana
+            st.session_state.selected_parameter = new_ana
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- START DATE & END DATE ---
     try:
