@@ -1921,49 +1921,6 @@ def main():
             border-color: #9a22d9 !important;
         }
 
-        /* 2. Style the Radio Buttons inside the popover (White background, dark text) */
-        div[data-testid="stPopoverBody"] div[role="radiogroup"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 10px !important;
-        }
-
-        div[data-testid="stPopoverBody"] div[role="radiogroup"] label {
-            background-color: #ffffff !important;
-            padding: 10px 15px !important;
-            border-radius: 6px !important;
-            margin-bottom: 5px !important;
-            border: 1px solid transparent !important;
-        }
-
-        /* Force text inside the list to be dark */
-        div[data-testid="stPopoverBody"] div[role="radiogroup"] label * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-            font-weight: 600 !important;
-        }
-
-        /* Hover effect on the options */
-        div[data-testid="stPopoverBody"] div[role="radiogroup"] label:hover {
-            background-color: #d1d5db !important;
-            cursor: pointer !important;
-        }
-
-        /* Hide the radio circle (so it just looks like a button) */
-        div[data-testid="stPopoverBody"] div[role="radiogroup"] label > div:first-child {
-            display: none !important;
-        }
-        /* ===== FORCE TOP BAR TO ONE ROW ===== */
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
-            flex-wrap: nowrap !important;
-            gap: 0.3rem !important; 
-            align-items: center !important;
-        }
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
-            min-width: 0 !important;
-            width: 100% !important;
-        }
-
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
