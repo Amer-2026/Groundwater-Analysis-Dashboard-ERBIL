@@ -1890,7 +1890,7 @@ def main():
         }
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
-        /* 1. The Main Purple Button */
+        /* 1. The Main Purple Button & Alignment */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -1898,15 +1898,24 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            margin-top: 4px !important; /* Aligns with green buttons */
+            margin-top: 9px !important; /* Pushes the button down to perfectly align */
         }
 
-        /* 2. White Text and Icon */
+        /* 2. White Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
             color: #ffffff !important;
-            fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div div {
+            background-color: transparent !important;
         }
 
         /* 3. Fix the Green Hover Flash */
