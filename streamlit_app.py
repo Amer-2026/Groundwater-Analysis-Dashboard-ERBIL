@@ -2421,8 +2421,47 @@ def main():
             ana_label = f"🌧️ {t('nav_pwl')}"
         else:
             ana_label = f"📊 {t('nav_analysis')}"
-            
-        # We keep the popover for the Analysis menu to allow the sub-menu
+
+        # Inject CSS directly before the popover to force the green color
+        st.markdown("""
+        <style>
+        /* Force the exact popover button to be green and aligned */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+            background-color: #a8f368 !important;
+            background: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            margin-top: 0px !important;
+            box-shadow: none !important;
+        }
+        
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
+        
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
+            border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # Keep the popover to allow sub-menus
         with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
             
             if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
