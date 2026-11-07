@@ -2186,51 +2186,23 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        current_loc = st.session_state.selected_location
-        loc_label_text = t("nav_subnational") if current_loc == "subnational" else t("nav_national")
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
+        current_index = loc_options.index(st.session_state.selected_location)
 
-        with st.popover(f"📍 {loc_label_text}", use_container_width=True, key="region_popover"):
-            # Clean up the radio button to look exactly like b2
-            st.markdown("""
-            <style>
-            /* Hide the circular radio button icon */
-            div[role="radiogroup"] label > div:first-child { display: none !important; }
-            
-            /* Style the list items */
-            div[role="radiogroup"] label {
-                background-color: #ffffff !important;
-                padding: 10px 15px !important;
-                border-radius: 6px !important;
-                margin-bottom: 2px !important;
-                border: none !important;
-            }
-            
-            /* Style the text */
-            div[role="radiogroup"] label * {
-                color: #1a0a2e !important;
-                font-weight: 500 !important;
-                font-size: 15px !important;
-            }
-            
-            /* Hover effect (light grey) */
-            div[role="radiogroup"] label:hover {
-                background-color: #f0f2f6 !important;
-                cursor: pointer !important;
-            }
-            </style>
-            """, unsafe_allow_html=True)
+        # Use the exact same widget as the language button
+        selected_label = st.selectbox(
+            "Region", 
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
 
-            location_choice = st.radio(
-                "Select Region",
-                options=["subnational", "national"],
-                format_func=lambda x: t("nav_subnational") if x == "subnational" else t("nav_national"),
-                index=0 if current_loc == "subnational" else 1,
-                label_visibility="collapsed"
-            )
-            
-            if location_choice != current_loc:
-                st.session_state.selected_location = location_choice
-                st.rerun()
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
