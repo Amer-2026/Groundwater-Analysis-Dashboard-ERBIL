@@ -75,7 +75,7 @@ TRANSLATIONS = {
 - 🌍 **Interactive Visualization**: View monthly groundwater data on an interactive map
 - 📊 **Statistical Analysis**: Access key statistics for the selected parameter
 - 📈 **Time Series Analysis**: Click any location to view historical trends
-- 📥 **Data Export**: Download time series and regional summaries as CSV
+- 📥 **Data Export**: Download time series and al summaries as CSV
 - 🎨 **Customizable Display**: Adjust visualization parameters to your needs
 
 Data sources: FAO WaPOR v3 (actual evapotranspiration), CHIRPS (rainfall),
@@ -99,10 +99,10 @@ For support or more information, please contact the development team.""",
         "error_parse_date": "Error parsing date from asset",
         "value_label": "Value",
         "download_csv": "📥 Download as CSV",
-        "regional_summary": "Regional Monthly Summary",
-        "compute_summary": "Compute regional summary",
+        "al_summary": "al Monthly Summary",
+        "compute_summary": "Compute al summary",
         "summary_help": "Average value over the whole study area for every month (may take up to a minute)",
-        "summary_title": "Regional mean {parameter} per month",
+        "summary_title": "al mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
@@ -111,7 +111,7 @@ For support or more information, please contact the development team.""",
         "nav_recharge_m3": "Recharge (m³)",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
-        "nav_region": "Region",
+        "nav_": "",
         "nav_subnational": "Sub-National",
         "nav_national": "National",
         "nav_analysis": "Analysis",
@@ -195,7 +195,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
         "download_csv": "📥 تنزيل بصيغة CSV",
-        "regional_summary": "الملخص الشهري الإقليمي",
+        "al_summary": "الملخص الشهري الإقليمي",
         "compute_summary": "حساب الملخص الإقليمي",
         "summary_help": "متوسط القيمة على كامل منطقة الدراسة لكل شهر (قد يستغرق دقيقة)",
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
@@ -207,7 +207,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "التغذية الجوفية (م³)",
         "nav__mm": "التغذية الجوفية (مم)",
         "nav__m3": "التغذية الجوفية (م³)",
-        "nav_region": "المنطقة",
+        "nav_": "المنطقة",
         "nav_subnational": "دون الوطني",
         "nav_national": "وطني",
         "nav_analysis": "التحليل",
@@ -289,7 +289,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
         "download_csv": "📥 دابەزاندن وەک CSV",
-        "regional_summary": "پوختەی مانگانەی ناوچەیی",
+        "al_summary": "پوختەی مانگانەی ناوچەیی",
         "compute_summary": "ژماردنی پوختەی ناوچەیی",
         "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
         "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
@@ -301,7 +301,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "پڕبوونەوە (م³)",
         "nav__mm": "پڕبوونەوە (مم)",
         "nav__m3": "پڕبوونەوە (م³)",
-        "nav_region": "ناوچە",
+        "nav_": "ناوچە",
         "nav_subnational": "ناوچەیی",
         "nav_national": "نیشتمانی",
         "nav_analysis": "شیکردنەوە",
@@ -646,7 +646,7 @@ def get_image_min_max(asset_id):
     # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
     valid_img = img.updateMask(img.neq(0))
     
-    minmax = valid_img.reduceRegion(
+    minmax = valid_img.reduce(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
@@ -680,7 +680,7 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduceRegion(
+                "value": img.reduce(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -709,7 +709,7 @@ def get_image_min_max(asset_id):
     
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    minmax = img.reduceRegion(
+    minmax = img.reduce(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
@@ -869,7 +869,7 @@ def get_time_series_data(point, parameter, assets):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduceRegion(
+                "value": img.reduce(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -895,12 +895,12 @@ def get_time_series_data(point, parameter, assets):
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def get_regional_summary(parameter, assets, scale):
+def get_al_summary(parameter, assets, scale):
     """Mean value of `parameter` over the whole study area, for every month"""
     images = _collection_with_dates(assets, parameter)
 
-    def region_mean(img):
-        mean = img.reduceRegion(
+    def _mean(img):
+        mean = img.reduce(
             reducer=ee.Reducer.mean(),
             geometry=img.geometry(),
             scale=max(scale, 100),  # coarse scale keeps this fast
@@ -908,7 +908,7 @@ def get_regional_summary(parameter, assets, scale):
         ).values().get(0)
         return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
 
-    results = images.map(region_mean).getInfo()
+    results = images.map(_mean).getInfo()
     rows = []
     for feature in results["features"]:
         props = feature["properties"]
@@ -1030,8 +1030,8 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     return fig
 
 
-def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
-    """Create regional summary bar chart with optional download button as annotation"""
+def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+    """Create al summary bar chart with optional download button as annotation"""
 
 
     df = pd.DataFrame(summary_data)
@@ -1436,7 +1436,7 @@ def main():
             margin-bottom: 10px !important;
         }
 
-        .regional-summary-section h3 {
+        .al-summary-section h3 {
             margin-top: 25px !important;
             margin-bottom: 10px !important;
         }
@@ -1888,37 +1888,55 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== BULLETPROOF REGION POPOVER BUTTON ===== */
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
-        /* 1. Style the main button (Forces Purple) */
-        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"] {
+        /* 1. The Main Purple Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
-            background: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            box-shadow: none !important;
             margin-top: 4px !important; /* Aligns with green buttons */
         }
 
-        /* Force text to white */
-        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"] * {
+        /* 2. White Text and Icon */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
             color: #ffffff !important;
             fill: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
         }
 
-        /* Hover state (Darker purple to avoid green flash) */
-        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:hover,
-        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:focus,
-        div[class*="st-key-region_popover"] button[data-testid="stPopoverButton"]:active {
-            background-color: #9a22d9 !important;
+        /* 3. Fix the Green Hover Flash */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
+        }
+
+        /* 4. The Dropdown List (White & Grey Hover) */
+        div[data-baseweb="popover"] ul[role="listbox"] {
+            background-color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 5px !important;
+        }
+
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 2px !important;
+        }
+
+        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
+            background-color: #f0f2f6 !important;
+            color: #1a0a2e !important;
+            cursor: pointer !important;
         }
 
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
