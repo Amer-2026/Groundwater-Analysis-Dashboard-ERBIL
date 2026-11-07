@@ -1947,6 +1947,43 @@ def main():
             color: #1a0a2e !important;
             cursor: pointer !important;
         }
+                /* ===== ABSTRACTION SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; /* Keep your 0px alignment trick! */
+        }
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State (Slightly darker green to avoid flash) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
 
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
@@ -2233,18 +2270,33 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        # Always show just "Abstraction" on the main button
-        abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
+        # Options for the dropdown
+        abs_options = ["abstraction_mm", "abstraction_m3"]
+        abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        
+        # Get current state
+        current_abs = st.session_state.selected_parameter
+        if current_abs not in abs_options:
+            current_abs = "abstraction_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_abs
             
-        with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
-            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_mm"
-                st.session_state.map_generated = False
-                st.rerun()
-            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_m3"
-                st.session_state.map_generated = False
-                st.rerun()
+        current_abs_idx = abs_options.index(current_abs)
+
+        # Create the selectbox
+        selected_abs_label = st.selectbox(
+            "Abstraction", 
+            options=abs_labels,
+            index=current_abs_idx,
+            key="abs_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        new_abs = abs_options[abs_labels.index(selected_abs_label)]
+        if new_abs != current_abs:
+            st.session_state.selected_parameter = new_abs
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
