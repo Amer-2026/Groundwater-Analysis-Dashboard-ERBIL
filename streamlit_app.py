@@ -2402,25 +2402,26 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
 
-    # --- Column 4: Analysis Dropdown (Flat Selectbox) ---
+    # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
-        # Define all options in one flat list
-        ana_options = ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]
+        # We use a flat list with visual headers to simulate nesting safely
+        ana_options = ["wsi", "water_balance", "climate_header", "aeti", "pet", "precip", "pwl", "irrigation"]
         
         ana_labels = [
             t("nav_wsi"),
             t("nav_water_balance"),
-            t("nav_aeti"),
-            t("nav_pet"),
-            t("nav_precip"),
-            t("nav_pwl"),
+            f"▼ {t('nav_climate_et')}", # Header
+            f"    {t('nav_aeti')}",
+            f"    {t('nav_pet')}",
+            f"    {t('nav_precip')}",
+            f"    {t('nav_pwl')}",
             t("nav_irrigation")
         ]
 
-        # Find current index
-        current_ana = st.session_state.get("selected_analysis", "none")
+        # Find current index (default to WSI)
+        current_ana = st.session_state.get("selected_analysis", "wsi")
         if current_ana not in ana_options:
-            current_ana = "wsi" # Default fallback
+            current_ana = "wsi"
             st.session_state.selected_analysis = current_ana
             
         current_ana_idx = ana_options.index(current_ana)
@@ -2435,8 +2436,11 @@ def main():
         )
 
         # Update session state if changed
-        new_ana = ana_options[ana_labels.index(selected_ana_label)]
-        if new_ana != current_ana:
+        selected_idx = ana_labels.index(selected_ana_label)
+        new_ana = ana_options[selected_idx]
+        
+        # If they click the header, do nothing. Otherwise, update.
+        if new_ana != "climate_header" and new_ana != current_ana:
             st.session_state.selected_analysis = new_ana
             st.session_state.selected_parameter = new_ana
             st.session_state.map_generated = False
