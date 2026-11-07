@@ -1898,7 +1898,7 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            margin-top: 9px !important; /* Pushes the button down to perfectly align */
+            margin-top: 6px !important; /* Pushes the button down to perfectly align */
         }
 
         /* 2. White Text and Transparent Icon Background */
