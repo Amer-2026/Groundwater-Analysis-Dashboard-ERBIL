@@ -2226,17 +2226,43 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        # Initialize state if it doesn't exist
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # Determine the current label
         current_loc = st.session_state.selected_location
         loc_label_text = t("nav_subnational") if current_loc == "subnational" else t("nav_national")
 
-        # Use a popover button (easier to style than selectbox)
         with st.popover(f"📍 {loc_label_text}", use_container_width=True, key="region_popover"):
-            # Use a radio button inside the popover to act as the list
+            # Clean up the radio button to look exactly like b2
+            st.markdown("""
+            <style>
+            /* Hide the circular radio button icon */
+            div[role="radiogroup"] label > div:first-child { display: none !important; }
+            
+            /* Style the list items */
+            div[role="radiogroup"] label {
+                background-color: #ffffff !important;
+                padding: 10px 15px !important;
+                border-radius: 6px !important;
+                margin-bottom: 2px !important;
+                border: none !important;
+            }
+            
+            /* Style the text */
+            div[role="radiogroup"] label * {
+                color: #1a0a2e !important;
+                font-weight: 500 !important;
+                font-size: 15px !important;
+            }
+            
+            /* Hover effect (light grey) */
+            div[role="radiogroup"] label:hover {
+                background-color: #f0f2f6 !important;
+                cursor: pointer !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
             location_choice = st.radio(
                 "Select Region",
                 options=["subnational", "national"],
@@ -2245,7 +2271,6 @@ def main():
                 label_visibility="collapsed"
             )
             
-            # If they change the radio button, update state and rerun
             if location_choice != current_loc:
                 st.session_state.selected_location = location_choice
                 st.rerun()
