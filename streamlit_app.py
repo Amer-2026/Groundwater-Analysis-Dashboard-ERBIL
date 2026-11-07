@@ -1984,7 +1984,43 @@ def main():
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
+        /* ===== RECHARGE SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
 
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State (Slightly darker green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
@@ -2300,22 +2336,33 @@ def main():
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        if st.session_state.selected_parameter == "recharge_mm":
-            rc_label = f"🔴 {t('nav_recharge_mm')}"
-        elif st.session_state.selected_parameter == "recharge_m3":
-            rc_label = f"🔴 {t('nav_recharge_m3')}"
-        else:
-            rc_label = "⚪ Recharge"
+        # Options for the dropdown
+        rc_options = ["recharge_mm", "recharge_m3"]
+        rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
+        
+        # Get current state
+        current_rc = st.session_state.selected_parameter
+        if current_rc not in rc_options:
+            current_rc = "recharge_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_rc
             
-        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
-            if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
-                st.session_state.selected_parameter = "recharge_mm"
-                st.session_state.map_generated = False
-                st.rerun()
-            if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
-                st.session_state.selected_parameter = "recharge_m3"
-                st.session_state.map_generated = False
-                st.rerun()
+        current_rc_idx = rc_options.index(current_rc)
+
+        # Create the selectbox
+        selected_rc_label = st.selectbox(
+            "Recharge", 
+            options=rc_labels,
+            index=current_rc_idx,
+            key="rc_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        new_rc = rc_options[rc_labels.index(selected_rc_label)]
+        if new_rc != current_rc:
+            st.session_state.selected_parameter = new_rc
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 4: Analysis Dropdown ---
     with nav_col_month:
