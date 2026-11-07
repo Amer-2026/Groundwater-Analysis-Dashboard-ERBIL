@@ -2404,18 +2404,18 @@ def main():
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
-        # We use a flat list with visual headers to simulate nesting safely
-        ana_options = ["wsi", "water_balance", "climate_header", "aeti", "pet", "precip", "pwl", "irrigation"]
+        # Swapped Irrigation to be before the Climate header
+        ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
         
         ana_labels = [
             t("nav_wsi"),
             t("nav_water_balance"),
+            t("nav_irrigation"),
             f"▼ {t('nav_climate_et')}", # Header
             f"    {t('nav_aeti')}",
             f"    {t('nav_pet')}",
             f"    {t('nav_precip')}",
-            f"    {t('nav_pwl')}",
-            t("nav_irrigation")
+            f"    {t('nav_pwl')}"
         ]
 
         # Find current index (default to WSI)
