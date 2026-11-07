@@ -2374,8 +2374,6 @@ def main():
             ana_label = f"🌧️ {t('nav_climate_et')}"
         elif st.session_state.get("selected_analysis") == "irrigation":
             ana_label = f"🚜 {t('nav_irrigation')}"
-
-        
         elif st.session_state.get("selected_analysis") == "aeti":
             ana_label = f"🌧️ {t('nav_aeti')}"
         elif st.session_state.get("selected_analysis") == "pet":
@@ -2387,10 +2385,9 @@ def main():
         else:
             ana_label = f"📊 {t('nav_analysis')}"
             
-        # This is the popover (the dropdown menu)
+        # We keep the popover for the Analysis menu to allow the sub-menu
         with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
             
-            # These are the options INSIDE the dropdown
             if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
                 st.session_state.selected_analysis = "wsi"
                 st.session_state.selected_parameter = "wsi" 
