@@ -2500,7 +2500,7 @@ def main():
                 margin-bottom: 16px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
-            div[class*="st-key-date_form_wrap"] h3,
+            div[class*="st-key-date_form_wrap"] h2,
             div[class*="st-key-date_form_wrap"] label,
             div[class*="st-key-date_form_wrap"] p,
             div[class*="st-key-date_form_wrap"] .stMarkdown {
