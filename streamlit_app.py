@@ -2710,11 +2710,11 @@ def main():
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
 
-    # ---- INLINE LOCATION FORM (Positioned under Specify Location) ----
+    # ---- INLINE LOCATION FORM (Positioned under top bar) ----
     if st.session_state.get("show_location_form", False):
         
-        # Use columns to push the form to the right side (above the map)
-        spacer1, spacer2, spacer3, spacer4, spacer5, form_col, spacer6 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
+        # Use columns to push the form to the right side
+        spacer1, spacer2, spacer3, spacer4, spacer5, spacer6, form_col = st.columns([1, 1, 1, 1, 1, 1, 1])
         
         with form_col:
             # Inject CSS to match the Date form
@@ -2796,7 +2796,7 @@ def main():
                     value=float(st.session_state.get("search_lat") or 36.19),
                     step=0.00001,
                     format="%.5f",
-                    key="inline_lat",
+                    key="form_inline_lat", # Unique key
                 )
                 
                 lng_val = st.number_input(
@@ -2806,16 +2806,16 @@ def main():
                     value=float(st.session_state.get("search_lng") or 44.01),
                     step=0.00001,
                     format="%.5f",
-                    key="inline_lng",
+                    key="form_inline_lng", # Unique key
                 )
 
                 c1, c2 = st.columns(2)
                 with c1:
-                    if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                    if st.button("❌ Cancel", key="form_inline_cancel", use_container_width=True): # Unique key
                         st.session_state.show_location_form = False
                         st.rerun()
                 with c2:
-                    if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                    if st.button("✅ OK", key="form_inline_ok", type="primary", use_container_width=True): # Unique key
                         st.session_state.search_lat = lat_val
                         st.session_state.search_lng = lng_val
                         st.session_state.search_pending = True
