@@ -2710,46 +2710,117 @@ def main():
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
 
-                    # ===== Inline Location Form =====
-                    if st.session_state.get("show_location_form", False):
-                        with st.container(key="location_form_wrap"):
-                            st.markdown("### 📍 Specify Location")
-                            st.caption("Enter coordinates in Decimal Degrees (DD). Example: 36.19120, 44.00940")
+    # ---- INLINE LOCATION FORM (Positioned under Specify Location) ----
+    if st.session_state.get("show_location_form", False):
+        
+        # Use columns to push the form to the right side (above the map)
+        spacer1, spacer2, spacer3, spacer4, spacer5, form_col, spacer6 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
+        
+        with form_col:
+            # Inject CSS to match the Date form
+            st.markdown("""
+            <style>
+            div[class*="st-key-location_form_wrap"] {
+                background-color: #ffffff !important;
+                border: 2px solid #c6c5c1 !important;
+                border-radius: 12px !important;
+                padding: 15px 20px !important;
+                width: 100% !important;
+                max-width: 260px !important; 
+                margin-top: 1px !important;
+                margin-bottom: 1px !important;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+            }
+            /* Text styles */
+            div[class*="st-key-location_form_wrap"] h3,
+            div[class*="st-key-location_form_wrap"] label,
+            div[class*="st-key-location_form_wrap"] p,
+            div[class*="st-key-location_form_wrap"] .stMarkdown {
+                color: #1a0a2e !important;
+            }
+            
+            /* Title style and hide anchor link */
+            div[class*="st-key-location_form_wrap"] h3 {
+                font-size: 16px !important; 
+                margin-bottom: 5px !important;
+                margin-top: 0px !important;
+            }
+            div[class*="st-key-location_form_wrap"] h3 a {
+                display: none !important;
+            }
+            
+            /* Number input styles */
+            div[class*="st-key-location_form_wrap"] div[data-baseweb="input"] {
+                background-color: #f0f2f6 !important;
+                border: 1px solid #e0e0e0 !important;
+                border-radius: 8px !important;
+            }
+            div[class*="st-key-location_form_wrap"] input {
+                color: #1a0a2e !important;
+            }
+            
+            /* Buttons */
+            div[class*="st-key-location_form_wrap"] button:not([kind="primary"]) {
+                background-color: #ffffff !important;
+                color: #1a0a2e !important;
+                border: 1px solid #c6c5c1 !important;
+                border-radius: 6px !important;
+                font-size: 12px !important;
+                padding: 4px 8px !important;
+                height: 32px !important;
+                min-height: 32px !important;
+            }
+            div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
+                background-color: #f0f2f6 !important;
+            }
+            div[class*="st-key-location_form_wrap"] button[kind="primary"] {
+                background-color: #a8f368 !important;
+                color: #1a0a2e !important;
+                border: none !important;
+                font-size: 12px !important;
+                padding: 4px 8px !important;
+                height: 32px !important;
+                min-height: 32px !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-                            col_lat, col_lng = st.columns(2)
-                            with col_lat:
-                                lat_val = st.number_input(
-                                    "Latitude",
-                                    min_value=-90.0,
-                                    max_value=90.0,
-                                    value=float(st.session_state.get("search_lat") or 36.19),
-                                    step=0.00001,
-                                    format="%.5f",
-                                    key="inline_lat",
-                                )
-                            with col_lng:
-                                lng_val = st.number_input(
-                                    "Longitude",
-                                    min_value=-180.0,
-                                    max_value=180.0,
-                                    value=float(st.session_state.get("search_lng") or 44.01),
-                                    step=0.00001,
-                                    format="%.5f",
-                                    key="inline_lng",
-                                )
+            with st.container(key="location_form_wrap"):
+                st.markdown("### 📍 SPECIFY LOCATION", unsafe_allow_html=True)
+                st.caption("Enter coordinates in Decimal Degrees (DD).")
+                
+                lat_val = st.number_input(
+                    "Latitude",
+                    min_value=-90.0,
+                    max_value=90.0,
+                    value=float(st.session_state.get("search_lat") or 36.19),
+                    step=0.00001,
+                    format="%.5f",
+                    key="inline_lat",
+                )
+                
+                lng_val = st.number_input(
+                    "Longitude",
+                    min_value=-180.0,
+                    max_value=180.0,
+                    value=float(st.session_state.get("search_lng") or 44.01),
+                    step=0.00001,
+                    format="%.5f",
+                    key="inline_lng",
+                )
 
-                            col_ok, col_cancel = st.columns([1, 1])
-                            with col_ok:
-                                if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
-                                    st.session_state.search_lat = lat_val
-                                    st.session_state.search_lng = lng_val
-                                    st.session_state.search_pending = True
-                                    st.session_state.show_location_form = False
-                                    st.rerun()
-                            with col_cancel:
-                                if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
-                                    st.session_state.show_location_form = False
-                                    st.rerun()
+                c1, c2 = st.columns(2)
+                with c1:
+                    if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                        st.session_state.show_location_form = False
+                        st.rerun()
+                with c2:
+                    if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                        st.session_state.search_lat = lat_val
+                        st.session_state.search_lng = lng_val
+                        st.session_state.search_pending = True
+                        st.session_state.show_location_form = False
+                        st.rerun()
 
                     # ---- Build the map ----
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
