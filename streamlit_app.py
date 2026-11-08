@@ -2484,7 +2484,7 @@ def main():
         
         # Create empty columns to push the form to the right
         # The Start Date button is roughly in the 5th column (position 4)
-        spacer1, spacer2, spacer3, spacer4, form_col, spacer5 = st.columns([1, 1, 1, 1.2, 1.2, 1.1])
+        spacer1, spacer2, spacer3, form_col, spacer5 = st.columns([1, 1, 1, 1.5, 2.5])
         
         with form_col:
             # Inject CSS directly to make this form white and clean
