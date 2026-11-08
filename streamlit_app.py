@@ -2488,7 +2488,7 @@ def main():
         div[class*="st-key-date_form_wrap"] {
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
-            border-radius: 8px !important;
+            border-radius: 0px !important;
             padding: 10px 12px !important;
             max-width: 220px !important; /* Narrower box */
             margin-top: 0px !important;
