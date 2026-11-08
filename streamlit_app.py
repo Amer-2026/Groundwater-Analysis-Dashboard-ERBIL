@@ -2491,7 +2491,7 @@ def main():
             border-radius: 8px !important;
             padding: 15px 20px !important;
             max-width: 320px !important; /* Narrower box */
-            margin-top: 12px !important;
+            margin-top: 8px !important;
             margin-bottom: 16px !important;
         }
         div[class*="st-key-date_form_wrap"] h3,
