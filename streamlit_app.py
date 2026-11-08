@@ -223,6 +223,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
+        "btn_info": "ℹ️ معلومات",
+        "btn_reset": "🔄 إعادة تعيين",
+        "download_data": "تنزيل البيانات",
+        "download_report": "تنزيل التقرير",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -317,6 +321,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
+        "btn_info": "ℹ️ زانیاری",
+        "btn_reset": "🔄 ڕیسێت",
+        "download_data": "دابەزاندنی داتا",
+        "download_report": "دابەزاندنی ڕاپۆرت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -2278,12 +2286,12 @@ def main():
     
     # Info Button (c3)
     with c3:
-        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+        if st.button(t("btn_info"), key="info_btn", use_container_width=True):
             st.session_state.show_info_modal = True
             
     # Reset Button (c4)
     with c4:
-        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
+        if st.button(t("btn_reset"), key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
