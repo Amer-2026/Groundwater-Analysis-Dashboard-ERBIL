@@ -2489,8 +2489,8 @@ def main():
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
             border-radius: 12px !important;
-            padding: 20px 24px !important;
-            max-width: 260px !important;
+            padding: 15px 20px !important;
+            max-width: 320px !important; /* Narrower box */
             margin-top: 12px !important;
             margin-bottom: 16px !important;
         }
@@ -2509,11 +2509,17 @@ def main():
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
+        
+        /* Style for the Cancel/Select buttons */
         div[class*="st-key-date_form_wrap"] button:not([kind="primary"]) {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 1px solid #c6c5c1 !important;
             border-radius: 6px !important;
+            font-size: 12px !important; /* Smaller button text */
+            padding: 4px 8px !important;
+            height: 32px !important;
+            min-height: 32px !important;
         }
         div[class*="st-key-date_form_wrap"] button:not([kind="primary"]):hover {
             background-color: #f0f2f6 !important;
@@ -2522,12 +2528,18 @@ def main():
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
+            font-size: 12px !important; /* Smaller button text */
+            padding: 4px 8px !important;
+            height: 32px !important;
+            min-height: 32px !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
         with st.container(key="date_form_wrap"):
-            st.markdown(f"### 📅 Select new {active.upper()} DATE")
+            # Changed title and made it smaller
+            st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
+            
             st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
             
             cal_years = [str(y) for y in range(2018, 2031)]
