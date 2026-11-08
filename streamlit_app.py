@@ -2526,10 +2526,10 @@ def main():
         
         cal_years = [str(y) for y in range(2018, 2031)]
         current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
-        sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
+        sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)), key="cal_year_select")
         
         cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        sel_month = st.selectbox("Month", cal_months, index=0)
+        sel_month = st.selectbox("Month", cal_months, index=0, key="cal_month_select")
         
         c1, c2 = st.columns(2)
         with c1:
