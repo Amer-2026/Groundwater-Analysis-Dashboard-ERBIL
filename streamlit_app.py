@@ -2495,7 +2495,8 @@ def main():
                 border: 2px solid #c6c5c1 !important;
                 border-radius: 12px !important;
                 padding: 15px 20px !important;
-                width: 100% !important; /* Take full width of the column */
+                width: 100% !important;
+                max-width: 250px !important; /* 👈 ADD THIS LINE HERE */
                 margin-top: 1px !important;
                 margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
