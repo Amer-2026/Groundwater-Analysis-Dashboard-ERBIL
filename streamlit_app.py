@@ -2490,7 +2490,7 @@ def main():
             border: 2px solid #c6c5c1 !important;
             border-radius: 12px !important;
             padding: 20px 24px !important;
-            max-width: 300px !important;
+            max-width: 240px !important;
             margin-top: 12px !important;
             margin-bottom: 16px !important;
         }
