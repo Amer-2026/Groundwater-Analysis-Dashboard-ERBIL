@@ -2584,6 +2584,7 @@ def main():
     # Trigger the modal
     if st.session_state.get("show_info_modal"):
         show_info_modal()
+    if st.session_state.get("active_cal"):
         show_calendar()
 
     # Get the dates for the map generation
