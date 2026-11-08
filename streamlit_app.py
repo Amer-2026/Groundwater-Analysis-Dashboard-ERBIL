@@ -2543,7 +2543,7 @@ def main():
             """, unsafe_allow_html=True)
 
             with st.container(key="date_form_wrap"):
-                st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
+                st.markdown(f"#### {active.upper()} DATE", unsafe_allow_html=True)
                 
                 st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
                 
