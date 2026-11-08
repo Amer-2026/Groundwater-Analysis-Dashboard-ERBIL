@@ -2477,12 +2477,53 @@ def main():
     # The Popup Dialog
     @st.dialog("📅 Target Date")
     def show_calendar():
+        # Inject CSS to force the dialog to be white and clean
+        st.markdown("""
+        <style>
+        /* Force the dialog background to be white */
+        div[data-testid="stDialog"] > div > div {
+            background-color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+        }
+        
+        /* Force all text inside the dialog to be dark */
+        div[data-testid="stDialog"] * {
+            color: #1a0a2e !important;
+        }
+        
+        /* Style the selectboxes inside the dialog (for Year/Month) to look clean */
+        div[data-testid="stDialog"] div[data-baseweb="select"] > div {
+            background-color: #f0f2f6 !important;
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            color: #1a0a2e !important;
+        }
+        
+        /* Style the Cancel and Select buttons to be white with a grey border */
+        div[data-testid="stDialog"] button {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
+            color: #1a0a2e !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Hover effect for buttons */
+        div[data-testid="stDialog"] button:hover {
+            background-color: #f0f2f6 !important;
+            border-color: #9ca3af !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
         active = st.session_state.get("active_cal")
         if not active:
             return
         
         st.write(f"Select new **{active.upper()} DATE**:")
         st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
+        
         cal_years = [str(y) for y in range(2018, 2031)]
         current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
         sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)))
@@ -2496,7 +2537,8 @@ def main():
                 st.session_state.active_cal = None
                 st.rerun()
         with c2:
-            if st.button("✔ Select", type="primary", use_container_width=True):
+            # Notice we removed type="primary" here so it uses our white button style
+            if st.button("✔ Select", use_container_width=True):
                 new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
                 if active == "start":
                     st.session_state.date_range = (new_date, st.session_state.date_range[1])
