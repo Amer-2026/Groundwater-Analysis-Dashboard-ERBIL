@@ -2478,13 +2478,18 @@ def main():
     if st.session_state.get("show_info_modal"):
         show_info_modal()
 
-    # ---- INLINE TARGET DATE FORM (Positioned under Start Date) ----
+    # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
     if st.session_state.get("active_cal"):
         active = st.session_state.get("active_cal")
         
-        # Create empty columns to push the form to the right
-        # The Start Date button is roughly in the 5th column (position 4)
-        spacer1, spacer2, spacer3, spacer4, form_col, spacer5 = st.columns([1, 1, 1, 1, 1.3, 2.2])
+        # Use the exact same column widths as the main navigation bar
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
+        
+        # Determine which column to render the form in
+        if active == "start":
+            form_col = col5
+        else:
+            form_col = col6
         
         with form_col:
             # Inject CSS directly to make this form white and clean
@@ -2496,7 +2501,7 @@ def main():
                 border-radius: 12px !important;
                 padding: 15px 20px !important;
                 width: 100% !important;
-                max-width: 260px !important; /* 👈 ADD THIS LINE HERE */
+                max-width: 260px !important; 
                 margin-top: 1px !important;
                 margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
@@ -2508,12 +2513,18 @@ def main():
             div[class*="st-key-date_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
             }
-            /* Make the title smaller */
-            div[class*="st-key-date_form_wrap"] h4 {
+            
+            /* Make the title smaller and hide the anchor link icon */
+            div[class*="st-key-date_form_wrap"] h3 {
                 font-size: 16px !important; 
                 margin-bottom: 5px !important;
                 margin-top: 0px !important;
+                color: #1a0a2e !important;
             }
+            div[class*="st-key-date_form_wrap"] h3 a {
+                display: none !important;
+            }
+            
             div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
                 background-color: #f0f2f6 !important;
                 border: 1px solid #e0e0e0 !important;
@@ -2551,6 +2562,7 @@ def main():
             """, unsafe_allow_html=True)
 
             with st.container(key="date_form_wrap"):
+                # We use ### here, and the CSS above targets the <a> link to hide it
                 st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
                 
                 st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
