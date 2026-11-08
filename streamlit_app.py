@@ -2478,18 +2478,13 @@ def main():
     if st.session_state.get("show_info_modal"):
         show_info_modal()
 
-    # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
+    # ---- INLINE TARGET DATE FORM (Positioned under Start Date) ----
     if st.session_state.get("active_cal"):
         active = st.session_state.get("active_cal")
         
-        # Use the exact same column widths as the main navigation bar
-        col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
-        
-        # Determine which column to render the form in
-        if active == "start":
-            form_col = col5
-        else:
-            form_col = col6
+        # Create empty columns to push the form to the right
+        # The Start Date button is roughly in the 5th column (position 4)
+        spacer1, spacer2, spacer3, spacer4, form_col, spacer5 = st.columns([1, 1, 1, 1, 1.3, 2.2])
         
         with form_col:
             # Inject CSS directly to make this form white and clean
@@ -2501,7 +2496,7 @@ def main():
                 border-radius: 12px !important;
                 padding: 15px 20px !important;
                 width: 100% !important;
-                max-width: 260px !important; 
+                max-width: 260px !important; /* 👈 ADD THIS LINE HERE */
                 margin-top: 1px !important;
                 margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
@@ -2513,18 +2508,12 @@ def main():
             div[class*="st-key-date_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
             }
-            
-            /* Make the title smaller and hide the anchor link icon */
-            div[class*="st-key-date_form_wrap"] h3 {
+            /* Make the title smaller */
+            div[class*="st-key-date_form_wrap"] h4 {
                 font-size: 16px !important; 
                 margin-bottom: 5px !important;
                 margin-top: 0px !important;
-                color: #1a0a2e !important;
             }
-            div[class*="st-key-date_form_wrap"] h3 a {
-                display: none !important;
-            }
-            
             div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
                 background-color: #f0f2f6 !important;
                 border: 1px solid #e0e0e0 !important;
@@ -2562,7 +2551,6 @@ def main():
             """, unsafe_allow_html=True)
 
             with st.container(key="date_form_wrap"):
-                # We use ### here, and the CSS above targets the <a> link to hide it
                 st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
                 
                 st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
@@ -2588,6 +2576,7 @@ def main():
                             st.session_state.date_range = (st.session_state.date_range[0], new_date)
                         st.session_state.active_cal = None
                         st.rerun()
+
     # Get the dates for the map generation
     start_date = st.session_state.date_range[0]
     end_date = st.session_state.date_range[1]
@@ -2710,117 +2699,46 @@ def main():
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
 
-    # ---- INLINE LOCATION FORM (Positioned under top bar) ----
-    if st.session_state.get("show_location_form", False):
-        
-        # Use columns to push the form to the right side
-        spacer1, spacer2, spacer3, spacer4, spacer5, spacer6, form_col = st.columns([1, 1, 1, 1, 1, 1, 1])
-        
-        with form_col:
-            # Inject CSS to match the Date form
-            st.markdown("""
-            <style>
-            div[class*="st-key-location_form_wrap"] {
-                background-color: #ffffff !important;
-                border: 2px solid #c6c5c1 !important;
-                border-radius: 12px !important;
-                padding: 15px 20px !important;
-                width: 100% !important;
-                max-width: 260px !important; 
-                margin-top: 1px !important;
-                margin-bottom: 1px !important;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-            }
-            /* Text styles */
-            div[class*="st-key-location_form_wrap"] h3,
-            div[class*="st-key-location_form_wrap"] label,
-            div[class*="st-key-location_form_wrap"] p,
-            div[class*="st-key-location_form_wrap"] .stMarkdown {
-                color: #1a0a2e !important;
-            }
-            
-            /* Title style and hide anchor link */
-            div[class*="st-key-location_form_wrap"] h3 {
-                font-size: 16px !important; 
-                margin-bottom: 5px !important;
-                margin-top: 0px !important;
-            }
-            div[class*="st-key-location_form_wrap"] h3 a {
-                display: none !important;
-            }
-            
-            /* Number input styles */
-            div[class*="st-key-location_form_wrap"] div[data-baseweb="input"] {
-                background-color: #f0f2f6 !important;
-                border: 1px solid #e0e0e0 !important;
-                border-radius: 8px !important;
-            }
-            div[class*="st-key-location_form_wrap"] input {
-                color: #1a0a2e !important;
-            }
-            
-            /* Buttons */
-            div[class*="st-key-location_form_wrap"] button:not([kind="primary"]) {
-                background-color: #ffffff !important;
-                color: #1a0a2e !important;
-                border: 1px solid #c6c5c1 !important;
-                border-radius: 6px !important;
-                font-size: 12px !important;
-                padding: 4px 8px !important;
-                height: 32px !important;
-                min-height: 32px !important;
-            }
-            div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
-                background-color: #f0f2f6 !important;
-            }
-            div[class*="st-key-location_form_wrap"] button[kind="primary"] {
-                background-color: #a8f368 !important;
-                color: #1a0a2e !important;
-                border: none !important;
-                font-size: 12px !important;
-                padding: 4px 8px !important;
-                height: 32px !important;
-                min-height: 32px !important;
-            }
-            </style>
-            """, unsafe_allow_html=True)
+                    # ===== Inline Location Form =====
+                    if st.session_state.get("show_location_form", False):
+                        with st.container(key="location_form_wrap"):
+                            st.markdown("### 📍 Specify Location")
+                            st.caption("Enter coordinates in Decimal Degrees (DD). Example: 36.19120, 44.00940")
 
-            with st.container(key="location_form_wrap"):
-                st.markdown("### 📍 SPECIFY LOCATION", unsafe_allow_html=True)
-                st.caption("Enter coordinates in Decimal Degrees (DD).")
-                
-                lat_val = st.number_input(
-                    "Latitude",
-                    min_value=-90.0,
-                    max_value=90.0,
-                    value=float(st.session_state.get("search_lat") or 36.19),
-                    step=0.00001,
-                    format="%.5f",
-                    key="form_inline_lat", # Unique key
-                )
-                
-                lng_val = st.number_input(
-                    "Longitude",
-                    min_value=-180.0,
-                    max_value=180.0,
-                    value=float(st.session_state.get("search_lng") or 44.01),
-                    step=0.00001,
-                    format="%.5f",
-                    key="form_inline_lng", # Unique key
-                )
+                            col_lat, col_lng = st.columns(2)
+                            with col_lat:
+                                lat_val = st.number_input(
+                                    "Latitude",
+                                    min_value=-90.0,
+                                    max_value=90.0,
+                                    value=float(st.session_state.get("search_lat") or 36.19),
+                                    step=0.00001,
+                                    format="%.5f",
+                                    key="inline_lat",
+                                )
+                            with col_lng:
+                                lng_val = st.number_input(
+                                    "Longitude",
+                                    min_value=-180.0,
+                                    max_value=180.0,
+                                    value=float(st.session_state.get("search_lng") or 44.01),
+                                    step=0.00001,
+                                    format="%.5f",
+                                    key="inline_lng",
+                                )
 
-                c1, c2 = st.columns(2)
-                with c1:
-                    if st.button("❌ Cancel", key="form_inline_cancel", use_container_width=True): # Unique key
-                        st.session_state.show_location_form = False
-                        st.rerun()
-                with c2:
-                    if st.button("✅ OK", key="form_inline_ok", type="primary", use_container_width=True): # Unique key
-                        st.session_state.search_lat = lat_val
-                        st.session_state.search_lng = lng_val
-                        st.session_state.search_pending = True
-                        st.session_state.show_location_form = False
-                        st.rerun()
+                            col_ok, col_cancel = st.columns([1, 1])
+                            with col_ok:
+                                if st.button("✅ OK", key="inline_ok", type="primary", use_container_width=True):
+                                    st.session_state.search_lat = lat_val
+                                    st.session_state.search_lng = lng_val
+                                    st.session_state.search_pending = True
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
+                            with col_cancel:
+                                if st.button("❌ Cancel", key="inline_cancel", use_container_width=True):
+                                    st.session_state.show_location_form = False
+                                    st.rerun()
 
                     # ---- Build the map ----
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
