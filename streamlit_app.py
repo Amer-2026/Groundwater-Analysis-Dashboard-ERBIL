@@ -2501,10 +2501,17 @@ def main():
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
             div[class*="st-key-date_form_wrap"] h3,
+            div[class*="st-key-date_form_wrap"] h4,
             div[class*="st-key-date_form_wrap"] label,
             div[class*="st-key-date_form_wrap"] p,
             div[class*="st-key-date_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
+            }
+            /* Make the title smaller */
+            div[class*="st-key-date_form_wrap"] h4 {
+                font-size: 16px !important; 
+                margin-bottom: 5px !important;
+                margin-top: 0px !important;
             }
             div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
                 background-color: #f0f2f6 !important;
