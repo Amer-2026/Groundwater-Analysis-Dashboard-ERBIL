@@ -2489,7 +2489,7 @@ def main():
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
             border-radius: 8px !important;
-            padding: 15px 20px !important;
+            padding: 13px 16px !important;
             max-width: 320px !important; /* Narrower box */
             margin-top: 8px !important;
             margin-bottom: 16px !important;
