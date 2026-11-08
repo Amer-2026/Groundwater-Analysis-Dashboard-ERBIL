@@ -2478,91 +2478,96 @@ def main():
     if st.session_state.get("show_info_modal"):
         show_info_modal()
 
-    # ---- INLINE TARGET DATE FORM (Guaranteed 100% stable) ----
+    # ---- INLINE TARGET DATE FORM (Positioned under Start Date) ----
     if st.session_state.get("active_cal"):
         active = st.session_state.get("active_cal")
         
-        # Inject CSS directly to make this form white and clean
-        st.markdown("""
-        <style>
-        div[class*="st-key-date_form_wrap"] {
-            background-color: #ffffff !important;
-            border: 2px solid #c6c5c1 !important;
-            border-radius: 0px !important;
-            padding: 10px 8px !important;
-            max-width: 220px !important; /* Narrower box */
-            margin-top: 0px !important;
-            margin-bottom: 0px !important;
-        }
-        div[class*="st-key-date_form_wrap"] h3,
-        div[class*="st-key-date_form_wrap"] label,
-        div[class*="st-key-date_form_wrap"] p,
-        div[class*="st-key-date_form_wrap"] .stMarkdown {
-            color: #1a0a2e !important;
-        }
-        div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
-            background-color: #f0f2f6 !important;
-            border: 1px solid #e0e0e0 !important;
-            border-radius: 8px !important;
-        }
-        div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
+        # Create empty columns to push the form to the right
+        # The Start Date button is roughly in the 5th column (position 4)
+        spacer1, spacer2, spacer3, spacer4, form_col, spacer5 = st.columns([1, 1, 1, 1.2, 1.2, 1.1])
         
-        /* Style for the Cancel/Select buttons */
-        div[class*="st-key-date_form_wrap"] button:not([kind="primary"]) {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border: 1px solid #c6c5c1 !important;
-            border-radius: 6px !important;
-            font-size: 12px !important; /* Smaller button text */
-            padding: 4px 8px !important;
-            height: 32px !important;
-            min-height: 32px !important;
-        }
-        div[class*="st-key-date_form_wrap"] button:not([kind="primary"]):hover {
-            background-color: #f0f2f6 !important;
-        }
-        div[class*="st-key-date_form_wrap"] button[kind="primary"] {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            font-size: 12px !important; /* Smaller button text */
-            padding: 4px 8px !important;
-            height: 32px !important;
-            min-height: 32px !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        with form_col:
+            # Inject CSS directly to make this form white and clean
+            st.markdown("""
+            <style>
+            div[class*="st-key-date_form_wrap"] {
+                background-color: #ffffff !important;
+                border: 2px solid #c6c5c1 !important;
+                border-radius: 12px !important;
+                padding: 15px 20px !important;
+                width: 100% !important; /* Take full width of the column */
+                margin-top: 12px !important;
+                margin-bottom: 16px !important;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+            }
+            div[class*="st-key-date_form_wrap"] h3,
+            div[class*="st-key-date_form_wrap"] label,
+            div[class*="st-key-date_form_wrap"] p,
+            div[class*="st-key-date_form_wrap"] .stMarkdown {
+                color: #1a0a2e !important;
+            }
+            div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
+                background-color: #f0f2f6 !important;
+                border: 1px solid #e0e0e0 !important;
+                border-radius: 8px !important;
+            }
+            div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] * {
+                color: #1a0a2e !important;
+                fill: #1a0a2e !important;
+            }
+            
+            /* Style for the Cancel/Select buttons */
+            div[class*="st-key-date_form_wrap"] button:not([kind="primary"]) {
+                background-color: #ffffff !important;
+                color: #1a0a2e !important;
+                border: 1px solid #c6c5c1 !important;
+                border-radius: 6px !important;
+                font-size: 12px !important;
+                padding: 4px 8px !important;
+                height: 32px !important;
+                min-height: 32px !important;
+            }
+            div[class*="st-key-date_form_wrap"] button:not([kind="primary"]):hover {
+                background-color: #f0f2f6 !important;
+            }
+            div[class*="st-key-date_form_wrap"] button[kind="primary"] {
+                background-color: #a8f368 !important;
+                color: #1a0a2e !important;
+                border: none !important;
+                font-size: 12px !important;
+                padding: 4px 8px !important;
+                height: 32px !important;
+                min-height: 32px !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-        with st.container(key="date_form_wrap"):
-            # Changed title and made it smaller
-            st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
-            
-            st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
-            
-            cal_years = [str(y) for y in range(2018, 2031)]
-            current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
-            sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)), key="cal_year_form")
-            
-            cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-            sel_month = st.selectbox("Month", cal_months, index=0, key="cal_month_form")
-            
-            c1, c2 = st.columns(2)
-            with c1:
-                if st.button("❌ Cancel", key="cancel_date_form", use_container_width=True):
-                    st.session_state.active_cal = None
-                    st.rerun()
-            with c2:
-                if st.button("✔ Select", key="submit_date_form", type="primary", use_container_width=True):
-                    new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
-                    if active == "start":
-                        st.session_state.date_range = (new_date, st.session_state.date_range[1])
-                    else:
-                        st.session_state.date_range = (st.session_state.date_range[0], new_date)
-                    st.session_state.active_cal = None
-                    st.rerun()
+            with st.container(key="date_form_wrap"):
+                st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
+                
+                st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
+                
+                cal_years = [str(y) for y in range(2018, 2031)]
+                current_year = st.session_state.date_range[0].year if active == 'start' else st.session_state.date_range[1].year
+                sel_year = st.selectbox("Year", cal_years, index=cal_years.index(str(current_year)), key="cal_year_form")
+                
+                cal_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                sel_month = st.selectbox("Month", cal_months, index=0, key="cal_month_form")
+                
+                c1, c2 = st.columns(2)
+                with c1:
+                    if st.button("❌ Cancel", key="cancel_date_form", use_container_width=True):
+                        st.session_state.active_cal = None
+                        st.rerun()
+                with c2:
+                    if st.button("✔ Select", key="submit_date_form", type="primary", use_container_width=True):
+                        new_date = datetime(int(sel_year), cal_months.index(sel_month) + 1, 1).date()
+                        if active == "start":
+                            st.session_state.date_range = (new_date, st.session_state.date_range[1])
+                        else:
+                            st.session_state.date_range = (st.session_state.date_range[0], new_date)
+                        st.session_state.active_cal = None
+                        st.rerun()
 
     # Get the dates for the map generation
     start_date = st.session_state.date_range[0]
