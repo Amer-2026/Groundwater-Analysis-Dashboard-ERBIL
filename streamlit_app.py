@@ -2336,47 +2336,51 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-        /* ===== ULTIMATE DOWNLOAD POPOVER LIST STYLING ===== */
-        
-        /* 1. Force the popover container to be white */
-        div[data-testid="stPopoverBody"] {
-            background-color: #ffffff !important;
+    # NEW Download Button (Popover to match the design)
+    with c5:
+        # Inject CSS directly before the popover to force the green styling and alignment
+        st.markdown("""
+        <style>
+        div[class*="st-key-download_dropdown"] button {
+            background-color: #a8f368 !important;
+            background: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
             border-radius: 8px !important;
-            padding: 8px !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-        }
-
-        /* 2. Force EVERY button inside the popover to be a clean white list item */
-        div[data-testid="stPopoverBody"] button {
-            background-color: transparent !important;
-            background: transparent !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            border-radius: 6px !important;
-            padding: 10px 15px !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            text-align: left !important;
-            justify-content: flex-start !important; 
-            height: auto !important;
+            height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            display: flex !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-        }
-
-        /* 3. Hover effect (Light Grey) */
-        div[data-testid="stPopoverBody"] button:hover {
-            background-color: #f0f2f6 !important;
             color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            margin-top: 0px !important;
         }
-
-        /* 4. Force the text inside the buttons to be dark */
-        div[data-testid="stPopoverBody"] button * {
+        
+        div[class*="st-key-download_dropdown"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
+        
+        div[class*="st-key-download_dropdown"] button:hover,
+        div[class*="st-key-download_dropdown"] button:focus,
+        div[class*="st-key-download_dropdown"] button:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
+            border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
+            if st.button(t("download_data"), key="dl_data", use_container_width=True):
+                st.toast("Download Data triggered! (Add your download logic here)")
+                
+            if st.button(t("download_report"), key="dl_report", use_container_width=True):
+                st.toast("Download Report triggered! (Add your download logic here)")
             
     # Language Selector (c6)
     with c6:
