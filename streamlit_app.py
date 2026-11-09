@@ -2341,8 +2341,8 @@ def main():
         # Inject CSS directly before the popover to force the green styling and alignment
         st.markdown("""
         <style>
-        /* Target this specific popover button */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+        /* Target the specific popover button using the container key */
+        div[class*="st-key-download_dropdown"] button {
             background-color: #a8f368 !important;
             background: #a8f368 !important;
             border: 1px solid #a8f368 !important;
@@ -2359,14 +2359,16 @@ def main():
             margin-top: 0px !important;
         }
         
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] * {
+        /* Force text and icons to be dark */
+        div[class*="st-key-download_dropdown"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
         
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
+        /* Hover state */
+        div[class*="st-key-download_dropdown"] button:hover,
+        div[class*="st-key-download_dropdown"] button:focus,
+        div[class*="st-key-download_dropdown"] button:active {
             background-color: #8fd154 !important;
             background: #8fd154 !important;
             border-color: #8fd154 !important;
@@ -2378,10 +2380,10 @@ def main():
 
         with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
             if st.button(t("download_data"), key="dl_data", use_container_width=True):
-                st.toast("Download Data triggered!")
+                st.toast("Download Data triggered! (Add your download logic here)")
                 
             if st.button(t("download_report"), key="dl_report", use_container_width=True):
-                st.toast("Download Report triggered!")
+                st.toast("Download Report triggered! (Add your download logic here)")
             
     # Language Selector (c6)
     with c6:
