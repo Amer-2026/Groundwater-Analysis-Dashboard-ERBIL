@@ -2252,6 +2252,12 @@ def main():
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         } 
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "📥 Download" !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+        }
     """
     
     # Render the CSS safely
