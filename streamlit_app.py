@@ -2215,44 +2215,40 @@ def main():
             font-weight: 700 !important;
         }
 
-        /* ===== DOWNLOAD POPOVER LIST STYLING ===== */
-        
-        /* 1. Force the background of the popover body to be white */
-        div[data-testid="stPopoverBody"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 5px !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-        }
-
-        /* 2. Style the buttons inside the popover to look like list items */
-        div[data-testid="stPopoverBody"] .stButton > button {
-            background-color: #ffffff !important;
+        /* 2. Style the buttons inside the popover to look like plain text items */
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button,
+        div[data-baseweb="popover"] button {
+            background-color: transparent !important; /* Removes the green */
+            background: transparent !important;
             color: #1a0a2e !important;
             border: none !important;
             border-radius: 6px !important;
-            padding: 8px 12px !important;
+            padding: 10px 15px !important;
             font-weight: 600 !important;
             font-size: 14px !important;
             text-align: left !important;
-            justify-content: flex-start !important; /* Aligns text to the left */
+            justify-content: flex-start !important; 
             height: auto !important;
             min-height: 38px !important;
-            transition: all 0.2s ease !important;
+            width: 100% !important;
+            display: flex !important;
             box-shadow: none !important;
+            margin: 0 !important;
         }
 
-        /* 3. Hover effect for the list items (Light Grey) */
-        div[data-testid="stPopoverBody"] .stButton > button:hover {
+        /* 3. Hover effect (Light Grey) */
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button:hover,
+        div[data-baseweb="popover"] button:hover {
             background-color: #f0f2f6 !important;
             color: #1a0a2e !important;
         }
 
         /* 4. Force the text inside the buttons to be dark */
-        div[data-testid="stPopoverBody"] .stButton > button * {
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button *,
+        div[data-baseweb="popover"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
-        }   
+        }
         
     """
     
