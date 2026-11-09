@@ -2252,12 +2252,7 @@ def main():
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         } 
-        /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "📥 Download" !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-        }
+
     """
     
     # Render the CSS safely
@@ -2346,9 +2341,8 @@ def main():
 
     # NEW Download Dropdown (Matches Abstraction/Recharge)
     with c5:
-        dl_options = ["", "data", "report"]
+        dl_options = ["data", "report"]
         dl_labels = [
-            "", # Empty default state
             t("download_data"), 
             t("download_report")
         ]
@@ -2356,7 +2350,8 @@ def main():
         selected_dl = st.selectbox(
             "Download",
             options=dl_labels,
-            index=0, # Always defaults to empty
+            index=None, # This prevents any option from being pre-selected
+            placeholder="📥 Download", # This shows on the button when nothing is selected
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2364,12 +2359,12 @@ def main():
         # Trigger the action when an option is selected
         if selected_dl == t("download_data"):
             st.toast("Download Data triggered!")
-            st.session_state.download_selector = "" # Reset
+            st.session_state.download_selector = None # Reset to None
             st.rerun()
             
         elif selected_dl == t("download_report"):
             st.toast("Download Report triggered!")
-            st.session_state.download_selector = "" # Reset
+            st.session_state.download_selector = None # Reset to None
             st.rerun()
             
     # Language Selector (c6)
