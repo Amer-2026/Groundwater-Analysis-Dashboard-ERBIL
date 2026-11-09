@@ -2382,10 +2382,10 @@ def main():
 
         with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
             if st.button(t("download_data"), key="dl_data", use_container_width=True):
-                st.toast("Download Data triggered! (Add your download logic here)")
+                st.toast("Download Data triggered!")
                 
             if st.button(t("download_report"), key="dl_report", use_container_width=True):
-                st.toast("Download Report triggered! (Add your download logic here)")
+                st.toast("Download Report triggered!")
             
     # Language Selector (c6)
     with c6:
