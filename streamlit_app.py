@@ -2210,6 +2210,48 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
+               div[class*="st-key-lang_wrap"] span {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+            font-weight: 700 !important;
+        }
+
+        /* ===== DOWNLOAD SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        } 
     """
     
     # Render the CSS safely
