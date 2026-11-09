@@ -2296,11 +2296,35 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (c5)
+    # NEW Download Dropdown (Matches Abstraction/Recharge)
     with c5:
-        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
-            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
-            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
+        dl_options = ["none", "data", "report"]
+        dl_labels = [
+            f"📥 {t('nav_download')}", 
+            t("download_data"), 
+            t("download_report")
+        ]
+        
+        selected_dl = st.selectbox(
+            "Download",
+            options=dl_labels,
+            index=0, # Always defaults to "📥 Download"
+            key="download_selector",
+            label_visibility="collapsed"
+        )
+        
+        # Trigger the action when an option is selected
+        if selected_dl == t("download_data"):
+            st.toast("Download Data triggered! (Add your download logic here)")
+            # Reset back to default after clicking (requires state trick)
+            st.session_state.download_selector = f"📥 {t('nav_download')}"
+            st.rerun()
+            
+        elif selected_dl == t("download_report"):
+            st.toast("Download Report triggered! (Add your download logic here)")
+            # Reset back to default after clicking
+            st.session_state.download_selector = f"📥 {t('nav_download')}"
+            st.rerun()
             
     # Language Selector (c6)
     with c6:
