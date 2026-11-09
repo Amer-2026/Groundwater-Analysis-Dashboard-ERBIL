@@ -2340,9 +2340,9 @@ def main():
 
     # NEW Download Dropdown (Matches Abstraction/Recharge)
     with c5:
-        dl_options = ["none", "data", "report"]
+        dl_options = ["", "data", "report"]
         dl_labels = [
-            f"📥 {t('nav_download')}", 
+            "", # Empty default state
             t("download_data"), 
             t("download_report")
         ]
@@ -2350,22 +2350,20 @@ def main():
         selected_dl = st.selectbox(
             "Download",
             options=dl_labels,
-            index=0, # Always defaults to "📥 Download"
+            index=0, # Always defaults to empty
             key="download_selector",
             label_visibility="collapsed"
         )
         
         # Trigger the action when an option is selected
         if selected_dl == t("download_data"):
-            st.toast("Download Data triggered! (Add your download logic here)")
-            # Reset back to default after clicking (requires state trick)
-            st.session_state.download_selector = f"📥 {t('nav_download')}"
+            st.toast("Download Data triggered!")
+            st.session_state.download_selector = "" # Reset
             st.rerun()
             
         elif selected_dl == t("download_report"):
-            st.toast("Download Report triggered! (Add your download logic here)")
-            # Reset back to default after clicking
-            st.session_state.download_selector = f"📥 {t('nav_download')}"
+            st.toast("Download Report triggered!")
+            st.session_state.download_selector = "" # Reset
             st.rerun()
             
     # Language Selector (c6)
