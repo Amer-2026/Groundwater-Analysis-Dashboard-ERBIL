@@ -2217,42 +2217,6 @@ def main():
 
         /* ===== DOWNLOAD SELECTBOX (Green) ===== */
         
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-        }
-
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        
-        /* Fix the white box */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        } 
-
     """
     
     # Render the CSS safely
@@ -2339,33 +2303,52 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Dropdown (Matches Abstraction/Recharge)
+    # NEW Download Button (Popover to match the design)
     with c5:
-        dl_options = ["data", "report"]
-        dl_labels = [
-            t("download_data"), 
-            t("download_report")
-        ]
+        # Inject CSS directly before the popover to force the green styling and alignment
+        st.markdown("""
+        <style>
+        /* Target this specific popover button */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+            background-color: #a8f368 !important;
+            background: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            margin-top: 0px !important;
+        }
         
-        selected_dl = st.selectbox(
-            "Download",
-            options=dl_labels,
-            index=None, # This prevents any option from being pre-selected
-            placeholder="📥 Download", # This shows on the button when nothing is selected
-            key="download_selector",
-            label_visibility="collapsed"
-        )
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
         
-        # Trigger the action when an option is selected
-        if selected_dl == t("download_data"):
-            st.toast("Download Data triggered!")
-            st.session_state.download_selector = None # Reset to None
-            st.rerun()
-            
-        elif selected_dl == t("download_report"):
-            st.toast("Download Report triggered!")
-            st.session_state.download_selector = None # Reset to None
-            st.rerun()
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
+            border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
+            if st.button(t("download_data"), key="dl_data", use_container_width=True):
+                st.toast("Download Data triggered! (Add your download logic here)")
+                
+            if st.button(t("download_report"), key="dl_report", use_container_width=True):
+                st.toast("Download Report triggered! (Add your download logic here)")
             
     # Language Selector (c6)
     with c6:
