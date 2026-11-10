@@ -2323,69 +2323,34 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (Bulletproof)
+    # NEW Download Button (Copied from Abstraction)
     with c5:
-        if st.button(f"📥 {t('nav_download')}", key="download_main_btn", use_container_width=True):
-            st.session_state.show_download_menu = not st.session_state.get("show_download_menu", False)
-            st.rerun()
-
-    # Download Menu (Opens below the button)
-    if st.session_state.get("show_download_menu", False):
-        # Use 4 columns to position the menu under the Download button
-        _d1, _d2, _d3, _d4, _d5, menu_col = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
+        # Define the options
+        dl_options = ["download_data", "download_report"]
         
-        with menu_col:
-            st.markdown("""
-            <style>
-            div[class*="st-key-download_menu_wrap"] {
-                background-color: #ffffff !important;
-                border: 1px solid #e0e0e0 !important;
-                border-radius: 8px !important;
-                padding: 5px !important;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-                margin-top: 5px !important;
-                /* Force the box to be wider and align left within its column */
-                min-width: 180px !important; 
-                width: max-content !important;
-                position: relative !important; /* Changed from absolute */
-                right: 10px !important; /* Nudges it slightly left to align under the button */
-            }
-            div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]) {
-                background-color: #ffffff !important;
-                color: #1a0a2e !important;
-                border: none !important;
-                border-radius: 6px !important;
-                padding: 10px 15px !important;
-                font-weight: 600 !important;
-                font-size: 14px !important;
-                text-align: left !important;
-                justify-content: flex-start !important;
-                height: 38px !important;
-                width: 100% !important;
-                margin-bottom: 2px !important;
-                display: flex !important;
-                white-space: nowrap !important; /* Prevents text wrapping */
-            }
-            div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]):hover {
-                background-color: #f0f2f6 !important;
-            }
-            div[class*="st-key-download_menu_wrap"] button * {
-                color: #1a0a2e !important;
-                fill: #1a0a2e !important;
-            }
-            </style>
-            """, unsafe_allow_html=True)
+        # Translate the labels
+        dl_labels = [t("download_data"), t("download_report")]
+        
+        # Create the selectbox
+        selected_dl_label = st.selectbox(
+            "Download",
+            options=dl_labels,
+            index=None, # Nothing selected by default
+            placeholder=f"📥 {t('nav_download')}", # The text on the main button
+            key="download_selector",
+            label_visibility="collapsed"
+        )
 
-            with st.container(key="download_menu_wrap"):
-                if st.button(t("download_data"), key="dl_data_btn", use_container_width=True):
-                    st.toast("Download Data triggered! (Add your download logic here)")
-                    st.session_state.show_download_menu = False
-                    st.rerun()
-                    
-                if st.button(t("download_report"), key="dl_report_btn", use_container_width=True):
-                    st.toast("Download Report triggered! (Add your download logic here)")
-                    st.session_state.show_download_menu = False
-                    st.rerun()
+        # Trigger the action if the user selects an option
+        if selected_dl_label == t("download_data"):
+            st.toast("Download Data triggered! (Add your logic here)")
+            st.session_state.download_selector = None 
+            st.rerun()
+            
+        elif selected_dl_label == t("download_report"):
+            st.toast("Download Report triggered! (Add your logic here)")
+            st.session_state.download_selector = None
+            st.rerun()
             
     # Language Selector (c6)
     with c6:
