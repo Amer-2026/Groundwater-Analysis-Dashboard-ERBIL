@@ -2332,7 +2332,7 @@ def main():
     # Download Menu (Opens below the button)
     if st.session_state.get("show_download_menu", False):
         # Use 4 columns to position the menu under the Download button
-        _d1, _d2, _d3, menu_col, _d4, _d5 = st.columns([1, 1, 1, 1.5, 1, 1])
+        _d1, _d2, _d3, _d4, _d5, menu_col = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
         
         with menu_col:
             st.markdown("""
