@@ -1863,42 +1863,29 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== ULTIMATE FIX FOR POPOVER BUTTONS ===== */
-        
-        /* 1. Force the background to be exactly #a8f368 */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+        /* ===== DOWNLOAD MAIN BUTTON (Green) ===== */
+        div[class*="st-key-download_main_btn"] button {
             background-color: #a8f368 !important;
-            background: #a8f368 !important;
+            color: #1a0a2e !important;
             border: 1px solid #a8f368 !important;
             border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
             width: 100% !important;
-            padding: 0 10px !important;
-            box-shadow: none !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            box-shadow: none !important;
         }
-
-        /* 2. Force all text and icons inside to be black */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] *,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] span {
+        div[class*="st-key-download_main_btn"] button:hover {
+            background-color: #8fd154 !important;
+            border-color: #8fd154 !important;
+        }
+        div[class*="st-key-download_main_btn"] button * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-        }
-
-        /* 3. Hover, Focus, Active states (to prevent the black flash) */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
-            background-color: #8fd154 !important;
-            background: #8fd154 !important;
-            border-color: #8fd154 !important;
-            box-shadow: none !important;
-            outline: none !important;
         }
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
@@ -2336,51 +2323,63 @@ def main():
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (Popover to match the design)
+    # NEW Download Button (Bulletproof)
     with c5:
-        # Inject CSS directly before the popover to force the green styling and alignment
-        st.markdown("""
-        <style>
-        div[class*="st-key-download_dropdown"] button {
-            background-color: #a8f368 !important;
-            background: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            margin-top: 0px !important;
-        }
-        
-        div[class*="st-key-download_dropdown"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-        
-        div[class*="st-key-download_dropdown"] button:hover,
-        div[class*="st-key-download_dropdown"] button:focus,
-        div[class*="st-key-download_dropdown"] button:active {
-            background-color: #8fd154 !important;
-            background: #8fd154 !important;
-            border-color: #8fd154 !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        if st.button(f"📥 {t('nav_download')}", key="download_main_btn", use_container_width=True):
+            st.session_state.show_download_menu = not st.session_state.get("show_download_menu", False)
+            st.rerun()
 
-        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
-            if st.button(t("download_data"), key="dl_data", use_container_width=True):
-                st.toast("Download Data triggered! (Add your download logic here)")
-                
-            if st.button(t("download_report"), key="dl_report", use_container_width=True):
-                st.toast("Download Report triggered! (Add your download logic here)")
+    # Download Menu (Opens below the button)
+    if st.session_state.get("show_download_menu", False):
+        # Use 4 columns to position the menu under the Download button
+        _d1, _d2, _d3, menu_col, _d4, _d5 = st.columns([1, 1, 1, 1.5, 1, 1])
+        
+        with menu_col:
+            st.markdown("""
+            <style>
+            div[class*="st-key-download_menu_wrap"] {
+                background-color: #ffffff !important;
+                border: 1px solid #e0e0e0 !important;
+                border-radius: 8px !important;
+                padding: 5px !important;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+                margin-top: 5px !important;
+            }
+            div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]) {
+                background-color: #ffffff !important;
+                color: #1a0a2e !important;
+                border: none !important;
+                border-radius: 6px !important;
+                padding: 10px 15px !important;
+                font-weight: 600 !important;
+                font-size: 14px !important;
+                text-align: left !important;
+                justify-content: flex-start !important;
+                height: 38px !important;
+                width: 100% !important;
+                margin-bottom: 2px !important;
+                display: flex !important;
+            }
+            div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]):hover {
+                background-color: #f0f2f6 !important;
+            }
+            div[class*="st-key-download_menu_wrap"] button * {
+                color: #1a0a2e !important;
+                fill: #1a0a2e !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
+            with st.container(key="download_menu_wrap"):
+                if st.button(t("download_data"), key="dl_data_btn", use_container_width=True):
+                    st.toast("Download Data triggered! (Add your download logic here)")
+                    st.session_state.show_download_menu = False
+                    st.rerun()
+                    
+                if st.button(t("download_report"), key="dl_report_btn", use_container_width=True):
+                    st.toast("Download Report triggered! (Add your download logic here)")
+                    st.session_state.show_download_menu = False
+                    st.rerun()
             
     # Language Selector (c6)
     with c6:
