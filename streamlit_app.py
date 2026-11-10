@@ -2325,18 +2325,19 @@ def main():
 
     # NEW Download Button (Copied from Abstraction)
     with c5:
-        # Define the options
-        dl_options = ["download_data", "download_report"]
+        # We add a dummy empty string at the start to act as the "default" state
+        dl_options = ["", "download_data", "download_report"]
+        dl_labels = [
+            "", # Empty default state
+            t("download_data"), 
+            t("download_report")
+        ]
         
-        # Translate the labels
-        dl_labels = [t("download_data"), t("download_report")]
-        
-        # Create the selectbox
+        # We use a placeholder that only shows when the empty string is selected
         selected_dl_label = st.selectbox(
             "Download",
             options=dl_labels,
-            index=None, # Nothing selected by default
-            placeholder=f"📥 {t('nav_download')}", # The text on the main button
+            index=0, # Defaults to the empty string
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2344,12 +2345,14 @@ def main():
         # Trigger the action if the user selects an option
         if selected_dl_label == t("download_data"):
             st.toast("Download Data triggered! (Add your logic here)")
-            st.session_state.download_selector = None 
+            # Instantly reset back to the empty string
+            st.session_state.download_selector = ""
             st.rerun()
             
         elif selected_dl_label == t("download_report"):
             st.toast("Download Report triggered! (Add your logic here)")
-            st.session_state.download_selector = None
+            # Instantly reset back to the empty string
+            st.session_state.download_selector = ""
             st.rerun()
             
     # Language Selector (c6)
