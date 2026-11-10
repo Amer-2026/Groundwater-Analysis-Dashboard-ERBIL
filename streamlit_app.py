@@ -2344,6 +2344,12 @@ def main():
                 padding: 5px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
                 margin-top: 5px !important;
+                /* Force the box to be wider so text doesn't wrap */
+                min-width: 200px !important; 
+                width: max-content !important;
+                position: absolute !important;
+                right: 0 !important; /* Align it to the right */
+                z-index: 9999 !important;
             }
             div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]) {
                 background-color: #ffffff !important;
@@ -2359,6 +2365,8 @@ def main():
                 width: 100% !important;
                 margin-bottom: 2px !important;
                 display: flex !important;
+                /* Prevent text from wrapping to the next line */
+                white-space: nowrap !important;
             }
             div[class*="st-key-download_menu_wrap"] button:not([kind="primary"]):hover {
                 background-color: #f0f2f6 !important;
