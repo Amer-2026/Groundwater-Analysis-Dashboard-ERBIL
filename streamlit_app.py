@@ -1863,7 +1863,7 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== DOWNLOAD SELECTBOX (Green) ===== */
+       /* ===== DOWNLOAD SELECTBOX (Green) ===== */
         
         /* 1. The Main Green Button */
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
@@ -1882,9 +1882,16 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 12px !important; 
+            font-size: 14px !important; /* Keeps text bold and readable */
         }
         
+        /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
         /* Fix the white box */
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
             fill: #1a0a2e !important;
@@ -1908,7 +1915,7 @@ def main():
             content: "📥 Download" !important;
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 12px !important; 
+            font-size: 14px !important; 
         }
 
         /* Hide the black X (clear button) entirely */
@@ -2365,17 +2372,6 @@ def main():
             key="download_selector",
             label_visibility="collapsed"
         )
-
-        # Trigger the action if the user selects an option
-        if selected_dl_label == t("download_data"):
-            st.toast("Download Data triggered! (Add your logic here)")
-            st.session_state.download_selector = None # Reset
-            st.rerun()
-            
-        elif selected_dl_label == t("download_report"):
-            st.toast("Download Report triggered! (Add your logic here)")
-            st.session_state.download_selector = None # Reset
-            st.rerun()
             
     # Language Selector (c6)
     with c6:
