@@ -2353,16 +2353,6 @@ def main():
 
     # NEW Download Button (Copied from Abstraction)
     with c5:
-        # We add a dummy empty string at the start to act as the "default" state
-        dl_options = ["", "download_data", "download_report"]
-        dl_labels = [
-            "", # Empty default state
-            t("download_data"), 
-            t("download_report")
-        ]
-        
-    # NEW Download Button (Copied from Abstraction)
-    with c5:
         # We use a placeholder trick that works perfectly with selectbox
         dl_options = ["download_data", "download_report"]
         dl_labels = [t("download_data"), t("download_report")]
