@@ -1863,29 +1863,57 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== DOWNLOAD MAIN BUTTON (Green) ===== */
-        div[class*="st-key-download_main_btn"] button {
+        /* ===== DOWNLOAD SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
             background-color: #a8f368 !important;
-            color: #1a0a2e !important;
             border: 1px solid #a8f368 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
             box-shadow: none !important;
+            margin-top: 0px !important; 
+            padding-left: 2px !important; 
+            padding-right: 2px !important; 
         }
-        div[class*="st-key-download_main_btn"] button:hover {
-            background-color: #8fd154 !important;
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 12px !important; 
+        }
+        
+        /* Fix the white box */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
+            background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
-        div[class*="st-key-download_main_btn"] button * {
+
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "📥 Download" !important;
             color: #1a0a2e !important;
-            fill: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 12px !important; 
+        }
+
+        /* Hide the black X (clear button) entirely */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
+            display: none !important;
         }
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
@@ -2333,11 +2361,17 @@ def main():
             t("download_report")
         ]
         
-        # We use a placeholder that only shows when the empty string is selected
+    # NEW Download Button (Copied from Abstraction)
+    with c5:
+        # We use a placeholder trick that works perfectly with selectbox
+        dl_options = ["download_data", "download_report"]
+        dl_labels = [t("download_data"), t("download_report")]
+        
         selected_dl_label = st.selectbox(
             "Download",
             options=dl_labels,
-            index=0, # Defaults to the empty string
+            index=None, # This keeps the button empty by default
+            placeholder=f"📥 {t('nav_download')}", # The text shown on the button
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2345,14 +2379,12 @@ def main():
         # Trigger the action if the user selects an option
         if selected_dl_label == t("download_data"):
             st.toast("Download Data triggered! (Add your logic here)")
-            # Instantly reset back to the empty string
-            st.session_state.download_selector = ""
+            st.session_state.download_selector = None # Reset
             st.rerun()
             
         elif selected_dl_label == t("download_report"):
             st.toast("Download Report triggered! (Add your logic here)")
-            # Instantly reset back to the empty string
-            st.session_state.download_selector = ""
+            st.session_state.download_selector = None # Reset
             st.rerun()
             
     # Language Selector (c6)
