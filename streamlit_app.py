@@ -2558,29 +2558,17 @@ def main():
             st.session_state.active_cal = "end"
             st.rerun()
 
-    # Info Popup Dialog (Directly shows PDF)
+    # Info Popup Dialog (Displays PDF directly)
     @st.dialog("📄 Dashboard Guide", width="large")
     def show_info_modal():
-        st.write("Click the button below to view or download the full Dashboard Guide PDF.")
+        # The raw link to your PDF on GitHub
+        # Make sure the URL matches your repository exactly!
+        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/raw/main/Dashboard_Guide.pdf"
         
-        import os
+        # Display the PDF in an iframe
+        st.components.v1.iframe(pdf_url, height=600, scrolling=True)
         
-        # Notice the capital D and G here!
-        if os.path.exists("Dashboard_Guide.pdf"):
-            with open("Dashboard_Guide.pdf", "rb") as pdf_file:
-                PDFbyte = pdf_file.read()
-
-            st.download_button(
-                label="📥 Download Dashboard Guide",
-                data=PDFbyte,
-                file_name="Dashboard_Guide.pdf",
-                mime="application/pdf",
-                type="primary",
-                use_container_width=True
-            )
-        else:
-            st.error("The PDF file was not found.")
-        
+        # Close button
         if st.button("Close", use_container_width=True):
             st.session_state.show_info_modal = False
             st.rerun()
