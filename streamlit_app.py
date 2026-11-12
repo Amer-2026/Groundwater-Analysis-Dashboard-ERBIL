@@ -1428,7 +1428,8 @@ def main():
         }
 
         /* Hide Streamlit's default download button (now embedded in chart) */
-        .stDownloadButton {
+        /* But keep it visible inside the Info modal */
+        .stDownloadButton:not(div[data-testid="stDialog"] .stDownloadButton) {
             display: none !important;
         }
 
