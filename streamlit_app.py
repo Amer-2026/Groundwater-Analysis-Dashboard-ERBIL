@@ -2557,6 +2557,56 @@ def main():
             st.session_state.active_cal = "end"
             st.rerun()
 
+    # Info Popup Dialog (Restored with PDF button)
+    @st.dialog("ℹ️ Dashboard Guide & Definitions", width="large")
+    def show_info_modal():
+        # Create tabs for organized reading
+        tab1, tab2, tab3 = st.tabs(["📊 Parameters", "📈 Analysis", "📄 PDF Guide"])
+        
+        with tab1:
+            st.markdown(f"**{t('nav_abstraction_mm')}**")
+            st.write(t("info_abstraction"))
+            st.divider()
+            st.markdown(f"**{t('nav_recharge_mm')}**")
+            st.write(t("info_recharge"))
+            
+        with tab2:
+            st.markdown(f"**{t('nav_wsi')}**")
+            st.write(t("info_wsi"))
+            st.divider()
+            st.markdown(f"**{t('nav_water_balance')}**")
+            st.write(t("info_water_balance"))
+            st.divider()
+            st.markdown(f"**{t('nav_climate_et')}**")
+            st.write("Climate and Evapotranspiration data from WaPOR v3, including AETI, PET, Precipitation, and PWL.")
+            
+        with tab3:
+            st.markdown(t("about_text"))
+            st.divider()
+            # Add the PDF button here
+            st.markdown("### 📄 Dashboard User Guide")
+            st.write("Click the button below to open the PDF guide, which explains every indicator and feature.")
+            
+            try:
+                with open("dashboard_guide.pdf", "rb") as pdf_file:
+                    PDFbyte = pdf_file.read()
+
+                st.download_button(
+                    label="📥 Download PDF Guide",
+                    data=PDFbyte,
+                    file_name="dashboard_guide.pdf",
+                    mime="application/pdf",
+                    type="primary",
+                    use_container_width=True
+                )
+            except FileNotFoundError:
+                st.warning("The PDF file 'dashboard_guide.pdf' was not found. Please upload it to the app folder.")
+            
+        # Close button
+        if st.button("Close", type="primary", use_container_width=True):
+            st.session_state.show_info_modal = False
+            st.rerun()
+
     # Trigger the Info modal
     if st.session_state.get("show_info_modal"):
         show_info_modal()
