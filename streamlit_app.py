@@ -2562,7 +2562,12 @@ def main():
     def show_info_modal():
         st.write("Click the button below to view or download the full Dashboard Guide PDF. It explains every button, indicator, and feature in detail.")
         
-        try:
+        import os
+        
+        # Debug: Print the current directory to help find the file
+        # st.write(f"Looking for file in: {os.getcwd()}")
+        
+        if os.path.exists("dashboard_guide.pdf"):
             with open("dashboard_guide.pdf", "rb") as pdf_file:
                 PDFbyte = pdf_file.read()
 
@@ -2574,8 +2579,9 @@ def main():
                 type="primary",
                 use_container_width=True
             )
-        except FileNotFoundError:
-            st.warning("The PDF file 'dashboard_guide.pdf' was not found. Please upload it to the app folder.")
+        else:
+            st.error("The PDF file 'dashboard_guide.pdf' was not found in the app folder.")
+            st.info("Please make sure the file is named exactly 'dashboard_guide.pdf' (all lowercase) and is placed in the same folder as streamlit_app.py.")
         
         # Close button
         if st.button("Close", use_container_width=True):
