@@ -2566,7 +2566,7 @@ def main():
         
         # The raw link to your PDF on GitHub
         # (Make sure this matches your exact repository and file name)
-        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/raw/main/Dashboard_Guide.pdf"
+        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
         
         # A styled HTML link that looks like a button and opens in a new tab
         st.markdown(
