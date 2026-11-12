@@ -2558,15 +2558,37 @@ def main():
             st.session_state.active_cal = "end"
             st.rerun()
 
-    # Info Popup Dialog (Displays PDF directly)
+    # Info Popup Dialog (Opens PDF in a new tab)
     @st.dialog("📄 Dashboard Guide", width="large")
     def show_info_modal():
+        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
+        st.write("Click the button below to open it in a new tab.")
+        
         # The raw link to your PDF on GitHub
-        # Make sure the URL matches your repository exactly!
+        # (Make sure this matches your exact repository and file name)
         pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/raw/main/Dashboard_Guide.pdf"
         
-        # Display the PDF in an iframe
-        st.components.v1.iframe(pdf_url, height=600, scrolling=True)
+        # A styled HTML link that looks like a button and opens in a new tab
+        st.markdown(
+            f'''
+            <a href="{pdf_url}" target="_blank" style="
+                display: block;
+                width: 100%;
+                padding: 10px;
+                background-color: #a8f368;
+                color: #1a0a2e;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 10px;
+            ">
+                📄 Open Dashboard Guide (PDF)
+            </a>
+            ''',
+            unsafe_allow_html=True
+        )
         
         # Close button
         if st.button("Close", use_container_width=True):
