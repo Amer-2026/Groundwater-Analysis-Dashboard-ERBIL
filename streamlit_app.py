@@ -2175,6 +2175,14 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
+        /* Force the language text to be bold */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
