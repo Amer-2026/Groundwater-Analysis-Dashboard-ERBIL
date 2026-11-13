@@ -1877,8 +1877,8 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
             margin-top: 0px !important; 
-            padding-left: 2px !important; 
-            padding-right: 2px !important; 
+            padding-left: 0px !important; 
+            padding-right: 0px !important; 
         }
 
         /* 2. Dark Text and Transparent Icon Background */
@@ -1918,7 +1918,7 @@ def main():
             content: "📥 Download" !important;
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 14px !important; 
+            font-size: 13px !important; /* 👈 Change to 13px */
         }
 
         /* Hide the black X (clear button) entirely */
