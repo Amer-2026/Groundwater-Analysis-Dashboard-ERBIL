@@ -1885,7 +1885,7 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 14px !important; /* Keeps text bold and readable */
+            font-size: 13px !important;
         }
         
         /* Force the placeholder text to be bold and black */
