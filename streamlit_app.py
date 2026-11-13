@@ -2363,15 +2363,14 @@ def main():
 
     # NEW Download Button (Copied from Abstraction)
     with c5:
-        # We use a placeholder trick that works perfectly with selectbox
         dl_options = ["download_data", "download_report"]
         dl_labels = [t("download_data"), t("download_report")]
         
         selected_dl_label = st.selectbox(
             "Download",
             options=dl_labels,
-            index=None, # This keeps the button empty by default
-            placeholder=f"📥 {t('nav_download')}", # The text shown on the button
+            index=None, 
+            placeholder=f"📥 {t('nav_download')}", # 👈 THIS uses the translation
             key="download_selector",
             label_visibility="collapsed"
         )
