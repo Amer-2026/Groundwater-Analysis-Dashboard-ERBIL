@@ -2652,9 +2652,6 @@ def main():
                 if st.button("Close", key="close_info_form", use_container_width=True):
                     st.session_state.show_info_modal = False
                     st.rerun()
-    # Trigger the Info modal
-    if st.session_state.get("show_info_modal"):
-        show_info_modal()
 
     # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
     if st.session_state.get("active_cal"):
