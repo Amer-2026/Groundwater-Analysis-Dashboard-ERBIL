@@ -2567,43 +2567,87 @@ def main():
             st.session_state.active_cal = "end"
             st.rerun()
 
-    # Info Popup Dialog (Opens PDF in a new tab)
+    # Info Popup Dialog (Styled like Date Form)
     @st.dialog("📄 Dashboard Guide", width="large")
     def show_info_modal():
-        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
-        st.write("Click the button below to open it in a new tab.")
+        # Inject CSS to match the Start Date form
+        st.markdown("""
+        <style>
+        /* Force the dialog background to be white */
+        div[data-testid="stDialog"] > div > div {
+            background-color: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+        }
         
-        # The raw link to your PDF on GitHub
-        # (Make sure this matches your exact repository and file name)
+        /* Force all text inside the dialog to be dark */
+        div[data-testid="stDialog"] * {
+            color: #1a0a2e !important;
+        }
+        
+        /* Make the title smaller and hide the anchor link icon */
+        div[data-testid="stDialog"] h3,
+        div[data-testid="stDialog"] h4 {
+            font-size: 16px !important; 
+            margin-bottom: 5px !important;
+            margin-top: 0px !important;
+            color: #1a0a2e !important;
+        }
+        div[data-testid="stDialog"] h3 a,
+        div[data-testid="stDialog"] h4 a {
+            display: none !important;
+        }
+
+        /* Style the buttons to match the Cancel/Select buttons in the date form */
+        div[data-testid="stDialog"] .stButton > button,
+        div[data-testid="stDialog"] .stLinkButton > a {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 1px solid #c6c5c1 !important;
+            border-radius: 6px !important;
+            font-size: 12px !important;
+            padding: 4px 8px !important;
+            height: 32px !important;
+            min-height: 32px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            text-decoration: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Green button for the PDF link */
+        div[data-testid="stDialog"] .stLinkButton > a {
+            background-color: #a8f368 !important;
+            border: none !important;
+            font-weight: 700 !important;
+        }
+
+        /* Hover effects */
+        div[data-testid="stDialog"] .stButton > button:hover {
+            background-color: #f0f2f6 !important;
+        }
+        div[data-testid="stDialog"] .stLinkButton > a:hover {
+            background-color: #8fd154 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # The text inside the box
+        st.markdown("#### 📄 Dashboard Guide", unsafe_allow_html=True)
+        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
+        
+        # The link button
         pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
         
-        # A styled HTML link that looks like a button and opens in a new tab
-        st.markdown(
-            f'''
-            <a href="{pdf_url}" target="_blank" style="
-                display: block;
-                width: 100%;
-                padding: 10px;
-                background-color: #a8f368;
-                color: #1a0a2e;
-                text-align: center;
-                text-decoration: none;
-                border-radius: 8px;
-                font-weight: bold;
-                font-size: 16px;
-                margin-bottom: 10px;
-            ">
-                📄 Open Dashboard Guide (PDF)
-            </a>
-            ''',
-            unsafe_allow_html=True
-        )
+        st.link_button("📄 Open Dashboard Guide (PDF)", pdf_url, use_container_width=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True) # small spacer
         
         # Close button
         if st.button("Close", use_container_width=True):
             st.session_state.show_info_modal = False
             st.rerun()
-
     # Trigger the Info modal
     if st.session_state.get("show_info_modal"):
         show_info_modal()
