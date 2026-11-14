@@ -2570,8 +2570,8 @@ def main():
     # ---- INFO FORM (Styled exactly like Start Date) ----
     if st.session_state.get("show_info_modal"):
         
-        # Use 4 columns to push the form to the right (under the top bar)
-        _i1, _i2, _i3, info_col, _i4, _i5 = st.columns([1, 1, 1, 1.5, 0.5, 0.5])
+        # Use the exact same 6 columns as the top bar so it aligns perfectly under Info
+        _i1, _i2, info_col, _i4, _i5, _i6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
         
         with info_col:
             # Inject CSS to match the Start Date form
