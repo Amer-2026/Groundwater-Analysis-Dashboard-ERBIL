@@ -1925,6 +1925,62 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
             display: none !important;
         }
+        /* Hide the black X (clear button) entirely */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
+            display: none !important;
+        }
+
+        /* 👇 ADD THE NEW INFO CSS HERE 👇 */
+        /* ===== INFO SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+            padding-left: 2px !important; 
+            padding-right: 2px !important; 
+        }
+
+        /* 2. Dark Text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important; 
+        }
+
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
+        /* ... rest of your code ... */
+        
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
         /* 1. The Main Purple Button & Alignment */
