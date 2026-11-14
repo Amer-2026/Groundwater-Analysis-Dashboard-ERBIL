@@ -2570,8 +2570,9 @@ def main():
     # ---- INFO FORM (Styled exactly like Start Date) ----
     if st.session_state.get("show_info_modal"):
         
-        # Use the exact same 6 columns as the top bar so it aligns perfectly under Info
-        _i1, _i2, info_col, _i4, _i5, _i6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
+        # Use spacer columns to push the form to the right
+        # The Info button is roughly in the 3rd column of the top bar
+        _spacer1, _spacer2, info_col, _spacer3, _spacer4 = st.columns([3.5, 1, 1.5, 0.5, 1])
         
         with info_col:
             # Inject CSS to match the Start Date form
@@ -2582,18 +2583,18 @@ def main():
                 border: 2px solid #c6c5c1 !important;
                 border-radius: 12px !important;
                 padding: 15px 20px !important;
-                width: 100% !important;
-                max-width: 260px !important; 
+                width: 280px !important; /* Fixed width */
+                max-width: 100% !important; 
                 margin-top: 1px !important;
                 margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
-            div[class*="st-key-info_form_wrap"] h3,
             div[class*="st-key-info_form_wrap"] h4,
-            div[class*="st-key-info_form_wrap"] label,
             div[class*="st-key-info_form_wrap"] p,
             div[class*="st-key-info_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
+                font-size: 13px !important; /* Smaller text for the description */
+                line-height: 1.4 !important;
             }
             
             /* Make the title smaller and hide the anchor link icon */
@@ -2623,6 +2624,7 @@ def main():
                 align-items: center !important;
                 text-decoration: none !important;
                 box-shadow: none !important;
+                width: 100% !important;
             }
             
             /* Green button for PDF link */
@@ -2640,7 +2642,7 @@ def main():
             with st.container(key="info_form_wrap"):
                 st.markdown("#### 📄 Dashboard Guide", unsafe_allow_html=True)
                 
-                st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
+                st.write("The Dashboard Guide contains detailed explanations of every button and indicator.")
                 
                 # The link button
                 pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
