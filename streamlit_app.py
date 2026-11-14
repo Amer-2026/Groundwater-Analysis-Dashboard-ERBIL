@@ -2357,10 +2357,27 @@ def main():
     # Use columns for layout, but force them onto one line with CSS
     c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
     
-    # Info Button (c3)
+    # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
-        if st.button(t("btn_info"), key="info_btn", use_container_width=True):
-            st.session_state.show_info_modal = True
+        info_options = ["", "pdf_guide"]
+        info_labels = [
+            "", # Empty default state
+            "📄 Indicators Guide" # The option in the list
+        ]
+        
+        selected_info = st.selectbox(
+            "Info",
+            options=info_labels,
+            index=0,
+            key="info_selector",
+            label_visibility="collapsed"
+        )
+        
+        # If the user clicks "Indicators Guide", open the PDF
+        if selected_info == "📄 Indicators Guide":
+            pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
+            st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
+            # We don't reset the selector here because the page is opening a new tab
             
     # Reset Button (c4)
     with c4:
