@@ -2572,7 +2572,7 @@ def main():
         
         # Use spacer columns to push the form to the right
         # The Info button is roughly in the 3rd column of the top bar
-        _spacer1, _spacer2, _spacer3, _spacer4, info_col = st.columns([3.5, 0.5, 0.5, 0.5, 1.2])
+        _spacer1, info_col, _spacer3, _spacer4, _spacer5, _spacer6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
         
         with info_col:
             # Inject CSS to match the Start Date form
