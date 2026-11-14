@@ -2585,7 +2585,7 @@ def main():
                 padding: 15px 20px !important;
                 width: 280px !important; /* Fixed width */
                 max-width: 100% !important; 
-                margin-top: -100px !important;
+                margin-top: -200px !important;
                 margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
