@@ -2024,6 +2024,12 @@ def main():
             background-color: #ffffff !important;
             border-radius: 8px !important;
             padding: 5px !important;
+            min-width: 180px !important; /* 👈 ADD THIS LINE */
+        }
+
+        /* Force the list items to not wrap and fit the new width */
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            white-space: nowrap !important; /* 👈 ADD THIS LINE */
         }
 
         div[data-baseweb="popover"] ul[role="listbox"] li {
