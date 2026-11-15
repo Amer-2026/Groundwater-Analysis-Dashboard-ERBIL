@@ -2139,6 +2139,12 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+                /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div svg {
