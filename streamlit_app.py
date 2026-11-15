@@ -2108,6 +2108,12 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+        /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
@@ -2565,33 +2571,30 @@ def main():
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        # Options for the dropdown
         rc_options = ["recharge_mm", "recharge_m3"]
         rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
-        
-        # Get current state
-        current_rc = st.session_state.selected_parameter
-        if current_rc not in rc_options:
-            current_rc = "recharge_mm" # Default if something else was selected
-            st.session_state.selected_parameter = current_rc
-            
-        current_rc_idx = rc_options.index(current_rc)
 
-        # Create the selectbox
         selected_rc_label = st.selectbox(
             "Recharge", 
             options=rc_labels,
-            index=current_rc_idx,
+            index=None, # Shows the placeholder
+            placeholder="⚪ Recharge", # The text on the button
             key="rc_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        new_rc = rc_options[rc_labels.index(selected_rc_label)]
-        if new_rc != current_rc:
-            st.session_state.selected_parameter = new_rc
-            st.session_state.map_generated = False
-            st.rerun()
+        mapping_rc = {
+            t("nav_recharge_mm"): "recharge_mm",
+            t("nav_recharge_m3"): "recharge_m3"
+        }
+
+        if selected_rc_label is not None:
+            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
+            
+            if new_rc != st.session_state.get("selected_parameter"):
+                st.session_state.selected_parameter = new_rc
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
