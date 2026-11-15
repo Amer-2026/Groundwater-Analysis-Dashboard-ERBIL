@@ -2001,10 +2001,16 @@ def main():
             font-size: 14px !important;
         }
         /* Force the placeholder text to be bold and white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
-            background-color: #B429F9 !important; /* Purple stays! */
-            border: 1px solid #B429F9 !important;
-            /* ... */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* Also force the text directly */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input {
+            color: #ffffff !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow white */
