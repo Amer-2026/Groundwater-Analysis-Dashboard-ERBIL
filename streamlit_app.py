@@ -2417,7 +2417,7 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
+    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 1.2, 0.5, 0.5, 0.5])
     
     # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
