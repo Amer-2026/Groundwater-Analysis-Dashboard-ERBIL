@@ -2605,17 +2605,17 @@ def main():
             f"    {t('nav_pwl')}"
         ]
 
-        # We set index=None so it shows the placeholder text on the main button
+        # Display the selectbox with the placeholder
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=None, 
-            placeholder="📊 Analysis", # The text shown on the button
+            index=None, # Shows the placeholder
+            placeholder="📊 Analysis", 
             key="analysis_selector",
             label_visibility="collapsed"
         )
 
-        # Only update if the user actually clicks an option
+        # Only run the logic if the user actually clicked an option
         if selected_ana_label is not None:
             selected_idx = ana_labels.index(selected_ana_label)
             new_ana = ana_options[selected_idx]
