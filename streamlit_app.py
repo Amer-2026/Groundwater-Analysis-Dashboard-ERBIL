@@ -1914,11 +1914,11 @@ def main():
         }
 
         /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "📥 Download" !important;
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 13px !important; /* 👈 Change to 13px */
+            font-size: 14px !important; 
         }
 
         /* Hide the black X (clear button) entirely */
@@ -2415,16 +2415,14 @@ def main():
     
     # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
-        info_options = ["", "pdf_guide"]
-        info_labels = [
-            "", # Empty default state
-            "📄 Indicators Guide" # The option in the list
-        ]
+        # We use the placeholder trick so the button shows the text instead of "Choose"
+        info_labels = ["📄 Indicators Guide"] 
         
         selected_info = st.selectbox(
             "Info",
             options=info_labels,
-            index=0,
+            index=None, # Leaves the button empty (shows placeholder)
+            placeholder="ℹ️ Info", # The text that shows on the button
             key="info_selector",
             label_visibility="collapsed"
         )
@@ -2433,7 +2431,6 @@ def main():
         if selected_info == "📄 Indicators Guide":
             pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
             st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
-            # We don't reset the selector here because the page is opening a new tab
             
     # Reset Button (c4)
     with c4:
