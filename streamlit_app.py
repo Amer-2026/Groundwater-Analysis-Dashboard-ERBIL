@@ -2065,6 +2065,12 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+        /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div svg {
@@ -2532,33 +2538,30 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        # Options for the dropdown
         abs_options = ["abstraction_mm", "abstraction_m3"]
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
-        
-        # Get current state
-        current_abs = st.session_state.selected_parameter
-        if current_abs not in abs_options:
-            current_abs = "abstraction_mm" # Default if something else was selected
-            st.session_state.selected_parameter = current_abs
-            
-        current_abs_idx = abs_options.index(current_abs)
 
-        # Create the selectbox
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=current_abs_idx,
+            index=None, # Shows the placeholder
+            placeholder="🔴 Abstraction", # The text on the button
             key="abs_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        new_abs = abs_options[abs_labels.index(selected_abs_label)]
-        if new_abs != current_abs:
-            st.session_state.selected_parameter = new_abs
-            st.session_state.map_generated = False
-            st.rerun()
+        mapping_abs = {
+            t("nav_abstraction_mm"): "abstraction_mm",
+            t("nav_abstraction_m3"): "abstraction_m3"
+        }
+
+        if selected_abs_label is not None:
+            new_abs = mapping_abs.get(selected_abs_label, "abstraction_mm")
+            
+            if new_abs != st.session_state.get("selected_parameter"):
+                st.session_state.selected_parameter = new_abs
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
