@@ -2253,14 +2253,14 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
-        /* Force the text inside the Language button to be bold and white */
+        /* Force the text inside the Language button to be bold and black */
         div[class*="st-key-lang_wrap"] input::placeholder {
-            color: #ffffff !important;
+            color: #1a0a2e !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }
         div[class*="st-key-lang_wrap"] input {
-            color: #ffffff !important;
+            color: #1a0a2e !important;
             font-weight: 700 !important;
         }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
