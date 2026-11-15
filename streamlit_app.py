@@ -1996,9 +1996,15 @@ def main():
 
         /* 2. White Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #ffffff !important;
+            color: #B429F9  !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        /* Force the placeholder text to be bold and white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+            color: #B429F9  !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow white */
@@ -2526,21 +2532,28 @@ def main():
 
         loc_options = ["subnational", "national"]
         loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
 
-        # Use the exact same widget as the language button
+        # We use index=None and a placeholder to show "📍 Region" on the button
         selected_label = st.selectbox(
             "Region", 
             options=loc_labels,
-            index=current_index,
+            index=None, 
+            placeholder="📍 Region", 
             key="region_selector",
             label_visibility="collapsed"
         )
 
-        new_location = loc_options[loc_labels.index(selected_label)]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        mapping_loc = {
+            t("nav_subnational"): "subnational",
+            t("nav_national"): "national"
+        }
+
+        if selected_label is not None:
+            new_location = mapping_loc.get(selected_label, "subnational")
+            
+            if new_location != st.session_state.selected_location:
+                st.session_state.selected_location = new_location
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
