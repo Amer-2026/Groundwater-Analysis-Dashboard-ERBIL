@@ -2615,28 +2615,25 @@ def main():
             label_visibility="collapsed"
         )
 
-        # Only run the logic if the user actually clicked an option
+        mapping = {
+            t("nav_wsi"): "wsi",
+            t("nav_water_balance"): "water_balance",
+            t("nav_irrigation"): "irrigation",
+            f"▼ {t('nav_climate_et')}": "climate_header",
+            f"    {t('nav_aeti')}": "aeti",
+            f"    {t('nav_pet')}": "pet",
+            f"    {t('nav_precip')}": "precip",
+            f"    {t('nav_pwl')}": "pwl"
+        }
+
         if selected_ana_label is not None:
-            selected_idx = ana_labels.index(selected_ana_label)
-            new_ana = ana_options[selected_idx]
+            new_ana = mapping.get(selected_ana_label, "wsi")
             
-            # If they click the header, do nothing. Otherwise, update.
             if new_ana != "climate_header" and new_ana != st.session_state.get("selected_analysis"):
                 st.session_state.selected_analysis = new_ana
                 st.session_state.selected_parameter = new_ana
                 st.session_state.map_generated = False
                 st.rerun()
-
-        # Update session state if changed
-        selected_idx = ana_labels.index(selected_ana_label)
-        new_ana = ana_options[selected_idx]
-        
-        # If they click the header, do nothing. Otherwise, update.
-        if new_ana != "climate_header" and new_ana != current_ana:
-            st.session_state.selected_analysis = new_ana
-            st.session_state.selected_parameter = new_ana
-            st.session_state.map_generated = False
-            st.rerun()
 
     # --- START DATE & END DATE ---
     try:
