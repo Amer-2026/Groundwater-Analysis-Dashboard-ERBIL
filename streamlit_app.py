@@ -2586,36 +2586,40 @@ def main():
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
-        # Swapped Irrigation to be before the Climate header
         ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
         
         ana_labels = [
             t("nav_wsi"),
             t("nav_water_balance"),
             t("nav_irrigation"),
-            f"▼ {t('nav_climate_et')}", # Header
+            f"▼ {t('nav_climate_et')}", 
             f"    {t('nav_aeti')}",
             f"    {t('nav_pet')}",
             f"    {t('nav_precip')}",
             f"    {t('nav_pwl')}"
         ]
 
-        # Find current index (default to WSI)
-        current_ana = st.session_state.get("selected_analysis", "wsi")
-        if current_ana not in ana_options:
-            current_ana = "wsi"
-            st.session_state.selected_analysis = current_ana
-            
-        current_ana_idx = ana_options.index(current_ana)
-
-        # Create the selectbox
+        # We set index=None so it shows the placeholder text on the main button
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=current_ana_idx,
+            index=None, 
+            placeholder="📊 Analysis", # The text shown on the button
             key="analysis_selector",
             label_visibility="collapsed"
         )
+
+        # Only update if the user actually clicks an option
+        if selected_ana_label is not None:
+            selected_idx = ana_labels.index(selected_ana_label)
+            new_ana = ana_options[selected_idx]
+            
+            # If they click the header, do nothing. Otherwise, update.
+            if new_ana != "climate_header" and new_ana != st.session_state.get("selected_analysis"):
+                st.session_state.selected_analysis = new_ana
+                st.session_state.selected_parameter = new_ana
+                st.session_state.map_generated = False
+                st.rerun()
 
         # Update session state if changed
         selected_idx = ana_labels.index(selected_ana_label)
