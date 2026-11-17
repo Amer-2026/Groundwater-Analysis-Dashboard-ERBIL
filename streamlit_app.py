@@ -736,7 +736,7 @@ def get_image_min_max(asset_id):
 
 def get_vis_params(parameter, asset_id):
     # 1. Get the palette
-    palette = PALETTES.get(parameter, PALETTES[""])
+    palette = PALETTES.get(parameter, PALETTES["abstraction_mm"])
     
     # 2. FORCE the visual range for 
     if parameter == "":
