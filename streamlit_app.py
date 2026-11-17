@@ -918,36 +918,6 @@ def get_regional_summary(parameter, assets, scale):
     rows.sort(key=lambda x: x["date"])
     return rows
 
-
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_al_summary(parameter, assets, scale):
-    """Mean value of `parameter` over the whole study area, for every month"""
-    images = _collection_with_dates(assets, parameter)
-
-    def _mean(img):
-        mean = img.reduce(
-            reducer=ee.Reducer.mean(),
-            geometry=img.geometry(),
-            scale=max(scale, 100),  # coarse scale keeps this fast
-            maxPixels=1e9,
-        ).values().get(0)
-        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
-
-    results = images.map(_mean).getInfo()
-    rows = []
-    for feature in results["features"]:
-        props = feature["properties"]
-        if props.get("mean") is not None:
-            rows.append(
-                {
-                    "date": datetime.fromtimestamp(props["date"] / 1000),
-                    "mean": float(props["mean"]),
-                }
-            )
-    rows.sort(key=lambda x: x["date"])
-    return rows
-
-
 def create_empty_time_series_plot(parameter, lat, lon):
     """Create an empty time series plot with a message to click on the map"""
     fig = go.Figure()
