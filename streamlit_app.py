@@ -1026,7 +1026,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     return fig
 
 
-def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
     """Create al summary bar chart with optional download button as annotation"""
 
 
