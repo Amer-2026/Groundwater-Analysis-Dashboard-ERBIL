@@ -3183,23 +3183,37 @@ def main():
                             else:
                                 ranged_assets = assets
 
-                    try:
-                    summary = get_regional_summary(
-                        st.session_state.current_parameter,
-                        tuple(ranged_assets),
-                        int(cfg.get("native_scale_m", 20)),
-                    )
-                    if summary:
-                        st.session_state.regional_summary_data = summary
-                    else:
-                        st.session_state.regional_summary_data = []
-                    except Exception as e:
-                        st.error(f"Error computing regional summary: {e}")
-                        st.error(traceback.format_exc())
-                        st.session_state.regional_summary_data = []
+                            # Compute the summary directly (no try/except)
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(ranged_assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                            if summary:
+                                st.session_state.regional_summary_data = summary
+                            else:
+                                st.session_state.regional_summary_data = []
 
-            # 👇 THIS LINE MUST BE FLUSH LEFT WITH `except` ABOVE 👇
+            # 👇 DEBUG LINE 👇
             st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
+
+            # Display the chart if we have data
+            if st.session_state.regional_summary_data:
+                summary = st.session_state.regional_summary_data
+                csv_data = to_csv_bytes(summary, value_col="mean")
+                filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+
+                fig = create_regional_summary_plot(
+                    summary,
+                    st.session_state.current_parameter,
+                    csv_data=csv_data,
+                    filename=filename,
+                    button_text="📥 Download as CSV",
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+                with st.expander(t("raw_data")):
+                    st.dataframe(pd.DataFrame(summary))
 
             # Display the chart if we have data
             if st.session_state.regional_summary_data:
