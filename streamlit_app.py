@@ -3195,12 +3195,15 @@ def main():
                                     st.session_state.regional_summary_data = []
                             except Exception as e:
                                 st.error(f"Error computing regional summary: {e}")
-                                st.error(traceback.format_exc()) # 👈 Add this line to see the full error
+                                st.error(traceback.format_exc())
                                 st.session_state.regional_summary_data = []
-                                
 
-                    # Display the chart if we have data
-                    if st.session_state.regional_summary_data:
+            # 👇 ADD THE DEBUG LINE HERE 👇
+            st.write(f"Debug - Summary Data Length: {len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0}")
+
+            # Display the chart if we have data
+            if st.session_state.regional_summary_data:
+                summary = st.session_state.regional_summary_data
                         summary = st.session_state.regional_summary_data
                         csv_data = to_csv_bytes(summary, value_col="mean")
                         filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
