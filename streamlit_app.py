@@ -723,7 +723,7 @@ def get_image_min_max(asset_id):
     
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    minmax = img.reduce(
+    minmax = img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
