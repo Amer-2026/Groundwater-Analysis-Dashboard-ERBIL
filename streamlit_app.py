@@ -3199,7 +3199,7 @@ def main():
                                 st.session_state.regional_summary_data = []
 
             # 👇 ADD THE DEBUG LINE HERE 👇
-            st.write(f"Debug - Summary Data Length: {len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0}")
+                   st.write(f"Debug - Summary Data Length: {len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0}")
 
             # Display the chart if we have data
             if st.session_state.regional_summary_data:
