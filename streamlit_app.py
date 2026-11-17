@@ -3184,15 +3184,15 @@ def main():
                                 ranged_assets = assets
 
                     try:
-                        summary = get_regional_summary(
-                            st.session_state.current_parameter,
-                            tuple(ranged_assets),
-                            int(cfg.get("native_scale_m", 20)),
-                        )
-                        if summary:
-                            st.session_state.regional_summary_data = summary
-                        else:
-                            st.session_state.regional_summary_data = []
+                    summary = get_regional_summary(
+                        st.session_state.current_parameter,
+                        tuple(ranged_assets),
+                        int(cfg.get("native_scale_m", 20)),
+                    )
+                    if summary:
+                        st.session_state.regional_summary_data = summary
+                    else:
+                        st.session_state.regional_summary_data = []
                     except Exception as e:
                         st.error(f"Error computing regional summary: {e}")
                         st.error(traceback.format_exc())
