@@ -3183,7 +3183,7 @@ def main():
                             else:
                                 ranged_assets = assets
 
-                            # Compute the summary directly (no try/except)
+                            # Compute the summary directly
                             summary = get_regional_summary(
                                 st.session_state.current_parameter,
                                 tuple(ranged_assets),
@@ -3194,7 +3194,7 @@ def main():
                             else:
                                 st.session_state.regional_summary_data = []
 
-            # 👇 DEBUG LINE 👇
+            # 👇 DEBUG LINE (Aligned exactly with the `if` above) 👇
             st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
 
             # Display the chart if we have data
