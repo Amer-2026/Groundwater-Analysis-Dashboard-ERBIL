@@ -3195,7 +3195,9 @@ def main():
                                     st.session_state.regional_summary_data = []
                             except Exception as e:
                                 st.error(f"Error computing regional summary: {e}")
+                                st.error(traceback.format_exc()) # 👈 Add this line to see the full error
                                 st.session_state.regional_summary_data = []
+                                
 
                     # Display the chart if we have data
                     if st.session_state.regional_summary_data:
