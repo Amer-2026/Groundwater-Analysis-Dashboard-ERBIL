@@ -717,22 +717,6 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
             )
     processed.sort(key=lambda x: x["date"])
     return processed 
-    
-def get_image_min_max(asset_id):
-
-    
-    """Min/max of an image asset (cached — one server call per asset)"""
-    img = ee.Image(asset_id)
-    minmax = img.reduceRegion(
-        reducer=ee.Reducer.minMax(),
-        geometry=img.geometry(),
-        scale=1000,
-        maxPixels=1e9,
-    ).getInfo()
-    min_key = next(key for key in minmax if key.endswith("_min"))
-    max_key = next(key for key in minmax if key.endswith("_max"))
-    return minmax[min_key], minmax[max_key]
-
 
 def get_vis_params(parameter, asset_id):
     # 1. Get the palette
