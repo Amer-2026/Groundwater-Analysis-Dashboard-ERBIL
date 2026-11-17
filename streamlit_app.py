@@ -906,6 +906,33 @@ def get_time_series_data(point, parameter, assets):
             )
     processed.sort(key=lambda x: x["date"])
     return processed
+    @st.cache_data(ttl=3600, show_spinner=False)
+def get_regional_summary(parameter, assets, scale):
+    """Mean value of `parameter` over the whole study area, for every month"""
+    images = _collection_with_dates(assets, parameter)
+
+    def region_mean(img):
+        mean = img.reduceRegion(
+            reducer=ee.Reducer.mean(),
+            geometry=img.geometry(),
+            scale=max(scale, 100),  # coarse scale keeps this fast
+            maxPixels=1e9,
+        ).values().get(0)
+        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
+
+    results = images.map(region_mean).getInfo()
+    rows = []
+    for feature in results["features"]:
+        props = feature["properties"]
+        if props.get("mean") is not None:
+            rows.append(
+                {
+                    "date": datetime.fromtimestamp(props["date"] / 1000),
+                    "mean": float(props["mean"]),
+                }
+            )
+    rows.sort(key=lambda x: x["date"])
+    return rows
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
