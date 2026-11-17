@@ -2536,15 +2536,20 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "erbil_shamamk"
 
-        # Define the internal keys, headers, and display labels
+        # Define the internal keys and the visual labels
         loc_options = [
-            "erbil_shamamk", 
-            "national_header", 
-            "duhok", "hawler", "sulaimaniy", "halabja"
+            "subnational_header",  # The header
+            "erbil_shamamk",       # The option under it
+            "national_header",     # The second header
+            "duhok", 
+            "hawler", 
+            "sulaimaniy", 
+            "halabja"
         ]
         
         loc_labels = [
-            "Erbil (Shamamk)", 
+            "▼ Sub-National", 
+            "    Erbil (Shamamk)", 
             "▼ National", 
             "    Duhok", 
             "    Hawler (Erbil)", 
@@ -2562,9 +2567,9 @@ def main():
             label_visibility="collapsed"
         )
 
-        # Map the labels back to the internal keys safely
+        # Map the visible text back to the internal variable name
         mapping_loc = {
-            "Erbil (Shamamk)": "erbil_shamamk",
+            "    Erbil (Shamamk)": "erbil_shamamk",
             "    Duhok": "duhok",
             "    Hawler (Erbil)": "hawler",
             "    Sulaimaniy": "sulaimaniy",
@@ -2572,13 +2577,15 @@ def main():
         }
 
         if selected_label is not None:
-            # Get the internal key (defaults to erbil_shamamk if somehow not found)
-            new_location = mapping_loc.get(selected_label, "erbil_shamamk")
-            
-            # Ignore if the user clicked the "National" header
-            if new_location != "national_header" and new_location != st.session_state.selected_location:
-                st.session_state.selected_location = new_location
-                st.rerun()
+            # Check if they clicked a header
+            if selected_label in ["▼ Sub-National", "▼ National"]:
+                pass # Do nothing if they click a header
+            else:
+                new_location = mapping_loc.get(selected_label, "erbil_shamamk")
+                
+                if new_location != st.session_state.selected_location:
+                    st.session_state.selected_location = new_location
+                    st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
