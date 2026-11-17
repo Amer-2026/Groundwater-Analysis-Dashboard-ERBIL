@@ -890,6 +890,8 @@ def get_time_series_data(point, parameter, assets):
             )
     processed.sort(key=lambda x: x["date"])
     return processed
+
+    
     @st.cache_data(ttl=3600, show_spinner=False)
 def get_regional_summary(parameter, assets, scale):
     """Mean value of `parameter` over the whole study area, for every month"""
