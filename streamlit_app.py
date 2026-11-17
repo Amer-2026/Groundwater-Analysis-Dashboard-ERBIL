@@ -660,7 +660,7 @@ def get_image_min_max(asset_id):
     # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
     valid_img = img.updateMask(img.neq(0))
     
-    minmax = valid_img.reduce(
+    minmax = valid_img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
