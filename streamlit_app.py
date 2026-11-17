@@ -3166,109 +3166,91 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
-                    st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
+                # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
+                st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
 
-                    # Automatically compute regional summary when map is generated
-                    if st.session_state.regional_summary_data is None:
-                        with st.spinner(t("computing")):
-                            # Filter assets by the selected date range
-                            if st.session_state.date_range:
-                                start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                                ranged_assets = [
-                                    a for a in assets
-                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                                ]
-                            else:
-                                ranged_assets = assets
+                # Automatically compute regional summary when map is generated
+                if st.session_state.regional_summary_data is None:
+                    with st.spinner(t("computing")):
+                        # Filter assets by the selected date range
+                        if st.session_state.date_range:
+                            start_ym = st.session_state.date_range[0].strftime("%Y_%m")
+                            end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                            ranged_assets = [
+                                a for a in assets
+                                if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                            ]
+                        else:
+                            ranged_assets = assets
 
-                            # Compute the summary directly
-                            summary = get_regional_summary(
-                                st.session_state.current_parameter,
-                                tuple(ranged_assets),
-                                int(cfg.get("native_scale_m", 20)),
-                            )
-                            if summary:
-                                st.session_state.regional_summary_data = summary
-                            else:
-                                st.session_state.regional_summary_data = []
-
-            # 👇 DEBUG LINE (Aligned exactly with the `if` above) 👇
-            st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
-
-            # Display the chart if we have data
-            if st.session_state.regional_summary_data:
-                summary = st.session_state.regional_summary_data
-                csv_data = to_csv_bytes(summary, value_col="mean")
-                filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
-
-                fig = create_regional_summary_plot(
-                    summary,
-                    st.session_state.current_parameter,
-                    csv_data=csv_data,
-                    filename=filename,
-                    button_text="📥 Download as CSV",
-                )
-                st.plotly_chart(fig, use_container_width=True)
-
-                with st.expander(t("raw_data")):
-                    st.dataframe(pd.DataFrame(summary))
-
-            # Display the chart if we have data
-            if st.session_state.regional_summary_data:
-                summary = st.session_state.regional_summary_data
-                csv_data = to_csv_bytes(summary, value_col="mean")
-                filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
-
-                fig = create_regional_summary_plot(
-                    summary,
-                    st.session_state.current_parameter,
-                    csv_data=csv_data,
-                    filename=filename,
-                    button_text="📥 Download as CSV",
-                )
-                st.plotly_chart(fig, use_container_width=True)
-
-                with st.expander(t("raw_data")):
-                    st.dataframe(pd.DataFrame(summary))
-
-                    # ---- Time Series Analysis (ALWAYS OPEN) ----
-                    st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
-
-                    # Get the current center coordinates for the empty chart
-                    center_lat = float(cfg["center_lat"])
-                    center_lon = float(cfg["center_lon"])
-
-                    # Always show the time series chart
-                    if st.session_state.time_series_data:
-                        clicked_lat = st.session_state.last_clicked["lat"]
-                        clicked_lng = st.session_state.last_clicked["lng"]
-
-                        csv_data = to_csv_bytes(st.session_state.time_series_data)
-                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
-
-                        fig = create_time_series_plot(
-                            st.session_state.time_series_data,
+                        # Compute the summary directly (no try/except)
+                        summary = get_regional_summary(
                             st.session_state.current_parameter,
-                            clicked_lat,
-                            clicked_lng,
-                            csv_data=csv_data,
-                            filename=filename,
+                            tuple(ranged_assets),
+                            int(cfg.get("native_scale_m", 20)),
                         )
+                        if summary:
+                            st.session_state.regional_summary_data = summary
+                        else:
+                            st.session_state.regional_summary_data = []
 
-                        st.plotly_chart(fig, use_container_width=True)
+                # 👇 DEBUG LINE 👇
+                st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
 
-                        with st.expander(t("raw_data")):
-                            st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                    else:
-                        # Show empty chart with click message
-                        fig = create_empty_time_series_plot(
-                            st.session_state.current_parameter,
-                            center_lat,
-                            center_lon
-                        )
-                        st.plotly_chart(fig, use_container_width=True)
+                # Display the chart if we have data
+                if st.session_state.regional_summary_data:
+                    summary = st.session_state.regional_summary_data
+                    csv_data = to_csv_bytes(summary, value_col="mean")
+                    filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+
+                    fig = create_regional_summary_plot(
+                        summary,
+                        st.session_state.current_parameter,
+                        csv_data=csv_data,
+                        filename=filename,
+                        button_text="📥 Download as CSV",
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    with st.expander(t("raw_data")):
+                        st.dataframe(pd.DataFrame(summary))
+
+                # ---- Time Series Analysis (ALWAYS OPEN) ----
+                st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
+
+                # Get the current center coordinates for the empty chart
+                center_lat = float(cfg["center_lat"])
+                center_lon = float(cfg["center_lon"])
+
+                # Always show the time series chart
+                if st.session_state.time_series_data:
+                    clicked_lat = st.session_state.last_clicked["lat"]
+                    clicked_lng = st.session_state.last_clicked["lng"]
+
+                    csv_data = to_csv_bytes(st.session_state.time_series_data)
+                    filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
+
+                    fig = create_time_series_plot(
+                        st.session_state.time_series_data,
+                        st.session_state.current_parameter,
+                        clicked_lat,
+                        clicked_lng,
+                        csv_data=csv_data,
+                        filename=filename,
+                    )
+
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    with st.expander(t("raw_data")):
+                        st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                else:
+                    # Show empty chart with click message
+                    fig = create_empty_time_series_plot(
+                        st.session_state.current_parameter,
+                        center_lat,
+                        center_lon
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
