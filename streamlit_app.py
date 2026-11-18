@@ -2901,6 +2901,9 @@ def main():
     with st.container():
         if not st.session_state.map_generated:
             st.markdown(f"### 📊 {t('statistics')}")
+            
+            # 1. Abstraction Statistics
+            st.markdown(f"**{t('nav_abstraction_mm')}**")
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(t('minimum'), "—")
@@ -2908,11 +2911,37 @@ def main():
                 st.metric(t('maximum'), "—")
             with col3:
                 st.metric(t('mean'), "—")
+                
+            st.markdown("<br>", unsafe_allow_html=True) # Spacer
+            
+            # 2. Recharge Statistics
+            st.markdown(f"**{t('nav_recharge_mm')}**")
+            col4, col5, col6 = st.columns(3)
+            with col4:
+                st.metric(t('minimum'), "—")
+            with col5:
+                st.metric(t('maximum'), "—")
+            with col6:
+                st.metric(t('mean'), "—")
+                
+            st.markdown("<br>", unsafe_allow_html=True) # Spacer
+            
+            # 3. Analysis Statistics
+            st.markdown(f"**{t('nav_analysis')}**")
+            col7, col8, col9 = st.columns(3)
+            with col7:
+                st.metric(t('minimum'), "—")
+            with col8:
+                st.metric(t('maximum'), "—")
+            with col9:
+                st.metric(t('mean'), "—")
+                
         else:
             try:
                 # 50% / 50% split
                 with st.container(key="map_stats_row"):
                     map_col, stats_col = st.columns([1, 1])
+                    # ... rest of your code ...
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
