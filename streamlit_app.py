@@ -3159,7 +3159,6 @@ def main():
                         f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                         unsafe_allow_html=True,
                     )
-                    try:
 
                 # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                 st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
