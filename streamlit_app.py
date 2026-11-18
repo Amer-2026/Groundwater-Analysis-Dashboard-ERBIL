@@ -3197,6 +3197,8 @@ def main():
 
                 # 👇 DEBUG LINE 👇
                 st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
+            if st.session_state.regional_summary_data:
+                st.write("Raw Data:", st.session_state.regional_summary_data)
 
                 # Display the chart if we have data
                 if st.session_state.regional_summary_data:
