@@ -3160,45 +3160,67 @@ def main():
                         unsafe_allow_html=True,
                     )
                     try:
-                        # Use the drawn shape if there is one; otherwise the whole image
-                        selection_geom = selection_to_ee_geometry(
-                            st.session_state.get("current_selection")
-                        )
-                        geom_to_use = selection_geom if selection_geom else ee_image.geometry()
+                    # Use the drawn shape if there is one; otherwise the whole image
+                    selection_geom = selection_to_ee_geometry(
+                        st.session_state.get("current_selection")
+                    )
+                    geom_to_use = selection_geom if selection_geom else ee_image.geometry()
 
-                        stats = ee_image.reduceRegion(
-                            reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
-                            geometry=geom_to_use,
-                            scale=1000,
-                            maxPixels=1e9,
-                        ).getInfo()
-                        prefix = next(
-                            (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
-                        )
+                    stats = ee_image.reduceRegion(
+                        reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                        geometry=geom_to_use,
+                        scale=1000,
+                        maxPixels=1e9,
+                    ).getInfo()
+                    
+                    prefix = next(
+                        (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                    )
+                    
+                    # Store the results in a temporary dictionary
+                    calculated_stats = {
+                        "min": stats.get(f"{prefix}_min"),
+                        "max": stats.get(f"{prefix}_max"),
+                        "mean": stats.get(f"{prefix}_mean")
+                    }
 
-                        min_val = stats.get(f"{prefix}_min")
-                        max_val = stats.get(f"{prefix}_max")
-                        mean_val = stats.get(f"{prefix}_mean")
+                    # Save them to the correct session state based on the parameter
+                    current_p = st.session_state.current_parameter
+                    if "abstraction" in current_p:
+                        st.session_state.stats_abstraction = calculated_stats
+                    elif "recharge" in current_p:
+                        st.session_state.stats_recharge = calculated_stats
+                    elif current_p in ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]:
+                        st.session_state.stats_analysis = calculated_stats
 
-                        with st.container(key="stats_metrics_row"):
-                            stat_cols = st.columns(3)
-                        with stat_cols[0]:
-                            st.metric(
-                                t('minimum'),
-                                f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
-                            )
-                        with stat_cols[1]:
-                            st.metric(
-                                t('maximum'),
-                                f"{max_val:.2f}" if isinstance(max_val, (int, float)) else "N/A",
-                            )
-                        with stat_cols[2]:
-                            st.metric(
-                                t('mean'),
-                                f"{mean_val:.2f}" if isinstance(mean_val, (int, float)) else "N/A",
-                            )
-                    except Exception as e:
-                        st.error(f"{t('error_statistics')}: {str(e)}")
+                    # Display the 3-row comparison table
+                    st.markdown(f"**{t('nav_abstraction_mm')}**")
+                    abs_stats = st.session_state.stats_abstraction
+                    a_cols = st.columns(3)
+                    a_cols[0].metric(t('minimum'), f"{abs_stats['min']:.2f}" if abs_stats and isinstance(abs_stats['min'], (int, float)) else "—")
+                    a_cols[1].metric(t('maximum'), f"{abs_stats['max']:.2f}" if abs_stats and isinstance(abs_stats['max'], (int, float)) else "—")
+                    a_cols[2].metric(t('mean'), f"{abs_stats['mean']:.2f}" if abs_stats and isinstance(abs_stats['mean'], (int, float)) else "—")
+
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.markdown(f"**{t('nav_recharge_mm')}**")
+                    rc_stats = st.session_state.stats_recharge
+                    r_cols = st.columns(3)
+                    r_cols[0].metric(t('minimum'), f"{rc_stats['min']:.2f}" if rc_stats and isinstance(rc_stats['min'], (int, float)) else "—")
+                    r_cols[1].metric(t('maximum'), f"{rc_stats['max']:.2f}" if rc_stats and isinstance(rc_stats['max'], (int, float)) else "—")
+                    r_cols[2].metric(t('mean'), f"{rc_stats['mean']:.2f}" if rc_stats and isinstance(rc_stats['mean'], (int, float)) else "—")
+
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                    st.markdown(f"**{t('nav_analysis')}**")
+                    ana_stats = st.session_state.stats_analysis
+                    an_cols = st.columns(3)
+                    an_cols[0].metric(t('minimum'), f"{ana_stats['min']:.2f}" if ana_stats and isinstance(ana_stats['min'], (int, float)) else "—")
+                    an_cols[1].metric(t('maximum'), f"{ana_stats['max']:.2f}" if ana_stats and isinstance(ana_stats['max'], (int, float)) else "—")
+                    an_cols[2].metric(t('mean'), f"{ana_stats['mean']:.2f}" if ana_stats and isinstance(ana_stats['mean'], (int, float)) else "—")
+
+                except Exception as e:
+                    st.error(f"{t('error_statistics')}: {str(e)}")
 
                 # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                 st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
