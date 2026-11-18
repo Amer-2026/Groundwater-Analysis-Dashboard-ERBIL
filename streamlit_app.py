@@ -2871,6 +2871,10 @@ def main():
         "time_series_data": None,
         "current_country": selected_country,
         "regional_summary_data": None,
+        # 👇 ADD THESE THREE LINES 👇
+        "stats_abstraction": None,
+        "stats_recharge": None,
+        "stats_analysis": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
