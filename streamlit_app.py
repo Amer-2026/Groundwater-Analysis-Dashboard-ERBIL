@@ -3196,7 +3196,7 @@ def main():
                             st.session_state.regional_summary_data = []
 
                 # 👇 DEBUG LINE 👇
-            st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
+                st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
             if st.session_state.regional_summary_data:
                 st.write("Raw Data:", st.session_state.regional_summary_data)
 
