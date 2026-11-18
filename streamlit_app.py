@@ -3161,37 +3161,42 @@ def main():
                     )
                     try:
                     # Use the drawn shape if there is one; otherwise the whole image
-                    selection_geom = selection_to_ee_geometry(
-                        st.session_state.get("current_selection")
-                    )
-                    geom_to_use = selection_geom if selection_geom else ee_image.geometry()
+                        selection_geom = selection_to_ee_geometry(
+                            st.session_state.get("current_selection")
+                        )
+                        geom_to_use = selection_geom if selection_geom else ee_image.geometry()
 
-                    stats = ee_image.reduceRegion(
-                        reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
-                        geometry=geom_to_use,
-                        scale=1000,
-                        maxPixels=1e9,
-                    ).getInfo()
-                    
-                    prefix = next(
-                        (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
-                    )
-                    
-                    # Store the results in a temporary dictionary
-                    calculated_stats = {
-                        "min": stats.get(f"{prefix}_min"),
-                        "max": stats.get(f"{prefix}_max"),
-                        "mean": stats.get(f"{prefix}_mean")
-                    }
+                        stats = ee_image.reduceRegion(
+                            reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                            geometry=geom_to_use,
+                            scale=1000,
+                            maxPixels=1e9,
+                        ).getInfo()
+                        
+                        prefix = next(
+                            (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                        )
+                        
+                        # Store the results in a temporary dictionary
+                        calculated_stats = {
+                            "min": stats.get(f"{prefix}_min"),
+                            "max": stats.get(f"{prefix}_max"),
+                            "mean": stats.get(f"{prefix}_mean")
+                        }
 
-                    # Save them to the correct session state based on the parameter
-                    current_p = st.session_state.current_parameter
-                    if "abstraction" in current_p:
-                        st.session_state.stats_abstraction = calculated_stats
-                    elif "recharge" in current_p:
-                        st.session_state.stats_recharge = calculated_stats
-                    elif current_p in ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]:
-                        st.session_state.stats_analysis = calculated_stats
+                        # Save them to the correct session state based on the parameter
+                        current_p = st.session_state.current_parameter
+                        if "abstraction" in current_p:
+                            st.session_state.stats_abstraction = calculated_stats
+                        elif "recharge" in current_p:
+                            st.session_state.stats_recharge = calculated_stats
+                        elif current_p in ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]:
+                            st.session_state.stats_analysis = calculated_stats
+                            
+                        # Keep the old variables for the right-side display
+                        min_val = calculated_stats["min"]
+                        max_val = calculated_stats["max"]
+                        mean_val = calculated_stats["mean"]
 
                     # Display the 3-row comparison table
                     st.markdown(f"**{t('nav_abstraction_mm')}**")
