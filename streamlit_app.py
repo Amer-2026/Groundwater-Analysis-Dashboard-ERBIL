@@ -900,8 +900,9 @@ def get_regional_summary(parameter, assets, scale):
         mean = img.reduceRegion(
             reducer=ee.Reducer.mean(),
             geometry=img.geometry(),
-            scale=max(scale, 100),  # coarse scale keeps this fast
-            maxPixels=1e9,
+            scale=1000, # 👈 Use a much coarser scale (1km) to prevent memory errors
+            maxPixels=1e12, # 👈 Increase max pixels significantly
+            bestEffort=True # 👈 Let GEE adjust the scale if it runs out of memory
         ).values().get(0)
         return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
 
