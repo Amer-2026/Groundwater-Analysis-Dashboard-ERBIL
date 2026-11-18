@@ -3153,6 +3153,13 @@ def main():
                                         first = coords[0]
                                     st.session_state.last_clicked = {"lat": first[1], "lng": first[0]}
                     try:
+                # ---- RIGHT COLUMN: STATISTICS ----
+                with stats_col:
+                    st.markdown(
+                        f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
+                        unsafe_allow_html=True,
+                    )
+                    try:
                         # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
                             st.session_state.get("current_selection")
