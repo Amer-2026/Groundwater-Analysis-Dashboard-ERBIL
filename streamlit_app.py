@@ -2572,14 +2572,24 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
+        # Hide the black X
+        st.markdown("""
+        <style>
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) [data-baseweb="select"] div[role="button"] {
+            display: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
         abs_options = ["abstraction_mm", "abstraction_m3"]
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
 
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=None, # Shows the placeholder
-            placeholder="🔴 Abstraction", # The text on the button
+            index=None, 
+            placeholder="🔴 Abstraction", 
             key="abs_selector",
             label_visibility="collapsed"
         )
@@ -2594,6 +2604,43 @@ def main():
             
             if new_abs != st.session_state.get("selected_parameter"):
                 st.session_state.selected_parameter = new_abs
+                st.session_state.map_generated = False
+                st.rerun()
+
+    # --- Column 3: Recharge Dropdown ---
+    with nav_col3:
+        # Hide the black X
+        st.markdown("""
+        <style>
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) [data-baseweb="select"] div[role="button"] {
+            display: none !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        rc_options = ["recharge_mm", "recharge_m3"]
+        rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
+
+        selected_rc_label = st.selectbox(
+            "Recharge", 
+            options=rc_labels,
+            index=None, 
+            placeholder="⚪ Recharge", 
+            key="rc_selector",
+            label_visibility="collapsed"
+        )
+
+        mapping_rc = {
+            t("nav_recharge_mm"): "recharge_mm",
+            t("nav_recharge_m3"): "recharge_m3"
+        }
+
+        if selected_rc_label is not None:
+            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
+            
+            if new_rc != st.session_state.get("selected_parameter"):
+                st.session_state.selected_parameter = new_rc
                 st.session_state.map_generated = False
                 st.rerun()
 
