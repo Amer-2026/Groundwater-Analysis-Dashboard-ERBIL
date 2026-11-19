@@ -2644,33 +2644,6 @@ def main():
                 st.session_state.map_generated = False
                 st.rerun()
 
-    # --- Column 3: Recharge Dropdown ---
-    with nav_col3:
-        rc_options = ["recharge_mm", "recharge_m3"]
-        rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
-
-        selected_rc_label = st.selectbox(
-            "Recharge", 
-            options=rc_labels,
-            index=None, # Shows the placeholder
-            placeholder="⚪ Recharge", # The text on the button
-            key="rc_selector",
-            label_visibility="collapsed"
-        )
-
-        mapping_rc = {
-            t("nav_recharge_mm"): "recharge_mm",
-            t("nav_recharge_m3"): "recharge_m3"
-        }
-
-        if selected_rc_label is not None:
-            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
-            
-            if new_rc != st.session_state.get("selected_parameter"):
-                st.session_state.selected_parameter = new_rc
-                st.session_state.map_generated = False
-                st.rerun()
-
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
         ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
