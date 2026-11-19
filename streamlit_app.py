@@ -2368,8 +2368,15 @@ def main():
             fill: #1a0a2e !important;
         }
         /* ===== HIDE THE BLACK X ON ALL SELECTBOXES ===== */
-        div[data-testid="stSelectbox"] button[aria-label="Clear all"] {
+        div[data-testid="stSelectbox"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
+        div[data-testid="stSelectbox"] svg[aria-label="Clear"] {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
         }
     """
     
