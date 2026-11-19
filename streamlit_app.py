@@ -2367,7 +2367,10 @@ def main():
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
         }
-        
+        /* ===== HIDE THE BLACK X ON ALL SELECTBOXES ===== */
+        div[data-testid="stSelectbox"] button[aria-label="Clear all"] {
+            display: none !important;
+        }
     """
     
     # Render the CSS safely
