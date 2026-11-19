@@ -3152,7 +3152,6 @@ def main():
                                     else:
                                         first = coords[0]
                                     st.session_state.last_clicked = {"lat": first[1], "lng": first[0]}
-                    try:
                 # ---- RIGHT COLUMN: STATISTICS ----
                 with stats_col:
                     st.markdown(
