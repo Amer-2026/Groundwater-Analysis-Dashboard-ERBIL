@@ -2534,30 +2534,12 @@ def main():
     # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
-            st.session_state.selected_location = "erbil_shamamk"
+            st.session_state.selected_location = "subnational"
 
-        # Define the internal keys and the visual labels
-        loc_options = [
-            "subnational_header",  # The header
-            "erbil_shamamk",       # The option under it
-            "national_header",     # The second header
-            "duhok", 
-            "hawler", 
-            "sulaimaniy", 
-            "halabja"
-        ]
-        
-        loc_labels = [
-            "▼ Sub-National", 
-            "    Erbil (Shamamk)", 
-            "▼ National", 
-            "    Duhok", 
-            "    Hawler (Erbil)", 
-            "    Sulaimaniy", 
-            "    Halabja"
-        ]
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
 
-        # Display the selectbox with the placeholder
+        # We use index=None and a placeholder to show "📍 Region" on the button
         selected_label = st.selectbox(
             "Region", 
             options=loc_labels,
@@ -2567,25 +2549,17 @@ def main():
             label_visibility="collapsed"
         )
 
-        # Map the visible text back to the internal variable name
         mapping_loc = {
-            "    Erbil (Shamamk)": "erbil_shamamk",
-            "    Duhok": "duhok",
-            "    Hawler (Erbil)": "hawler",
-            "    Sulaimaniy": "sulaimaniy",
-            "    Halabja": "halabja"
+            t("nav_subnational"): "subnational",
+            t("nav_national"): "national"
         }
 
         if selected_label is not None:
-            # Check if they clicked a header
-            if selected_label in ["▼ Sub-National", "▼ National"]:
-                pass # Do nothing if they click a header
-            else:
-                new_location = mapping_loc.get(selected_label, "erbil_shamamk")
-                
-                if new_location != st.session_state.selected_location:
-                    st.session_state.selected_location = new_location
-                    st.rerun()
+            new_location = mapping_loc.get(selected_label, "subnational")
+            
+            if new_location != st.session_state.selected_location:
+                st.session_state.selected_location = new_location
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
