@@ -1255,9 +1255,9 @@ def main():
         }
 
         /* 5. Language (Purple) */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { 
+            background-color: #B429F9 !important; 
+            border: 1px solid #B429F9 !important; 
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
