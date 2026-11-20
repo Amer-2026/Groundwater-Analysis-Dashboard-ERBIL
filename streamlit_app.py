@@ -5,7 +5,7 @@ A single, configurable Streamlit app serving all country deployments
 (Jordan, Iraq, Palestine, ...). Country settings live in config/*.json —
 to add a new country you only add a config file and the GEE assets.
 
-Data: monthly abstraction (mm, m3) and rech arge images stored as
+Data: monthly abstraction (mm, m3) and recharge images stored as
 Google Earth Engine assets named  <parameter>_<YYYY>_<MM>.
 
 Authentication: a GEE service-account key stored in Streamlit secrets
@@ -199,7 +199,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
         "download_csv": "📥 تنزيل بصيغة CSV",
-        "al_summary": "الملخص الشهري الإقليمي",
+        "regional_summary": "الملخص الشهري الإقليمي",
         "compute_summary": "حساب الملخص الإقليمي",
         "summary_help": "متوسط القيمة على كامل منطقة الدراسة لكل شهر (قد يستغرق دقيقة)",
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
@@ -223,11 +223,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
-        "nav_download": "تنزيل",
-        "download_data": "تنزيل البيانات",
-        "download_report": "تنزيل التقرير",
-        "btn_info": "ℹ️ معلومات",
-        "btn_reset": "🔄 إعادة تعيين",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -298,7 +293,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
         "download_csv": "📥 دابەزاندن وەک CSV",
-        "al_summary": "پوختەی مانگانەی ناوچەیی",
+        "regional_summary": "پوختەی مانگانەی ناوچەیی",
         "compute_summary": "ژماردنی پوختەی ناوچەیی",
         "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
         "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
@@ -322,11 +317,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
-        "nav_download": "دابەزاندن",
-        "download_data": "دابەزاندنی داتا",
-        "download_report": "دابەزاندنی ڕاپۆرت",
-        "btn_info": "ℹ️ زانیاری",
-        "btn_reset": "🔄 ڕیسێت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -355,13 +345,7 @@ CONFIG_DIR = APP_DIR / "config"
 
 @st.cache_data
 def load_country_configs():
-    """Load all country config files.
-
-    Looks first in a `config/` folder, then falls back to any *.json file
-    sitting next to the app (a common setup mistake). Only files that look
-    like a country config — i.e. contain a "key" and an "asset_path" — are
-    accepted, so package files like requirements never get mistaken for one.
-    """
+    """Load all country config files."""
     configs = {}
     search_dirs = [CONFIG_DIR, APP_DIR] if CONFIG_DIR.is_dir() else [APP_DIR]
     for folder in search_dirs:
@@ -372,7 +356,7 @@ def load_country_configs():
                 continue
             if isinstance(cfg, dict) and "key" in cfg and "asset_path" in cfg:
                 configs.setdefault(cfg["key"], cfg)
-        if configs:  # stop at the first folder that yielded configs
+        if configs:
             break
     return configs
 
@@ -391,15 +375,11 @@ def initialize_ee():
                 credentials_dict["client_email"],
                 key_data=json.dumps(credentials_dict),
             )
-            # Pass the Cloud project explicitly. Without it the newer
-            # earthengine-api installed on Streamlit Cloud falls back to the
-            # "earthengine-legacy" project and mangles cloud asset paths
-            # (e.g. projects/earthengine-legacy/assets/projects/<id>/...).
             project_id = credentials_dict.get("project_id")
             ee.Initialize(credentials, project=project_id)
         else:
             ee.Initialize()
-        ee.Number(1).getInfo()  # verify the connection actually works
+        ee.Number(1).getInfo()
         return True
     except Exception as e:
         st.error(f"{t('ee_init_error')}: {e}")
@@ -435,7 +415,6 @@ def create_base_map(center_lat, center_lon, zoom):
     m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom,
                    control_scale=True, tiles=None)
 
-    # 1) Satellite — DEFAULT (first added shows on load)
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         attr="Esri",
@@ -444,7 +423,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 2) Streets (OpenStreetMap)
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         attr="OpenStreetMap",
@@ -453,7 +431,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 3) Terrain / topographic
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
         attr="Esri",
@@ -462,7 +439,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 4) Humanitarian (borders + labels — good for reports)
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
         attr="Humanitarian OSM",
@@ -472,47 +448,17 @@ def create_base_map(center_lat, center_lon, zoom):
     ).add_to(m)
 
     Fullscreen(position="topleft", force_separate_button=True).add_to(m)
-    # Drawing tools: Marker, Circle, Rectangle, Polygon, Polyline + Hand pan
     Draw(
         export=False,
         position="topleft",
         draw_options={
-            "polyline": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "weight": 3,
-                }
-            },
-            "polygon": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
-            "rectangle": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
-            "circle": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
+            "polyline": {"shapeOptions": {"color": "#e81cff", "weight": 3}},
+            "polygon": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
+            "rectangle": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
+            "circle": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
             "marker": {},
         },
-        edit_options={
-            "edit": True,
-            "remove": True,
-        },
+        edit_options={"edit": True, "remove": True},
     ).add_to(m)
 
     formatter = "function(num) {return L.Util.formatNum(num, 4) + '°';};"
@@ -525,96 +471,28 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
-    # ===== Inject border CSS INSIDE the map (bypasses iframe restriction) =====
     border_css = """
     <style>
-    .folium-map {
-        border: 4px solid #e81cff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
-    }
-
-    /* ===== Draw toolbar — clean light buttons (native look) ===== */
-    .leaflet-draw-toolbar a {
-        border-radius: 6px !important;
-        margin-bottom: 3px !important;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
-    }
-    .leaflet-draw-toolbar a:hover {
-        box-shadow: 0 0 10px rgba(232, 28, 255, 0.7) !important;
-    }
-    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled {
-        box-shadow: 0 0 12px rgba(232, 28, 255, 0.9) !important;
-        outline: 2px solid #e81cff !important;
-    }
-
-    /* ===== Colored icons — override Folium's default sprites ===== */
-
-    /* Marker tool — RED */
-    a.leaflet-draw-draw-marker {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1515e'><path d='M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Circle tool — PINK */
-    a.leaflet-draw-draw-circle {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B9D' stroke-width='2.5'><circle cx='12' cy='12' r='8'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Rectangle tool — DARK GREY */
-    a.leaflet-draw-draw-rectangle {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b2b2b'><rect x='4' y='6' width='16' height='12'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Polygon tool — BLUE */
-    a.leaflet-draw-draw-polygon {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234263EB'><polygon points='12,3 21,9 17,20 7,20 3,9'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Map cursor — hand (grab) style */
-    .leaflet-container {
-        cursor: grab !important;
-    }
-    .leaflet-container.leaflet-dragging {
-        cursor: grabbing !important;
-    }
-    .leaflet-container.leaflet-grab {
-        cursor: grab !important;
-    }
-    .leaflet-container.leaflet-grabbing {
-        cursor: grabbing !important;
-     /* Delete / Edit tool — use default arrow cursor over shapes */
-    .leaflet-container.leaflet-crosshair,
-    .leaflet-container.leaflet-crosshair .leaflet-interactive,
-    .leaflet-touch .leaflet-bar a,
-    .leaflet-draw-edit-remove + .leaflet-draw-toolbar a,
-    .leaflet-container.leaflet-draw-edit-remove-active,
-    .leaflet-container.leaflet-draw-edit-edit-active,
-    .leaflet-container.leaflet-draw-edit-remove-active .leaflet-interactive,
-    .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
-        cursor: default !important;
-    }
-    
+    .folium-map { border: 4px solid #e81cff !important; border-radius: 12px !important; box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important; }
+    .leaflet-draw-toolbar a { border-radius: 6px !important; margin-bottom: 3px !important; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important; }
+    .leaflet-draw-toolbar a:hover { box-shadow: 0 0 10px rgba(232, 28, 255, 0.7) !important; }
+    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled { box-shadow: 0 0 12px rgba(232, 28, 255, 0.9) !important; outline: 2px solid #e81cff !important; }
+    a.leaflet-draw-draw-marker { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1515e'><path d='M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-circle { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B9D' stroke-width='2.5'><circle cx='12' cy='12' r='8'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-rectangle { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b2b2b'><rect x='4' y='6' width='16' height='12'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-polygon { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234263EB'><polygon points='12,3 21,9 17,20 7,20 3,9'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    .leaflet-container { cursor: grab !important; }
+    .leaflet-container.leaflet-dragging { cursor: grabbing !important; }
+    .leaflet-container.leaflet-grab { cursor: grab !important; }
+    .leaflet-container.leaflet-grabbing { cursor: grabbing !important; }
+    .leaflet-container.leaflet-crosshair, .leaflet-container.leaflet-crosshair .leaflet-interactive, .leaflet-touch .leaflet-bar a, .leaflet-draw-edit-remove + .leaflet-draw-toolbar a, .leaflet-container.leaflet-draw-edit-remove-active, .leaflet-container.leaflet-draw-edit-edit-active, .leaflet-container.leaflet-draw-edit-remove-active .leaflet-interactive, .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive { cursor: default !important; }
+    </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
 
-
     return m
+
+
 def add_ee_layer(map_obj, ee_image, vis_params, name):
     """Add an Earth Engine image as a tile layer on a folium map"""
     map_id_dict = ee_image.getMapId(vis_params)
@@ -656,10 +534,7 @@ UNITS = {
 def get_image_min_max(asset_id):
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    
-    # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
     valid_img = img.updateMask(img.neq(0))
-    
     minmax = valid_img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
@@ -667,26 +542,17 @@ def get_image_min_max(asset_id):
         maxPixels=1e9,
         bestEffort=True
     ).getInfo()
-    
     min_key = next((key for key in minmax if key.endswith("_min")), None)
     max_key = next((key for key in minmax if key.endswith("_max")), None)
-    
     min_val = minmax.get(min_key) if min_key else None
     max_val = minmax.get(max_key) if max_key else None
-    
-    # Fallback to a default range if everything is masked or min==max
     if min_val is None or max_val is None or min_val == max_val:
-        return 0, 100  #  usually falls between 0 and 100 mm
-        
+        return 0, 100
     return min_val, max_val
 
 
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
-    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
-
-    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
-    Larger `scale` (100 m) keeps it fast for areas/lines.
-    """
+    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry."""
     images = _collection_with_dates(assets, parameter)
 
     def compute_mean(img):
@@ -694,7 +560,7 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduce(
+                "value": img.reduceRegion(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -704,7 +570,6 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
         )
 
     results = images.map(compute_mean).getInfo()
-
     processed = []
     for feature in results["features"]:
         props = feature["properties"]
@@ -716,124 +581,98 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
                 }
             )
     processed.sort(key=lambda x: x["date"])
-    return processed 
+    return processed
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_regional_summary(parameter, assets, scale):
+    """Mean value of `parameter` over the whole study area, for every month"""
+    images = _collection_with_dates(assets, parameter)
+
+    def region_mean(img):
+        mean = img.reduceRegion(
+            reducer=ee.Reducer.mean(),
+            geometry=img.geometry(),
+            scale=1000,
+            maxPixels=1e12,
+            bestEffort=True
+        ).values().get(0)
+        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
+
+    results = images.map(region_mean).getInfo()
+    rows = []
+    for feature in results["features"]:
+        props = feature["properties"]
+        if props.get("mean") is not None:
+            rows.append(
+                {
+                    "date": datetime.fromtimestamp(props["date"] / 1000),
+                    "mean": float(props["mean"]),
+                }
+            )
+    rows.sort(key=lambda x: x["date"])
+    return rows
+
 
 def get_vis_params(parameter, asset_id):
-    # 1. Get the palette
     palette = PALETTES.get(parameter, PALETTES["abstraction_mm"])
-    
-    # 2. FORCE the visual range for 
-    if parameter == "":
-        #  is usually small numbers (0 to 100 mm/month)
-        # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
+    if parameter == "recharge_mm":
         return {"min": 0, "max": 100, "palette": palette}
-        
-    # 3. For Abstraction (mm & m3), let it calculate dynamically
     min_val, max_val = get_image_min_max(asset_id)
     return {"min": min_val, "max": max_val, "palette": palette}
+
 
 def selection_to_ee_geometry(selection):
     """Convert a stored drawing (session state) to an Earth Engine Geometry."""
     if not selection:
         return None
-
     geom_type = selection.get("type")
     coords = selection.get("coordinates")
     if not geom_type or not coords:
         return None
-
     try:
         if geom_type == "Point":
             lng, lat = coords[0], coords[1]
             return ee.Geometry.Point([lng, lat]).buffer(100).bounds()
-
         if geom_type == "LineString":
             return ee.Geometry.LineString(coords).buffer(50).bounds()
-
         if geom_type == "Polygon":
             return ee.Geometry.Polygon(coords)
-
         if geom_type == "Rectangle":
             return ee.Geometry.Polygon(coords)
-
         if geom_type == "Circle":
             return ee.Geometry.Polygon(coords)
-
     except Exception as e:
         st.warning(f"Could not convert selection to geometry: {e}")
         return None
-
     return None
 
 
 def add_colormap(m, vis_params, parameter):
-
     """Render a custom HTML legend with title on top, units, and clean styling."""
     unit = UNITS.get(parameter, "")
     title = f"{t(parameter)}" + (f" ({unit})" if unit else "")
-
     palette = vis_params["palette"]
     vmin = vis_params["min"]
     vmax = vis_params["max"]
-
-    # Build a linear-gradient across the palette for the color bar
     n = len(palette)
     stops = ", ".join(
         f"{color} {int(i * 100 / (n - 1))}%"
         for i, color in enumerate(palette)
     )
-
-    # Tick labels: vmin → vmax, evenly spaced
     num_ticks = 5
     tick_values = [vmin + (vmax - vmin) * i / (num_ticks - 1) for i in range(num_ticks)]
     tick_labels = "".join(
         f'<span style="flex:1; text-align:center;">{v:,.0f}</span>'
         for v in tick_values
     )
-
     legend_html = f"""
-    <div style="
-        position: absolute;
-        bottom: 30px;
-        right: 20px;
-        background: rgba(14, 17, 23, 0.98);
-        border: 2px solid rgba(180, 41, 249, 0.8);
-        border-radius: 10px;
-        padding: 12px 16px;
-        min-width: 260px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-        z-index: 999;
-        font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-    ">
-        <div style="
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 10px;
-            text-align: left;
-            letter-spacing: 0.2px;
-        ">{title}</div>
-        <div style="
-            height: 14px;
-            border-radius: 3px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: linear-gradient(to right, {stops});
-            margin-bottom: 6px;
-        "></div>
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.1px;
-        ">{tick_labels}</div>
+    <div style="position: absolute; bottom: 30px; right: 20px; background: rgba(14, 17, 23, 0.98); border: 2px solid rgba(180, 41, 249, 0.8); border-radius: 10px; padding: 12px 16px; min-width: 260px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); z-index: 999; font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;">
+        <div style="color: #ffffff; font-weight: 700; font-size: 14px; margin-bottom: 10px; text-align: left;">{title}</div>
+        <div style="height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.2); background: linear-gradient(to right, {stops}); margin-bottom: 6px;"></div>
+        <div style="display: flex; justify-content: space-between; color: #ffffff; font-size: 11px; font-weight: 600;">{tick_labels}</div>
     </div>
     """
-
     m.get_root().html.add_child(folium.Element(legend_html))
 
 
@@ -854,77 +693,14 @@ def _collection_with_dates(assets, parameter):
 
 @st.cache_data(ttl=3600)
 def get_time_series_data(point, parameter, assets):
-    """Monthly values of `parameter` at a clicked point. point = [lat, lon]
-
-    Kept for backwards compatibility with Point selections.
-    """
+    """Monthly values of `parameter` at a clicked point. point = [lat, lon]"""
     ee_geom = ee.Geometry.Point([point[1], point[0]])
     return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
 
 
-    def compute_mean(img):
-        return ee.Feature(
-            None,
-            {
-                "date": img.get("system:time_start"),
-                "value": img.reduce(
-                    reducer=ee.Reducer.mean(),
-                    geometry=ee_geom,
-                    scale=scale,
-                    maxPixels=1e9,
-                ).values().get(0),
-            },
-        )
-
-    results = images.map(compute_mean).getInfo()
-
-    processed = []
-    for feature in results["features"]:
-        props = feature["properties"]
-        if props["value"] is not None:
-            processed.append(
-                {
-                    "date": datetime.fromtimestamp(props["date"] / 1000),
-                    "value": float(props["value"]),
-                }
-            )
-    processed.sort(key=lambda x: x["date"])
-    return processed
-
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_regional_summary(parameter, assets, scale):
-    """Mean value of `parameter` over the whole study area, for every month"""
-    images = _collection_with_dates(assets, parameter)
-
-    def region_mean(img):
-        mean = img.reduceRegion(
-            reducer=ee.Reducer.mean(),
-            geometry=img.geometry(),
-            scale=1000, # 👈 Use a much coarser scale (1km) to prevent memory errors
-            maxPixels=1e12, # 👈 Increase max pixels significantly
-            bestEffort=True # 👈 Let GEE adjust the scale if it runs out of memory
-        ).values().get(0)
-        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
-
-    results = images.map(region_mean).getInfo()
-    rows = []
-    for feature in results["features"]:
-        props = feature["properties"]
-        if props.get("mean") is not None:
-            rows.append(
-                {
-                    "date": datetime.fromtimestamp(props["date"] / 1000),
-                    "mean": float(props["mean"]),
-                }
-            )
-    rows.sort(key=lambda x: x["date"])
-    return rows
-
 def create_empty_time_series_plot(parameter, lat, lon):
     """Create an empty time series plot with a message to click on the map"""
     fig = go.Figure()
-
-    # Add a trace with no data to show the chart
     fig.add_trace(
         go.Scatter(
             x=[],
@@ -934,8 +710,6 @@ def create_empty_time_series_plot(parameter, lat, lon):
             marker=dict(size=8, color="#B429F9"),
         )
     )
-
-    # Create a message annotation in the center
     fig.add_annotation(
         x=0.5,
         y=0.5,
@@ -946,7 +720,6 @@ def create_empty_time_series_plot(parameter, lat, lon):
         font=dict(size=16, color="#888888"),
         align="center",
     )
-
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -968,15 +741,12 @@ def create_empty_time_series_plot(parameter, lat, lon):
 def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
     """Create time series plot with optional download button as annotation"""
     import base64
-
     df = pd.DataFrame(time_series_data)
     if df.empty:
         return create_empty_time_series_plot(parameter, lat, lon)
-
     df = df.sort_values("date")
     months = [d.strftime("%Y-%m") for d in df["date"]]
     x_numeric = list(range(len(months)))
-
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
@@ -989,12 +759,9 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             text=months,
         )
     )
-
-    # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">📥 Download as CSV</a>'
-
         fig.add_annotation(
             x=0.98,
             y=0.98,
@@ -1008,7 +775,6 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             xanchor="right",
             yanchor="top",
         )
-
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -1028,9 +794,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
 
 
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
-    """Create al summary bar chart with optional download button as annotation"""
-
-
+    """Create regional summary bar chart with optional download button as annotation"""
     df = pd.DataFrame(summary_data)
     if df.empty:
         fig = go.Figure()
@@ -1041,18 +805,13 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             height=263,
         )
         return fig
-
     months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-
     fig = go.Figure(
         go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
     )
-
-    # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
-
         fig.add_annotation(
             x=0.98,
             y=0.93,
@@ -1066,7 +825,6 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             xanchor="right",
             yanchor="top",
         )
-
     fig.update_layout(
         title=t("summary_title", parameter=t(parameter)),
         xaxis=dict(tickangle=45),
@@ -1082,7 +840,6 @@ def to_csv_bytes(rows, value_col="value"):
     if not df.empty:
         df["date"] = df["date"].dt.strftime("%Y-%m")
     return df.to_csv(index=False).encode("utf-8")
-
 
 
 # ==================== Main app ====================
@@ -1118,8 +875,6 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-
-
     # ============================================================
     # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
     # calls get_ee_assets(). Previously this was further down inside
@@ -1138,7 +893,6 @@ def main():
     # ---- DARK THEME CSS ----
     css_content = """
         <style>
-        /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button { display: none !important; }
         header button { display: none !important; }
         header div:has(button) { display: none !important; }
@@ -1262,9 +1016,8 @@ def main():
         .stats-section { margin-top: 0 !important; }
         .stats-section h3 { margin-top: 0 !important; padding-top: 4px !important; margin-bottom: 10px !important; }
         .time-series-section h3 { margin-top: 25px !important; margin-bottom: 10px !important; }
-        .al-summary-section h3 { margin-top: 25px !important; margin-bottom: 10px !important; }
 
-        /* Dark background for metric cards */
+        /* Metric Cards */
         div[data-testid="stMetric"] {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             padding: 10px !important;
@@ -1301,7 +1054,6 @@ def main():
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
         }
-
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]) {
@@ -1417,7 +1169,6 @@ def main():
     </style>
     """
     
-    # Render the CSS safely
     st.markdown(css_content, unsafe_allow_html=True)
 
     # ---- TOP BAR: language + country ----
@@ -1610,15 +1361,6 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        st.markdown("""
-        <style>
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) button[aria-label="Clear all"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) [data-baseweb="select"] div[role="button"] {
-            display: none !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
         abs_options = ["abstraction_mm", "abstraction_m3"]
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
 
@@ -1646,15 +1388,6 @@ def main():
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        st.markdown("""
-        <style>
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) button[aria-label="Clear all"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) [data-baseweb="select"] div[role="button"] {
-            display: none !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
         rc_options = ["recharge_mm", "recharge_m3"]
         rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
 
@@ -2248,8 +1981,6 @@ def main():
                                 st.session_state.regional_summary_data = summary
                             else:
                                 st.session_state.regional_summary_data = []
-
-                    st.write("Debug - Summary Data Length:", len(st.session_state.regional_summary_data) if st.session_state.regional_summary_data else 0)
 
                     if st.session_state.regional_summary_data:
                         summary = st.session_state.regional_summary_data
