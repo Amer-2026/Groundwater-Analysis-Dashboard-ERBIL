@@ -1147,7 +1147,7 @@ def main():
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
         div[class*="st-key-lang_wrap"] input { font-weight: 700 !important; font-size: 14px !important; color: #ffffff !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { background-color: #a8f368 !important; border: 1px solid #a8f368 !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; box-shadow: none !important; }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { background-color: #B429F9 !important; border: 1px solid #B429F9 !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; box-shadow: none !important; }
         div[class*="st-key-lang_wrap"] input::placeholder { color: #1a0a2e !important; font-weight: 700 !important; opacity: 1 !important; }
         div[class*="st-key-lang_wrap"] input { color: #1a0a2e !important; font-weight: 700 !important; }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * { color: #ffffff !important; fill: #ffffff !important; }
