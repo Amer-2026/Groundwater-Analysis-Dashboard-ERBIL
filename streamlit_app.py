@@ -1412,7 +1412,7 @@ def main():
             "Info",
             options=info_labels,
             index=None,
-            placeholder="ℹ️ Info",
+            placeholder=t("btn_info"),
             key="info_selector",
             label_visibility="collapsed"
         )
