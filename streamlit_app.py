@@ -1254,24 +1254,6 @@ def main():
             opacity: 1 !important;
         }
 
-        /* 5. Language (Purple) */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { 
-            background-color: #a8f368 !important; 
-            border: 1px solid #a8f368 !important; 
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-        }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-        }
-        div[class*="st-key-lang_wrap"] input::placeholder {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
     </style>
     """
     
