@@ -1142,16 +1142,39 @@ def main():
         div[class*="st-key-reset_btn"] button:hover { background-color: #9a22d9 !important; }
         div[class*="st-key-reset_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
 
-        /* Language Button */
-        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div { background-color: transparent !important; border: none !important; border-radius: 8px !important; padding: 0 !important; margin: 0 !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] input { font-weight: 700 !important; font-size: 14px !important; color: #ffffff !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { background-color: #B429F9 !important; border: 1px solid #B429F9 !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; box-shadow: none !important; }
-        div[class*="st-key-lang_wrap"] input::placeholder { color: #1a0a2e !important; font-weight: 700 !important; opacity: 1 !important; }
-        div[class*="st-key-lang_wrap"] input { color: #1a0a2e !important; font-weight: 700 !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * { color: #ffffff !important; fill: #ffffff !important; }
-        div[class*="st-key-lang_wrap"] > div { border-radius: 8px !important; overflow: hidden !important; }
+        /* Language Button (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
 
         /* Bold Fonts */
         div[class*="st-key-info_btn"] button p,
