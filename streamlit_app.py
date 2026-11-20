@@ -1276,7 +1276,40 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-
+        /* ===== REGION SELECTBOX (Purple & Bold) ===== */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
+        }
     </style>
     """
     
