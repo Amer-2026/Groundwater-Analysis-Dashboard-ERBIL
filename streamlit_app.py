@@ -75,7 +75,7 @@ TRANSLATIONS = {
 - 🌍 **Interactive Visualization**: View monthly groundwater data on an interactive map
 - 📊 **Statistical Analysis**: Access key statistics for the selected parameter
 - 📈 **Time Series Analysis**: Click any location to view historical trends
-- 📥 **Data Export**: Download time series and al summaries as CSV
+- 📥 **Data Export**: Download time series and regional summaries as CSV
 - 🎨 **Customizable Display**: Adjust visualization parameters to your needs
 
 Data sources: FAO WaPOR v3 (actual evapotranspiration), CHIRPS (rainfall),
@@ -125,11 +125,9 @@ For support or more information, please contact the development team.""",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
         "btn_reset": "🔄 Reset",
-        "nav_download": "Download",
         "download_data": "Download Data",
         "download_report": "Download Report",
         "btn_info": "ℹ️ Info",
-        "btn_reset": "🔄 Reset",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -225,6 +223,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
+        "nav_download": "تنزيل",
+        "btn_reset": "🔄 إعادة تعيين",
+        "download_data": "تنزيل البيانات",
+        "download_report": "تنزيل التقرير",
+        "btn_info": "ℹ️ معلومات",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -319,6 +322,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
+        "nav_download": "دابەزاندن",
+        "btn_reset": "🔄 ڕیسێت",
+        "download_data": "دابەزاندنی داتا",
+        "download_report": "دابەزاندنی ڕاپۆرت",
+        "btn_info": "ℹ️ زانیاری",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
