@@ -1877,15 +1877,15 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
             margin-top: 0px !important; 
-            padding-left: 2px !important; 
-            padding-right: 2px !important; 
+            padding-left: 0px !important; 
+            padding-right: 0px !important; 
         }
 
         /* 2. Dark Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 14px !important; /* Keeps text bold and readable */
+            font-size: 13px !important;
         }
         
         /* Force the placeholder text to be bold and black */
@@ -1914,8 +1914,8 @@ def main():
         }
 
         /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "📥 Download" !important;
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important; 
@@ -1925,6 +1925,62 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
             display: none !important;
         }
+        /* Hide the black X (clear button) entirely */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
+            display: none !important;
+        }
+
+        /* 👇 ADD THE NEW INFO CSS HERE 👇 */
+        /* ===== INFO SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+            padding-left: 2px !important; 
+            padding-right: 2px !important; 
+        }
+
+        /* 2. Dark Text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important; 
+        }
+
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
+        /* ... rest of your code ... */
+        
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
         /* 1. The Main Purple Button & Alignment */
@@ -1940,9 +1996,21 @@ def main():
 
         /* 2. White Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #ffffff !important;
+            color: #B429F9  !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        /* Force the placeholder text to be bold and white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* Also force the text directly */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input {
+            color: #ffffff !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow white */
@@ -1968,6 +2036,12 @@ def main():
             background-color: #ffffff !important;
             border-radius: 8px !important;
             padding: 5px !important;
+            min-width: 180px !important; /* 👈 ADD THIS LINE */
+        }
+
+        /* Force the list items to not wrap and fit the new width */
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            white-space: nowrap !important; /* 👈 ADD THIS LINE */
         }
 
         div[data-baseweb="popover"] ul[role="listbox"] li {
@@ -2002,6 +2076,12 @@ def main():
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
@@ -2040,6 +2120,12 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+        /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
@@ -2076,6 +2162,12 @@ def main():
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+                /* Force the placeholder text to be bold and black */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
@@ -2175,6 +2267,14 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
+        /* Force the language text to be bold */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2182,6 +2282,16 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
+        }
+        /* Force the text inside the Language button to be bold and black */
+        div[class*="st-key-lang_wrap"] input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        div[class*="st-key-lang_wrap"] input {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
         }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
@@ -2347,12 +2457,26 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
+    c1, c2, c3, c4, c5, c6 = st.columns([3.2, 0.8, 0.7, 0.7, 0.7, 0.7])
     
-    # Info Button (c3)
+    # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
-        if st.button(t("btn_info"), key="info_btn", use_container_width=True):
-            st.session_state.show_info_modal = True
+        # We use the placeholder trick so the button shows the text instead of "Choose"
+        info_labels = ["📄 Indicators Guide"] 
+        
+        selected_info = st.selectbox(
+            "Info",
+            options=info_labels,
+            index=None, # Leaves the button empty (shows placeholder)
+            placeholder="ℹ️ Info", # The text that shows on the button
+            key="info_selector",
+            label_visibility="collapsed"
+        )
+        
+        # If the user clicks "Indicators Guide", open the PDF
+        if selected_info == "📄 Indicators Guide":
+            pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
+            st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
             
     # Reset Button (c4)
     with c4:
@@ -2363,15 +2487,14 @@ def main():
 
     # NEW Download Button (Copied from Abstraction)
     with c5:
-        # We use a placeholder trick that works perfectly with selectbox
         dl_options = ["download_data", "download_report"]
         dl_labels = [t("download_data"), t("download_report")]
         
         selected_dl_label = st.selectbox(
             "Download",
             options=dl_labels,
-            index=None, # This keeps the button empty by default
-            placeholder=f"📥 {t('nav_download')}", # The text shown on the button
+            index=None, 
+            placeholder=f"📥 {t('nav_download')}", # 👈 THIS uses the translation
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2379,16 +2502,19 @@ def main():
     # Language Selector (c6)
     with c6:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
-        current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
+        
         with st.container(key="lang_wrap"):
             selected_label = st.selectbox(
-                "🌐",
+                "Language",
                 options=list(lang_options.keys()),
-                index=list(lang_options.keys()).index(current_label),
+                index=None, # Empty by default to show placeholder
+                placeholder="🌐 Language", # The text on the button
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
-        if lang_options[selected_label] != st.session_state.lang:
+            
+        # Only trigger if the user actually selects a language
+        if selected_label is not None and lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
             
@@ -2408,129 +2534,157 @@ def main():
     # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
-            st.session_state.selected_location = "subnational"
+            st.session_state.selected_location = "erbil_shamamk"
 
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
+        # Define the internal keys and the visual labels
+        loc_options = [
+            "subnational_header",  # The header
+            "erbil_shamamk",       # The option under it
+            "national_header",     # The second header
+            "duhok", 
+            "hawler", 
+            "sulaimaniy", 
+            "halabja"
+        ]
+        
+        loc_labels = [
+            "▼ Sub-National", 
+            "    Erbil (Shamamk)", 
+            "▼ National", 
+            "    Duhok", 
+            "    Hawler (Erbil)", 
+            "    Sulaimaniy", 
+            "    Halabja"
+        ]
 
-        # Use the exact same widget as the language button
+        # Display the selectbox with the placeholder
         selected_label = st.selectbox(
             "Region", 
             options=loc_labels,
-            index=current_index,
+            index=None, 
+            placeholder="📍 Region", 
             key="region_selector",
             label_visibility="collapsed"
         )
 
-        new_location = loc_options[loc_labels.index(selected_label)]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        # Map the visible text back to the internal variable name
+        mapping_loc = {
+            "    Erbil (Shamamk)": "erbil_shamamk",
+            "    Duhok": "duhok",
+            "    Hawler (Erbil)": "hawler",
+            "    Sulaimaniy": "sulaimaniy",
+            "    Halabja": "halabja"
+        }
+
+        if selected_label is not None:
+            # Check if they clicked a header
+            if selected_label in ["▼ Sub-National", "▼ National"]:
+                pass # Do nothing if they click a header
+            else:
+                new_location = mapping_loc.get(selected_label, "erbil_shamamk")
+                
+                if new_location != st.session_state.selected_location:
+                    st.session_state.selected_location = new_location
+                    st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        # Options for the dropdown
         abs_options = ["abstraction_mm", "abstraction_m3"]
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
-        
-        # Get current state
-        current_abs = st.session_state.selected_parameter
-        if current_abs not in abs_options:
-            current_abs = "abstraction_mm" # Default if something else was selected
-            st.session_state.selected_parameter = current_abs
-            
-        current_abs_idx = abs_options.index(current_abs)
 
-        # Create the selectbox
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=current_abs_idx,
+            index=None, # Shows the placeholder
+            placeholder="🔴 Abstraction", # The text on the button
             key="abs_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        new_abs = abs_options[abs_labels.index(selected_abs_label)]
-        if new_abs != current_abs:
-            st.session_state.selected_parameter = new_abs
-            st.session_state.map_generated = False
-            st.rerun()
+        mapping_abs = {
+            t("nav_abstraction_mm"): "abstraction_mm",
+            t("nav_abstraction_m3"): "abstraction_m3"
+        }
+
+        if selected_abs_label is not None:
+            new_abs = mapping_abs.get(selected_abs_label, "abstraction_mm")
+            
+            if new_abs != st.session_state.get("selected_parameter"):
+                st.session_state.selected_parameter = new_abs
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        # Options for the dropdown
         rc_options = ["recharge_mm", "recharge_m3"]
         rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
-        
-        # Get current state
-        current_rc = st.session_state.selected_parameter
-        if current_rc not in rc_options:
-            current_rc = "recharge_mm" # Default if something else was selected
-            st.session_state.selected_parameter = current_rc
-            
-        current_rc_idx = rc_options.index(current_rc)
 
-        # Create the selectbox
         selected_rc_label = st.selectbox(
             "Recharge", 
             options=rc_labels,
-            index=current_rc_idx,
+            index=None, # Shows the placeholder
+            placeholder="⚪ Recharge", # The text on the button
             key="rc_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        new_rc = rc_options[rc_labels.index(selected_rc_label)]
-        if new_rc != current_rc:
-            st.session_state.selected_parameter = new_rc
-            st.session_state.map_generated = False
-            st.rerun()
+        mapping_rc = {
+            t("nav_recharge_mm"): "recharge_mm",
+            t("nav_recharge_m3"): "recharge_m3"
+        }
+
+        if selected_rc_label is not None:
+            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
+            
+            if new_rc != st.session_state.get("selected_parameter"):
+                st.session_state.selected_parameter = new_rc
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
-        # Swapped Irrigation to be before the Climate header
         ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
         
         ana_labels = [
             t("nav_wsi"),
             t("nav_water_balance"),
             t("nav_irrigation"),
-            f"▼ {t('nav_climate_et')}", # Header
+            f"▼ {t('nav_climate_et')}", 
             f"    {t('nav_aeti')}",
             f"    {t('nav_pet')}",
             f"    {t('nav_precip')}",
             f"    {t('nav_pwl')}"
         ]
 
-        # Find current index (default to WSI)
-        current_ana = st.session_state.get("selected_analysis", "wsi")
-        if current_ana not in ana_options:
-            current_ana = "wsi"
-            st.session_state.selected_analysis = current_ana
-            
-        current_ana_idx = ana_options.index(current_ana)
-
-        # Create the selectbox
+        # Display the selectbox with the placeholder
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=current_ana_idx,
+            index=None, # Shows the placeholder
+            placeholder="📊 Analysis", 
             key="analysis_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        selected_idx = ana_labels.index(selected_ana_label)
-        new_ana = ana_options[selected_idx]
-        
-        # If they click the header, do nothing. Otherwise, update.
-        if new_ana != "climate_header" and new_ana != current_ana:
-            st.session_state.selected_analysis = new_ana
-            st.session_state.selected_parameter = new_ana
-            st.session_state.map_generated = False
-            st.rerun()
+        mapping = {
+            t("nav_wsi"): "wsi",
+            t("nav_water_balance"): "water_balance",
+            t("nav_irrigation"): "irrigation",
+            f"▼ {t('nav_climate_et')}": "climate_header",
+            f"    {t('nav_aeti')}": "aeti",
+            f"    {t('nav_pet')}": "pet",
+            f"    {t('nav_precip')}": "precip",
+            f"    {t('nav_pwl')}": "pwl"
+        }
+
+        if selected_ana_label is not None:
+            new_ana = mapping.get(selected_ana_label, "wsi")
+            
+            if new_ana != "climate_header" and new_ana != st.session_state.get("selected_analysis"):
+                st.session_state.selected_analysis = new_ana
+                st.session_state.selected_parameter = new_ana
+                st.session_state.map_generated = False
+                st.rerun()
 
     # --- START DATE & END DATE ---
     try:
@@ -2559,47 +2713,6 @@ def main():
         if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
-
-    # Info Popup Dialog (Opens PDF in a new tab)
-    @st.dialog("📄 Dashboard Guide", width="large")
-    def show_info_modal():
-        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
-        st.write("Click the button below to open it in a new tab.")
-        
-        # The raw link to your PDF on GitHub
-        # (Make sure this matches your exact repository and file name)
-        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
-        
-        # A styled HTML link that looks like a button and opens in a new tab
-        st.markdown(
-            f'''
-            <a href="{pdf_url}" target="_blank" style="
-                display: block;
-                width: 100%;
-                padding: 10px;
-                background-color: #a8f368;
-                color: #1a0a2e;
-                text-align: center;
-                text-decoration: none;
-                border-radius: 8px;
-                font-weight: bold;
-                font-size: 16px;
-                margin-bottom: 10px;
-            ">
-                📄 Open Dashboard Guide (PDF)
-            </a>
-            ''',
-            unsafe_allow_html=True
-        )
-        
-        # Close button
-        if st.button("Close", use_container_width=True):
-            st.session_state.show_info_modal = False
-            st.rerun()
-
-    # Trigger the Info modal
-    if st.session_state.get("show_info_modal"):
-        show_info_modal()
 
     # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
     if st.session_state.get("active_cal"):
