@@ -124,10 +124,6 @@ For support or more information, please contact the development team.""",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
-        "download_data": "Download Data",
-        "download_report": "Download Report",
-        "btn_info": "ℹ️ Info",
-        "btn_reset": "🔄 Reset",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -223,11 +219,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
-        "nav_download": "تنزيل",
-        "download_data": "تنزيل البيانات",
-        "download_report": "تنزيل التقرير",
-        "btn_info": "ℹ️ معلومات",
-        "btn_reset": "🔄 إعادة تعيين",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -322,11 +313,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
-        "nav_download": "دابەزاندن",
-        "download_data": "دابەزاندنی داتا",
-        "download_report": "دابەزاندنی ڕاپۆرت",
-        "btn_info": "ℹ️ زانیاری",
-        "btn_reset": "🔄 ڕیسێت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1430,8 +1416,7 @@ def main():
         }
 
         /* Hide Streamlit's default download button (now embedded in chart) */
-        /* But keep it visible inside the Info modal */
-        .stDownloadButton:not(div[data-testid="stDialog"] .stDownloadButton) {
+        .stDownloadButton {
             display: none !important;
         }
 
@@ -1866,121 +1851,43 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-       /* ===== DOWNLOAD SELECTBOX (Green) ===== */
+        /* ===== ULTIMATE FIX FOR POPOVER BUTTONS ===== */
         
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
+        /* 1. Force the background to be exactly #a8f368 */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
             background-color: #a8f368 !important;
+            background: #a8f368 !important;
             border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
+            border-radius: 8px !important;
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
+            padding: 0 10px !important;
             box-shadow: none !important;
-            margin-top: 0px !important; 
-            padding-left: 0px !important; 
-            padding-right: 0px !important; 
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
         }
 
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
+        /* 2. Force all text and icons inside to be black */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] *,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] span {
             color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 13px !important;
-        }
-        
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-
-        /* Fix the white box */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
             fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-
-        /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "ℹ️ Info" !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important; 
-        }
-
-        /* Hide the black X (clear button) entirely */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
-            display: none !important;
-        }
-        /* Hide the black X (clear button) entirely */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
-            display: none !important;
-        }
-
-        /* 👇 ADD THE NEW INFO CSS HERE 👇 */
-        /* ===== INFO SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-            padding-left: 2px !important; 
-            padding-right: 2px !important; 
-        }
-
-        /* 2. Dark Text */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
+            font-weight: 600 !important;
             font-size: 14px !important;
         }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div div {
-            background-color: transparent !important;
-        }
 
-        /* 3. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:active {
-            background-color: #8fd154 !important; 
+        /* 3. Hover, Focus, Active states (to prevent the black flash) */
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
+        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
+            background-color: #8fd154 !important;
+            background: #8fd154 !important;
             border-color: #8fd154 !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
-
-        /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "ℹ️ Info" !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important; 
-        }
-
-        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
-        /* ... rest of your code ... */
-        
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
         /* 1. The Main Purple Button & Alignment */
@@ -2024,12 +1931,6 @@ def main():
             background-color: #ffffff !important;
             border-radius: 8px !important;
             padding: 5px !important;
-            min-width: 180px !important; /* 👈 ADD THIS LINE */
-        }
-
-        /* Force the list items to not wrap and fit the new width */
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            white-space: nowrap !important; /* 👈 ADD THIS LINE */
         }
 
         div[data-baseweb="popover"] ul[role="listbox"] li {
@@ -2237,14 +2138,6 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
-        /* Force the language text to be bold */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] input {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2252,16 +2145,6 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-        }
-        /* Force the text inside the Language button to be bold and black */
-        div[class*="st-key-lang_wrap"] input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        div[class*="st-key-lang_wrap"] input {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
         }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
@@ -2315,46 +2198,6 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
-               div[class*="st-key-lang_wrap"] span {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-
-        /* 2. Style the buttons inside the popover to look like plain text items */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button,
-        div[data-baseweb="popover"] button {
-            background-color: transparent !important; /* Removes the green */
-            background: transparent !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            border-radius: 6px !important;
-            padding: 10px 15px !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            text-align: left !important;
-            justify-content: flex-start !important; 
-            height: auto !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-        }
-
-        /* 3. Hover effect (Light Grey) */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button:hover,
-        div[data-baseweb="popover"] button:hover {
-            background-color: #f0f2f6 !important;
-            color: #1a0a2e !important;
-        }
-
-        /* 4. Force the text inside the buttons to be dark */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button *,
-        div[data-baseweb="popover"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-        
     """
     
     # Render the CSS safely
@@ -2427,64 +2270,39 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5, c6 = st.columns([3.2, 0.8, 0.7, 0.7, 0.7, 0.7])
+    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
     
-    # Info Dropdown (Matches Abstraction/Recharge)
+    # Info Button (c3)
     with c3:
-        # We use the placeholder trick so the button shows the text instead of "Choose"
-        info_labels = ["📄 Indicators Guide"] 
-        
-        selected_info = st.selectbox(
-            "Info",
-            options=info_labels,
-            index=None, # Leaves the button empty (shows placeholder)
-            placeholder="ℹ️ Info", # The text that shows on the button
-            key="info_selector",
-            label_visibility="collapsed"
-        )
-        
-        # If the user clicks "Indicators Guide", open the PDF
-        if selected_info == "📄 Indicators Guide":
-            pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
-            st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
+        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+            st.session_state.show_info_modal = True
             
     # Reset Button (c4)
     with c4:
-        if st.button(t("btn_reset"), key="reset_btn", use_container_width=True):
+        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (Copied from Abstraction)
+    # NEW Download Button (c5)
     with c5:
-        dl_options = ["download_data", "download_report"]
-        dl_labels = [t("download_data"), t("download_report")]
-        
-        selected_dl_label = st.selectbox(
-            "Download",
-            options=dl_labels,
-            index=None, 
-            placeholder=f"📥 {t('nav_download')}", # 👈 THIS uses the translation
-            key="download_selector",
-            label_visibility="collapsed"
-        )
+        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
+            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
+            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
             
     # Language Selector (c6)
     with c6:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
-        
+        current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         with st.container(key="lang_wrap"):
             selected_label = st.selectbox(
-                "Language",
+                "🌐",
                 options=list(lang_options.keys()),
-                index=None, # Empty by default to show placeholder
-                placeholder="🌐 Language", # The text on the button
+                index=list(lang_options.keys()).index(current_label),
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
-            
-        # Only trigger if the user actually selects a language
-        if selected_label is not None and lang_options[selected_label] != st.session_state.lang:
+        if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
             
@@ -2655,6 +2473,10 @@ def main():
         if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
+
+    # Trigger the Info modal
+    if st.session_state.get("show_info_modal"):
+        show_info_modal()
 
     # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
     if st.session_state.get("active_cal"):
