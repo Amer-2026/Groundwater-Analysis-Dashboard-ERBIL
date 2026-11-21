@@ -1996,21 +1996,9 @@ def main():
 
         /* 2. White Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #B429F9  !important;
+            color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
-        }
-        /* Force the placeholder text to be bold and white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-
-        /* Also force the text directly */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input {
-            color: #ffffff !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow white */
@@ -2077,12 +2065,6 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div svg {
@@ -2120,12 +2102,6 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
@@ -2162,12 +2138,6 @@ def main():
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
-        }
-                /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
         }
         
         /* Fix the white box: Make the background transparent, but keep the arrow dark */
@@ -2538,127 +2508,125 @@ def main():
 
         loc_options = ["subnational", "national"]
         loc_labels = [t("nav_subnational"), t("nav_national")]
+        current_index = loc_options.index(st.session_state.selected_location)
 
-        # We use index=None and a placeholder to show "📍 Region" on the button
+        # Use the exact same widget as the language button
         selected_label = st.selectbox(
             "Region", 
             options=loc_labels,
-            index=None, 
-            placeholder="📍 Region", 
+            index=current_index,
             key="region_selector",
             label_visibility="collapsed"
         )
 
-        mapping_loc = {
-            t("nav_subnational"): "subnational",
-            t("nav_national"): "national"
-        }
-
-        if selected_label is not None:
-            new_location = mapping_loc.get(selected_label, "subnational")
-            
-            if new_location != st.session_state.selected_location:
-                st.session_state.selected_location = new_location
-                st.rerun()
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
+        # Options for the dropdown
         abs_options = ["abstraction_mm", "abstraction_m3"]
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        
+        # Get current state
+        current_abs = st.session_state.selected_parameter
+        if current_abs not in abs_options:
+            current_abs = "abstraction_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_abs
+            
+        current_abs_idx = abs_options.index(current_abs)
 
+        # Create the selectbox
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=None, # Shows the placeholder
-            placeholder="🔴 Abstraction", # The text on the button
+            index=current_abs_idx,
             key="abs_selector",
             label_visibility="collapsed"
         )
 
-        mapping_abs = {
-            t("nav_abstraction_mm"): "abstraction_mm",
-            t("nav_abstraction_m3"): "abstraction_m3"
-        }
-
-        if selected_abs_label is not None:
-            new_abs = mapping_abs.get(selected_abs_label, "abstraction_mm")
-            
-            if new_abs != st.session_state.get("selected_parameter"):
-                st.session_state.selected_parameter = new_abs
-                st.session_state.map_generated = False
-                st.rerun()
+        # Update session state if changed
+        new_abs = abs_options[abs_labels.index(selected_abs_label)]
+        if new_abs != current_abs:
+            st.session_state.selected_parameter = new_abs
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
+        # Options for the dropdown
         rc_options = ["recharge_mm", "recharge_m3"]
         rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
+        
+        # Get current state
+        current_rc = st.session_state.selected_parameter
+        if current_rc not in rc_options:
+            current_rc = "recharge_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_rc
+            
+        current_rc_idx = rc_options.index(current_rc)
 
+        # Create the selectbox
         selected_rc_label = st.selectbox(
             "Recharge", 
             options=rc_labels,
-            index=None, # Shows the placeholder
-            placeholder="⚪ Recharge", # The text on the button
+            index=current_rc_idx,
             key="rc_selector",
             label_visibility="collapsed"
         )
 
-        mapping_rc = {
-            t("nav_recharge_mm"): "recharge_mm",
-            t("nav_recharge_m3"): "recharge_m3"
-        }
-
-        if selected_rc_label is not None:
-            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
-            
-            if new_rc != st.session_state.get("selected_parameter"):
-                st.session_state.selected_parameter = new_rc
-                st.session_state.map_generated = False
-                st.rerun()
+        # Update session state if changed
+        new_rc = rc_options[rc_labels.index(selected_rc_label)]
+        if new_rc != current_rc:
+            st.session_state.selected_parameter = new_rc
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
+        # Swapped Irrigation to be before the Climate header
         ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
         
         ana_labels = [
             t("nav_wsi"),
             t("nav_water_balance"),
             t("nav_irrigation"),
-            f"▼ {t('nav_climate_et')}", 
+            f"▼ {t('nav_climate_et')}", # Header
             f"    {t('nav_aeti')}",
             f"    {t('nav_pet')}",
             f"    {t('nav_precip')}",
             f"    {t('nav_pwl')}"
         ]
 
-        # Display the selectbox with the placeholder
+        # Find current index (default to WSI)
+        current_ana = st.session_state.get("selected_analysis", "wsi")
+        if current_ana not in ana_options:
+            current_ana = "wsi"
+            st.session_state.selected_analysis = current_ana
+            
+        current_ana_idx = ana_options.index(current_ana)
+
+        # Create the selectbox
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=None, # Shows the placeholder
-            placeholder="📊 Analysis", 
+            index=current_ana_idx,
             key="analysis_selector",
             label_visibility="collapsed"
         )
 
-        mapping = {
-            t("nav_wsi"): "wsi",
-            t("nav_water_balance"): "water_balance",
-            t("nav_irrigation"): "irrigation",
-            f"▼ {t('nav_climate_et')}": "climate_header",
-            f"    {t('nav_aeti')}": "aeti",
-            f"    {t('nav_pet')}": "pet",
-            f"    {t('nav_precip')}": "precip",
-            f"    {t('nav_pwl')}": "pwl"
-        }
-
-        if selected_ana_label is not None:
-            new_ana = mapping.get(selected_ana_label, "wsi")
-            
-            if new_ana != "climate_header" and new_ana != st.session_state.get("selected_analysis"):
-                st.session_state.selected_analysis = new_ana
-                st.session_state.selected_parameter = new_ana
-                st.session_state.map_generated = False
-                st.rerun()
+        # Update session state if changed
+        selected_idx = ana_labels.index(selected_ana_label)
+        new_ana = ana_options[selected_idx]
+        
+        # If they click the header, do nothing. Otherwise, update.
+        if new_ana != "climate_header" and new_ana != current_ana:
+            st.session_state.selected_analysis = new_ana
+            st.session_state.selected_parameter = new_ana
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- START DATE & END DATE ---
     try:
