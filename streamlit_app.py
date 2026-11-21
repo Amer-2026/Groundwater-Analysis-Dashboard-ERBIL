@@ -112,7 +112,6 @@ For support or more information, please contact the development team.""",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
         "nav_": "",
-        "nav_region": "Region",
         "nav_subnational": "Sub-National",
         "nav_national": "National",
         "nav_analysis": "Analysis",
@@ -129,7 +128,6 @@ For support or more information, please contact the development team.""",
         "download_data": "Download Data",
         "download_report": "Download Report",
         "btn_info": "ℹ️ Info",
-        "nav_language": "Language",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -214,7 +212,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav__mm": "التغذية الجوفية (مم)",
         "nav__m3": "التغذية الجوفية (م³)",
         "nav_": "المنطقة",
-        "nav_region": "المنطقة",
         "nav_subnational": "دون الوطني",
         "nav_national": "وطني",
         "nav_analysis": "التحليل",
@@ -231,7 +228,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "download_data": "تنزيل البيانات",
         "download_report": "تنزيل التقرير",
         "btn_info": "ℹ️ معلومات",
-        "nav_language": "اللغة",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -315,7 +311,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav__mm": "پڕبوونەوە (مم)",
         "nav__m3": "پڕبوونەوە (م³)",
         "nav_": "ناوچە",
-        "nav_region": "ناوچە",
         "nav_subnational": "ناوچەیی",
         "nav_national": "نیشتمانی",
         "nav_analysis": "شیکردنەوە",
@@ -332,7 +327,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "download_data": "دابەزاندنی داتا",
         "download_report": "دابەزاندنی ڕاپۆرت",
         "btn_info": "ℹ️ زانیاری",
-        "nav_language": "زمان",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -891,6 +885,12 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
+    # ============================================================
+    # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
+    # calls get_ee_assets(). Previously this was further down inside
+    # main(), which caused:
+    #   "Error in get_ee_assets: Earth Engine client library not initialized"
+    # ============================================================
     try:
         if not initialize_ee():
             st.error(t("ee_init_failed"))
@@ -1152,15 +1152,8 @@ def main():
         div[class*="st-key-reset_btn"] button:hover { background-color: #9a22d9 !important; }
         div[class*="st-key-reset_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
 
-        /* Language Button */
-        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
-            background-color: transparent !important;
-            border: none !important;
-            border-radius: 8px !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+        /* Language Button (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
             border-radius: 8px !important; 
@@ -1168,37 +1161,47 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div * {
             color: #1a0a2e !important;
-            fill: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        div[class*="st-key-lang_wrap"] input::placeholder {
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) input::placeholder {
             color: #1a0a2e !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:focus {
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:active {
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
+
+        /* Bold Fonts */
+        div[class*="st-key-info_btn"] button p,
+        div[class*="st-key-reset_btn"] button p,
+        div[class*="st-key-btn_start_cal_top"] button p,
+        div[class*="st-key-btn_end_cal_top"] button p,
+        div[class*="st-key-top_generate"] button p,
+        .stButton > button p { font-weight: 700 !important; font-size: 14px !important; }
 
         /* Hide Black X on All Selectboxes */
         div[data-testid="stSelectbox"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
-        div[data-testid="stSelectbox"] svg[aria-label="Clear"] { 
-            display: none !important; 
-            visibility: hidden !important; 
-            opacity: 0 !important; 
-            width: 0 !important; 
-            height: 0 !important; 
-        }
-
-        /* ===== RESTORE OTHER BUTTON COLORS ===== */
-        /* Abstraction */
+        div[data-testid="stSelectbox"] svg[aria-label="Clear"] { display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0 !important; height: 0 !important; }
+                /* ===== RESTORE BUTTON COLORS & BOLD TEXT ===== */
+        
+        /* 1. Abstraction (Green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
@@ -1206,6 +1209,7 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
+            margin-top: 0px !important; 
         }
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div * {
             color: #1a0a2e !important;
@@ -1218,7 +1222,7 @@ def main():
             opacity: 1 !important;
         }
 
-        /* Recharge */
+        /* 2. Recharge (Green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
@@ -1226,6 +1230,7 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
+            margin-top: 0px !important; 
         }
         div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div * {
             color: #1a0a2e !important;
@@ -1238,7 +1243,7 @@ def main():
             opacity: 1 !important;
         }
 
-        /* Analysis */
+        /* 3. Analysis (Green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
@@ -1246,6 +1251,7 @@ def main():
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
+            margin-top: 0px !important; 
         }
         div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div * {
             color: #1a0a2e !important;
@@ -1258,7 +1264,7 @@ def main():
             opacity: 1 !important;
         }
 
-        /* Info & Download */
+        /* 4. Info & Download (Green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
             background-color: #a8f368 !important;
@@ -1280,14 +1286,40 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-
-        /* Bold Fonts */
-        div[class*="st-key-info_btn"] button p,
-        div[class*="st-key-reset_btn"] button p,
-        div[class*="st-key-btn_start_cal_top"] button p,
-        div[class*="st-key-btn_end_cal_top"] button p,
-        div[class*="st-key-top_generate"] button p,
-        .stButton > button p { font-weight: 700 !important; font-size: 14px !important; }
+        /* ===== REGION SELECTBOX (Purple & Bold) ===== */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
+        }
     </style>
     """
     
@@ -1366,10 +1398,10 @@ def main():
     with c3:
         info_labels = ["📄 Indicators Guide"] 
         selected_info = st.selectbox(
-            t("btn_info"),
+            "Info",
             options=info_labels,
             index=None,
-            placeholder=t("btn_info"),
+            placeholder="ℹ️ Info",
             key="info_selector",
             label_visibility="collapsed"
         )
@@ -1391,7 +1423,7 @@ def main():
         dl_labels = [t("download_data"), t("download_report")]
         
         selected_dl_label = st.selectbox(
-            t("nav_download"),
+            "Download",
             options=dl_labels,
             index=None, 
             placeholder=f"📥 {t('nav_download')}",
@@ -1405,10 +1437,10 @@ def main():
         
         with st.container(key="lang_wrap"):
             selected_label = st.selectbox(
-                t("nav_language"),
+                "Language",
                 options=list(lang_options.keys()),
                 index=None,
-                placeholder=f"🌐 {t('nav_language')}",
+                placeholder="🌐 Language",
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
@@ -1421,13 +1453,13 @@ def main():
 
     # ---- Navigation Buttons (6 columns with date range + view month) ----
     st.markdown("---")
-       nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6, nav_col7 = st.columns([1, 1, 1, 1.2, 1.2, 1.1])
+    nav_col1, nav_col2, nav_col3, nav_col_month, nav_col_range, nav_col6, nav_col7 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
     
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
     if "selected_location" not in st.session_state:
-        st.session_state.selected_location = "erbil_shamamk"
+        st.session_state.selected_location = "subnational"
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
@@ -1455,10 +1487,10 @@ def main():
         ]
 
         selected_label = st.selectbox(
-            t("nav_region"), 
+            "Region", 
             options=loc_labels,
             index=None, 
-            placeholder=f"📍 {t('nav_region')}", 
+            placeholder="📍 Region", 
             key="region_selector",
             label_visibility="collapsed"
         )
@@ -1487,10 +1519,10 @@ def main():
         abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
 
         selected_abs_label = st.selectbox(
-            t("nav_abstraction_mm"), 
+            "Abstraction", 
             options=abs_labels,
             index=None, 
-            placeholder=f"🔴 {t('nav_abstraction_mm')}", 
+            placeholder="🔴 Abstraction", 
             key="abs_selector",
             label_visibility="collapsed"
         )
@@ -1514,10 +1546,10 @@ def main():
         rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
 
         selected_rc_label = st.selectbox(
-            t("nav_recharge_mm"),
+            "Recharge", 
             options=rc_labels,
             index=None, 
-            placeholder=f"⚪ {t('nav_recharge_mm')}", 
+            placeholder="⚪ Recharge", 
             key="rc_selector",
             label_visibility="collapsed"
         )
@@ -1551,10 +1583,10 @@ def main():
         ]
 
         selected_ana_label = st.selectbox(
-            t("nav_analysis"),
+            "Analysis", 
             options=ana_labels,
             index=None,
-            placeholder=f"📊 {t('nav_analysis')}", 
+            placeholder="📊 Analysis", 
             key="analysis_selector",
             label_visibility="collapsed"
         )
