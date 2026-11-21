@@ -1283,8 +1283,11 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-        /* ===== 1. REGION BUTTON (Purple - Language Independent) ===== */
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
+        /* ===== REGION BUTTON (Purple) ===== */
+        /* This targets the button by its label, which works even when translated */
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
@@ -1292,25 +1295,20 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div *,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div *,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        div[class*="st-key-region_selector"] input::placeholder {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
-        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus {
-            background-color: #9a22d9 !important; 
-            border-color: #9a22d9 !important;
-        }
 
-        /* ===== 2. LANGUAGE BUTTON (Green - Language Independent) ===== */
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+        /* ===== LANGUAGE BUTTON (Green) ===== */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="اللغة"]) > div > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="زمان"]) > div > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
             border-radius: 8px !important; 
@@ -1318,21 +1316,14 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div *,
+        div[data-testid="stSelectbox"]:has(input[aria-label="اللغة"]) > div > div *,
+        div[data-testid="stSelectbox"]:has(input[aria-label="زمان"]) > div > div * {
             color: #1a0a2e !important;
             fill: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
-        }
-        div[class*="st-key-lang_wrap"] input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:focus {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
         }
 
         /* ===== 3. HIDE THE BLACK X ===== */
@@ -1466,7 +1457,7 @@ def main():
                 "Language",
                 options=list(lang_options.keys()),
                 index=None,
-                placeholder="🌐 Language",
+                placeholder=f"🌐 {t('nav_region')}", # Or create a new key for 'Language'
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
