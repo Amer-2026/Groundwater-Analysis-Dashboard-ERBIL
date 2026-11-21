@@ -1501,10 +1501,10 @@ def main():
         ]
 
         selected_label = st.selectbox(
-            "Region", 
+            t("nav_region"), 
             options=loc_labels,
             index=None, 
-            placeholder="📍 Region", 
+            placeholder=f"📍 {t('nav_region')}", 
             key="region_selector",
             label_visibility="collapsed"
         )
