@@ -1196,7 +1196,7 @@ def main():
             width: 0 !important; 
             height: 0 !important; 
         }
-                /* ===== RESTORE BUTTON COLORS & BOLD TEXT ===== */
+        /* ===== RESTORE BUTTON COLORS & BOLD TEXT ===== */
         
         /* 1. Abstraction (Green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
@@ -1283,41 +1283,59 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-        /* ===== REGION SELECTBOX (Purple & Bold) ===== */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+        /* ===== 1. REGION BUTTON (Purple - Language Independent) ===== */
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            margin-top: 0px !important;
         }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] * {
             color: #ffffff !important;
+            fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+        div[class*="st-key-region_selector"] input::placeholder {
             color: #ffffff !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
-            fill: #ffffff !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:hover,
+        div[class*="st-key-region_selector"] div[data-baseweb="select"] > div:focus {
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
-                /* Hide the Black X on All Selectboxes */
+
+        /* ===== 2. LANGUAGE BUTTON (Green - Language Independent) ===== */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        div[class*="st-key-lang_wrap"] input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:focus {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+
+        /* ===== 3. HIDE THE BLACK X ===== */
         div[data-testid="stSelectbox"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
