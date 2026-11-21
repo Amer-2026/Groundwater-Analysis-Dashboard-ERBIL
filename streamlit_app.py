@@ -1285,10 +1285,10 @@ def main():
         }
         /* ===== REGION BUTTON (Purple, White Text, No Square) ===== */
         
-        /* 1. Target the button by its label, for all 3 languages */
+        /* 1. The Main Button Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
@@ -1297,43 +1297,41 @@ def main():
             box-shadow: none !important;
         }
         
-        /* 2. Force ALL text inside to be white and bold */
+        /* 2. Text Color */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div *,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div *,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div *,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div * {
             color: #ffffff !important;
             fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
         
-        /* 3. Force the placeholder text to be white */
+        /* 3. Placeholder Text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) input::placeholder {
             color: #ffffff !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }
 
-        /* 4. Fix the White Square (Make the arrow background transparent) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div svg,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div svg,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
-            fill: #ffffff !important;
+        /* 4. NUCLEAR OPTION: Force every single div inside the button to be transparent */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg {
+            background: transparent !important;
             background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div div {
-            background-color: transparent !important;
+            border: none !important;
         }
 
         /* 5. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover {
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div:hover {
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
@@ -1510,7 +1508,7 @@ def main():
                 "Language",
                 options=list(lang_options.keys()),
                 index=None,
-                placeholder=f"🌐 {t('nav_region')}", # Or create a new key for 'Language'
+                placeholder=f"🌐 {t('nav_language')}",
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
