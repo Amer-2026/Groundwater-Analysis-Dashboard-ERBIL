@@ -1198,6 +1198,8 @@ def main():
         }
 
         /* ===== REGION BUTTON (Purple, White Text, No Square) ===== */
+        
+        /* 1. The Main Button Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div {
@@ -1208,6 +1210,8 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
+        
+        /* 2. Text Color */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div *,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div *,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div * {
@@ -1216,6 +1220,8 @@ def main():
             font-weight: 700 !important;
             font-size: 14px !important;
         }
+        
+        /* 3. Placeholder Text */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) input::placeholder,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) input::placeholder {
@@ -1223,16 +1229,26 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
+
+        /* 4. THE ULTIMATE FIX FOR THE WHITE SQUARE */
+        /* Force EVERY div, svg, and button inside the selectbox to be transparent */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] div,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] div,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] button,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg {
-            background: transparent !important;
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] button {
             background-color: transparent !important;
+            background: transparent !important;
             border: none !important;
+            box-shadow: none !important;
+            fill: #ffffff !important;
         }
+
+        /* 5. Hover State */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div:hover,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div:hover {
