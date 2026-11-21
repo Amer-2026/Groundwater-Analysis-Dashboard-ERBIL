@@ -1197,115 +1197,6 @@ def main():
             height: 0 !important; 
         }
 
-        /* ===== REGION BUTTON (Purple, White Text, No Square) ===== */
-        
-        /* 1. The Main Button Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-        }
-        
-        /* 2. Text Color */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div *,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div *,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        
-        /* 3. Placeholder Text */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) input::placeholder {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-
-        /* 4. KILL THE WHITE SQUARE (Target the Open button directly) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] button {
-            background-color: transparent !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        
-        /* Ensure the SVG inside the button is white and has no background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button svg,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] button svg,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] button svg {
-            fill: #ffffff !important;
-            background-color: transparent !important;
-        }
-
-        /* 5. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div:hover {
-            background-color: #9a22d9 !important; 
-            border-color: #9a22d9 !important;
-        }
-                /* 6. KILL THE WHITE SQUARE ON REGION & ALL SELECTBOXES */
-        /* The arrow button itself */
-        div[data-testid="stSelectbox"] [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"] [data-baseweb="select"] [role="button"] {
-            background: transparent !important;
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-            min-width: 0 !important;
-        }
-
-        /* The white inner div Streamlit wraps around the arrow */
-        div[data-testid="stSelectbox"] [data-baseweb="select"] button > div,
-        div[data-testid="stSelectbox"] [data-baseweb="select"] [role="button"] > div,
-        div[data-testid="stSelectbox"] [data-baseweb="select"] svg {
-            background: transparent !important;
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-        /* Region-specific: force white arrow, transparent bg */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] [role="button"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] [role="button"] > div {
-            background: transparent !important;
-            background-color: transparent !important;
-        }
-
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg {
-            fill: #ffffff !important;
-            color: #ffffff !important;
-            background: transparent !important;
-        }
-
-        /* Hide the clear (×) button everywhere */
-        div[data-testid="stSelectbox"] button[aria-label="Clear all"],
-        div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
-        div[data-testid="stSelectbox"] [data-baseweb="select"] [aria-label="Clear all"],
-        div[data-testid="stSelectbox"] svg[aria-label="Clear"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            width: 0 !important;
-            height: 0 !important;
-            min-width: 0 !important;
-            padding: 0 !important;
-        }
-
         /* ===== RESTORE OTHER BUTTON COLORS ===== */
         /* Abstraction */
         div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
@@ -1536,7 +1427,7 @@ def main():
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
     if "selected_location" not in st.session_state:
-        st.session_state.selected_location = "subnational"
+        st.session_state.selected_location = "erbil_shamamk"
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
