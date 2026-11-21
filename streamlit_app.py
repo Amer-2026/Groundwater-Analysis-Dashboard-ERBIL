@@ -1337,6 +1337,26 @@ def main():
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
+                /* THE FINAL FIX FOR THE WHITE SQUARE ARROW */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg path,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] svg path,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg path {
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            fill: #ffffff !important;
+        }
+        
+        /* Also force the wrapper div of the arrow to be transparent */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] [data-testid="stMarkdownContainer"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] [data-testid="stMarkdownContainer"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] [data-testid="stMarkdownContainer"] {
+            background-color: transparent !important;
+        }
 
         /* ===== LANGUAGE BUTTON (Green) ===== */
         div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div,
