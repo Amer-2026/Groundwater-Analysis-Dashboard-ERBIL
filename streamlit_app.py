@@ -1283,8 +1283,9 @@ def main():
             font-weight: 700 !important;
             opacity: 1 !important;
         }
-        /* ===== REGION BUTTON (Purple) ===== */
-        /* This targets the button by its label, which works even when translated */
+        /* ===== REGION BUTTON (Purple, White Text, No Square) ===== */
+        
+        /* 1. Target the button by its label, for all 3 languages */
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
@@ -1296,6 +1297,7 @@ def main():
             box-shadow: none !important;
         }
         
+        /* 2. Force ALL text inside to be white and bold */
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div *,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div *,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
@@ -1303,6 +1305,37 @@ def main():
             fill: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
+        }
+        
+        /* 3. Force the placeholder text to be white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) input::placeholder,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) input::placeholder,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* 4. Fix the White Square (Make the arrow background transparent) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 5. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover {
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
         }
 
         /* ===== LANGUAGE BUTTON (Green) ===== */
