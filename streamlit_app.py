@@ -1230,22 +1230,22 @@ def main():
             opacity: 1 !important;
         }
 
-        /* 4. THE ULTIMATE FIX FOR THE WHITE SQUARE */
-        /* Force EVERY div, svg, and button inside the selectbox to be transparent */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg,
+        /* 4. KILL THE WHITE SQUARE (Target the Open button directly) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] svg,
         div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] button,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] svg,
         div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] button {
             background-color: transparent !important;
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
+        }
+        
+        /* Ensure the SVG inside the button is white and has no background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="المنطقة"]) [data-baseweb="select"] button svg,
+        div[data-testid="stSelectbox"]:has(input[aria-label="ناوچە"]) [data-baseweb="select"] button svg {
             fill: #ffffff !important;
+            background-color: transparent !important;
         }
 
         /* 5. Hover State */
