@@ -1155,8 +1155,8 @@ def main():
         div[class*="st-key-reset_btn"] button:hover { background-color: #9a22d9 !important; }
         div[class*="st-key-reset_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
 
-        /* Language Button (Green) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div {
+        /* Language Button (Green - Language Independent) */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #a8f368 !important;
             border: 1px solid #a8f368 !important;
             border-radius: 8px !important; 
@@ -1165,43 +1165,37 @@ def main():
             box-shadow: none !important;
         }
         
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div * {
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #1a0a2e !important;
+            fill: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
         
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) input::placeholder {
+        div[class*="st-key-lang_wrap"] input::placeholder {
             color: #1a0a2e !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }
         
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:active {
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:hover,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:focus,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div:active {
             background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
         }
-
-        /* Bold Fonts */
-        div[class*="st-key-info_btn"] button p,
-        div[class*="st-key-reset_btn"] button p,
-        div[class*="st-key-btn_start_cal_top"] button p,
-        div[class*="st-key-btn_end_cal_top"] button p,
-        div[class*="st-key-top_generate"] button p,
-        .stButton > button p { font-weight: 700 !important; font-size: 14px !important; }
 
         /* Hide Black X on All Selectboxes */
         div[data-testid="stSelectbox"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
-        div[data-testid="stSelectbox"] svg[aria-label="Clear"] { display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0 !important; height: 0 !important; }
+        div[data-testid="stSelectbox"] svg[aria-label="Clear"] { 
+            display: none !important; 
+            visibility: hidden !important; 
+            opacity: 0 !important; 
+            width: 0 !important; 
+            height: 0 !important; 
+        }
                 /* ===== RESTORE BUTTON COLORS & BOLD TEXT ===== */
         
         /* 1. Abstraction (Green) */
