@@ -1255,6 +1255,56 @@ def main():
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
+                /* 6. KILL THE WHITE SQUARE ON REGION & ALL SELECTBOXES */
+        /* The arrow button itself */
+        div[data-testid="stSelectbox"] [data-baseweb="select"] button,
+        div[data-testid="stSelectbox"] [data-baseweb="select"] [role="button"] {
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            min-width: 0 !important;
+        }
+
+        /* The white inner div Streamlit wraps around the arrow */
+        div[data-testid="stSelectbox"] [data-baseweb="select"] button > div,
+        div[data-testid="stSelectbox"] [data-baseweb="select"] [role="button"] > div,
+        div[data-testid="stSelectbox"] [data-baseweb="select"] svg {
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Region-specific: force white arrow, transparent bg */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] [role="button"],
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] button > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] [role="button"] > div {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg {
+            fill: #ffffff !important;
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+
+        /* Hide the clear (×) button everywhere */
+        div[data-testid="stSelectbox"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] [aria-label="Clear all"],
+        div[data-testid="stSelectbox"] svg[aria-label="Clear"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+            padding: 0 !important;
+        }
 
         /* ===== RESTORE OTHER BUTTON COLORS ===== */
         /* Abstraction */
