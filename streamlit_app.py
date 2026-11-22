@@ -2327,56 +2327,67 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
+        # The text that will appear INSIDE the button
+        loc_options = [
+            "📍 Region: Sub-National", 
+            "📍 Region: National"
+        ]
+        
+        # Map these options to your actual session state values
+        loc_mapping = {
+            "📍 Region: Sub-National": "subnational",
+            "📍 Region: National": "national"
+        }
 
-        # Inject CSS to center the text and keep it purple
+        # Find which one is currently selected
+        current_state = st.session_state.selected_location
+        current_label = "📍 Region: Sub-National" if current_state == "subnational" else "📍 Region: National"
+        current_index = loc_options.index(current_label)
+
+        # Inject CSS specifically to force this button to be purple and centered
         st.markdown("""
         <style>
-        /* 1. Center the text and icon horizontally inside the Region button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] > div {
-            justify-content: center !important;
-        }
-        
-        /* 2. Ensure the text inside remains bold and white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] * {
-            font-weight: 700 !important;
-            color: #ffffff !important;
-            font-size: 14px !important;
-        }
-        
-        /* 3. Force the purple background since the label name changed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div {
+        /* Force Purple Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            margin-top: 0px !important;
         }
         
-        /* 4. Fix hover/focus states so it doesn't flash green */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:active {
+        /* Force Text White, Bold, and Centered */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
+            justify-content: center !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] * {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix Hover States */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # The dropdown with the title INSIDE the label
+        # The Dropdown
         selected_label = st.selectbox(
-            "📍 REGION", 
-            options=loc_labels,
+            "Region", 
+            options=loc_options,
             index=current_index,
             key="region_selector",
             label_visibility="collapsed"
         )
 
-        new_location = loc_options[loc_labels.index(selected_label)]
+        # Update the session state based on the selected label
+        new_location = loc_mapping[selected_label]
         if new_location != st.session_state.selected_location:
             st.session_state.selected_location = new_location
             st.rerun()
