@@ -2327,10 +2327,10 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # Inject CSS to make the popover look exactly like a purple dropdown
+        # Inject CSS to make the popover button purple, and the list items clean
         st.markdown("""
         <style>
-        /* Force the Popover button to look like the purple dropdown */
+        /* 1. Force the Popover button to look like the purple dropdown */
         div[class*="st-key-region_popover"] button {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2344,26 +2344,65 @@ def main():
             align-items: center !important;
         }
         
-        /* Force Text White, Bold */
-        div[class*="st-key-region_popover"] button * {
+        /* Force Text White, Bold on the main button */
+        div[class*="st-key-region_popover"] > button * {
             color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
 
-        /* Hover state */
-        div[class*="st-key-region_popover"] button:hover {
+        /* Hover state for main button */
+        div[class*="st-key-region_popover"] > button:hover {
             background-color: #9a22d9 !important;
             border-color: #9a22d9 !important;
+        }
+
+        /* ========================================== */
+        /* 2. STYLE THE DROPDOWN LIST ITEMS (Image 16 style) */
+        /* ========================================== */
+        
+        /* Target buttons INSIDE the popover content */
+        div[data-testid="stPopoverBody"] button {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 6px !important;
+            height: 38px !important;
+            justify-content: flex-start !important; /* Align text to the left */
+            padding-left: 12px !important;
+        }
+
+        /* Default Text Color for list items */
+        div[data-testid="stPopoverBody"] button * {
+            color: #1a0a2e !important;
+            font-weight: 400 !important; /* Normal weight, not bold */
+            font-size: 14px !important;
+        }
+
+        /* Hover effect (Light Grey) */
+        div[data-testid="stPopoverBody"] button:hover {
+            background-color: #f0f2f6 !important;
+        }
+
+        /* Highlight the ACTIVE selection (Light Grey Background) */
+        div[data-testid="stPopoverBody"] button[kind="primary"] {
+            background-color: #f0f2f6 !important;
+            border: none !important;
+        }
+        
+        /* Make active text slightly bolder to show it's selected */
+        div[data-testid="stPopoverBody"] button[kind="primary"] * {
+            font-weight: 600 !important;
+            color: #1a0a2e !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
         # The Popover Button (acts as the "Region" title)
         with st.popover("📍 Region", use_container_width=True, key="region_popover"):
-            st.markdown("<div style='font-weight: bold; margin-bottom: 10px; color: #1a0a2e;'>Select Area:</div>", unsafe_allow_html=True)
             
             # The actual selectable options inside the popover
+            # We use type="primary" for the active one, and "secondary" for the inactive one
             if st.button("Sub-National", use_container_width=True, type="primary" if st.session_state.selected_location == "subnational" else "secondary"):
                 st.session_state.selected_location = "subnational"
                 st.rerun()
