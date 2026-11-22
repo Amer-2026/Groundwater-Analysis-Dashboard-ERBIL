@@ -2327,70 +2327,50 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # The text that will appear INSIDE the button
-        loc_options = [
-            "📍 Region: Sub-National", 
-            "📍 Region: National"
-        ]
-        
-        # Map these options to your actual session state values
-        loc_mapping = {
-            "📍 Region: Sub-National": "subnational",
-            "📍 Region: National": "national"
-        }
-
-        # Find which one is currently selected
-        current_state = st.session_state.selected_location
-        current_label = "📍 Region: Sub-National" if current_state == "subnational" else "📍 Region: National"
-        current_index = loc_options.index(current_label)
-
-        # Inject CSS specifically to force this button to be purple and centered
+        # Inject CSS to make the popover look exactly like a purple dropdown
         st.markdown("""
         <style>
-        /* Force Purple Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+        /* Force the Popover button to look like the purple dropdown */
+        div[class*="st-key-region_popover"] button {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
+            width: 100% !important;
             box-shadow: none !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
         }
         
-        /* Force Text White, Bold, and Centered */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
-            justify-content: center !important;
-        }
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] * {
+        /* Force Text White, Bold */
+        div[class*="st-key-region_popover"] button * {
             color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
-        
-        /* Fix Hover States */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #9a22d9 !important; 
+
+        /* Hover state */
+        div[class*="st-key-region_popover"] button:hover {
+            background-color: #9a22d9 !important;
             border-color: #9a22d9 !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # The Dropdown
-        selected_label = st.selectbox(
-            "Region", 
-            options=loc_options,
-            index=current_index,
-            key="region_selector",
-            label_visibility="collapsed"
-        )
-
-        # Update the session state based on the selected label
-        new_location = loc_mapping[selected_label]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        # The Popover Button (acts as the "Region" title)
+        with st.popover("📍 Region", use_container_width=True, key="region_popover"):
+            st.markdown("<div style='font-weight: bold; margin-bottom: 10px; color: #1a0a2e;'>Select Area:</div>", unsafe_allow_html=True)
+            
+            # The actual selectable options inside the popover
+            if st.button("Sub-National", use_container_width=True, type="primary" if st.session_state.selected_location == "subnational" else "secondary"):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+                
+            if st.button("National", use_container_width=True, type="primary" if st.session_state.selected_location == "national" else "secondary"):
+                st.session_state.selected_location = "national"
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
