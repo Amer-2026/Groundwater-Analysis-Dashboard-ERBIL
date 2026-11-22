@@ -2327,49 +2327,96 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
-        current_index = loc_options.index(st.session_state.selected_location)
-
-        # Inject CSS to place the "📍 Region" title INSIDE the purple box, but keep the native dropdown menu
+        # Inject CSS to perfectly style the Popover button and the dropdown list
         st.markdown("""
         <style>
-        /* 1. Center the text inside the purple button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
+        /* ========================================== */
+        /* 1. STYLE THE MAIN PURPLE BUTTON            */
+        /* ========================================== */
+        /* Target the popover button securely using its key */
+        div[class*="st-key-region_popover"] button {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            box-shadow: none !important;
+            display: flex !important;
             justify-content: center !important;
+            align-items: center !important;
+            transition: all 0.3s ease !important;
         }
         
-        /* 2. Hide the default selected text (e.g., Sub-National) when the button is closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] input {
-            color: transparent !important;
+        /* Hover state */
+        div[class*="st-key-region_popover"] button:hover {
+            background-color: #9a22d9 !important;
+            border-color: #9a22d9 !important;
+            color: white !important;
         }
         
-        /* 3. Overlay the "📍 Region" title using CSS pseudo-element */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div::before {
-            content: "📍 Region";
+        /* Force text to be white, bold, and standard size */
+        div[class*="st-key-region_popover"] button * {
             color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
-            position: absolute;
-            pointer-events: none; /* Allows clicking through to the dropdown */
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+        }
+
+        /* ========================================== */
+        /* 2. STYLE THE DROPDOWN MENU (Like b1)       */
+        /* ========================================== */
+        /* Target ONLY the buttons inside the popover body */
+        div[data-testid="stPopoverBody"] button {
+            background-color: transparent !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 6px !important;
+            height: 38px !important;
+            justify-content: flex-start !important; /* Align text left */
+            padding-left: 12px !important;
+            width: 100% !important;
+        }
+
+        /* Default Text Color for list items */
+        div[data-testid="stPopoverBody"] button * {
+            color: #1a0a2e !important;
+            font-weight: 400 !important; 
+            font-size: 14px !important;
+        }
+
+        /* Hover effect (Light Grey) */
+        div[data-testid="stPopoverBody"] button:hover {
+            background-color: #f0f2f6 !important;
+        }
+
+        /* Highlight the ACTIVE selection (Light Grey Background) */
+        div[data-testid="stPopoverBody"] button[kind="primary"] {
+            background-color: #f0f2f6 !important;
+            border: none !important;
+        }
+        
+        /* Make active text slightly bolder to show it's selected */
+        div[data-testid="stPopoverBody"] button[kind="primary"] * {
+            font-weight: 600 !important;
+            color: #1a0a2e !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # The Native Selectbox (acts exactly like your image)
-        selected_label = st.selectbox(
-            "Region", 
-            options=loc_labels,
-            index=current_index,
-            key="region_selector",
-            label_visibility="collapsed"
-        )
-
-        new_location = loc_options[loc_labels.index(selected_label)]
-        if new_location != st.session_state.selected_location:
-            st.session_state.selected_location = new_location
-            st.rerun()
+        # The Popover Button
+        with st.popover("📍 Region", use_container_width=True, key="region_popover"):
+            
+            # The actual selectable options inside the popover
+            # We use type="primary" for the active one to trigger our grey background CSS
+            if st.button("Sub-National", use_container_width=True, type="primary" if st.session_state.selected_location == "subnational" else "secondary"):
+                st.session_state.selected_location = "subnational"
+                st.rerun()
+                
+            if st.button("National", use_container_width=True, type="primary" if st.session_state.selected_location == "national" else "secondary"):
+                st.session_state.selected_location = "national"
+                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
