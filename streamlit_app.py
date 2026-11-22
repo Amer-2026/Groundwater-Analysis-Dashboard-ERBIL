@@ -2331,20 +2331,20 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # Wrap in a container so the text sits exactly above the dropdown
-        with st.container(key="region_col_wrap"):
-            
-            # Title label (Bold, White, No action)
-            st.markdown(f'<div class="region-title-label">{t("nav_region")}</div>', unsafe_allow_html=True)
-            
-            # The actual dropdown
-            selected_label = st.selectbox(
-                "Region", 
-                options=loc_labels,
-                index=current_index,
-                key="region_selector",
-                label_visibility="collapsed"
-            )
+        # 1. Add the Title (Bold, White, No action)
+        st.markdown(
+            f"<div style='color: #ffffff; font-weight: 700; font-size: 14px; margin-bottom: 4px;'>{t('nav_region')}</div>", 
+            unsafe_allow_html=True
+        )
+        
+        # 2. The Dropdown (keeping it purple)
+        selected_label = st.selectbox(
+            "Region", 
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
 
         new_location = loc_options[loc_labels.index(selected_label)]
         if new_location != st.session_state.selected_location:
