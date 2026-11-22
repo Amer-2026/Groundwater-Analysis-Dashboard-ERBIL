@@ -2331,25 +2331,27 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # 1. Inject CSS to push the text inside the button to the center
+        # Isolated CSS to pull the label up and keep the button aligned with the others
         st.markdown("""
         <style>
-        /* Center the text and icon inside the Region button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] > div {
-            justify-content: center !important;
-        }
-        /* Ensure the text stays bold and white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] * {
-            font-weight: 700 !important;
+        .region-col-label {
             color: #ffffff !important;
+            font-weight: 700 !important;
             font-size: 14px !important;
+            margin-bottom: -18px !important; /* Pulls the purple button up tight */
+            margin-top: -12px !important;    /* Pushes the text up to align with the other buttons */
+            display: block !important;
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # 2. The Dropdown (Now with the pin emoji in the label)
+        # The white bold text
+        st.markdown(f'<div class="region-col-label">{t("nav_region")}</div>', unsafe_allow_html=True)
+        
+        # The original dropdown (This will trigger your original purple CSS!)
         selected_label = st.selectbox(
-            "📍 Region", 
+            "Region", 
             options=loc_labels,
             index=current_index,
             key="region_selector",
