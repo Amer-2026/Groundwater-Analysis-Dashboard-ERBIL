@@ -2331,15 +2331,25 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # 1. Add the Title (Bold, White, No action)
-        st.markdown(
-            f"<div style='color: #ffffff; font-weight: 700; font-size: 14px; margin-bottom: 4px;'>{t('nav_region')}</div>", 
-            unsafe_allow_html=True
-        )
-        
-        # 2. The Dropdown (keeping it purple)
+        # 1. Inject CSS to push the text inside the button to the center
+        st.markdown("""
+        <style>
+        /* Center the text and icon inside the Region button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] > div {
+            justify-content: center !important;
+        }
+        /* Ensure the text stays bold and white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] * {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        # 2. The Dropdown (Now with the pin emoji in the label)
         selected_label = st.selectbox(
-            "Region", 
+            "📍 Region", 
             options=loc_labels,
             index=current_index,
             key="region_selector",
