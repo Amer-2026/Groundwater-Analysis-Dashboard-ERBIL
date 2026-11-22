@@ -2322,83 +2322,67 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-    # --- Column 1: Region Dropdown (Popover Version) ---
+    # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # CSS to style both the main button and the inside of the menu
+        # 1. The options list. The first item acts as the button title.
+        raw_options = ["📍 Region", t("nav_subnational"), t("nav_national")]
+        
+        # 2. Find which one is currently selected
+        current_label = t("nav_subnational") if st.session_state.selected_location == "subnational" else t("nav_national")
+        
+        # If nothing is selected yet, default to the title
+        if st.session_state.selected_location not in ["subnational", "national"]:
+            current_index = 0
+        else:
+            current_index = raw_options.index(current_label)
+
+        # 3. CSS to make the button purple and center the text
         st.markdown("""
         <style>
-        /* 1. FORCE MAIN BUTTON PURPLE (Exactly like Info/Reset) */
-        div[class*="st-key-region_popover"] > button {
+        /* Center the text in the button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
+            justify-content: center !important;
+        }
+        /* Bold white text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] * {
+            font-weight: 700 !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+        }
+        /* Force Purple Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            box-shadow: none !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            border-radius: 8px !important;
         }
-        /* Hover state */
-        div[class*="st-key-region_popover"] > button:hover {
+        /* Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover {
             background-color: #9a22d9 !important;
             border-color: #9a22d9 !important;
-        }
-        /* White, bold text */
-        div[class*="st-key-region_popover"] > button * {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-
-        /* 2. STYLE THE DROPDOWN MENU (Exactly like the native selectbox) */
-        div[data-testid="stPopoverBody"] button {
-            background-color: transparent !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            border-radius: 6px !important;
-            height: 38px !important;
-            justify-content: flex-start !important; /* Align text left */
-            padding-left: 12px !important;
-        }
-        
-        /* Menu Item Text */
-        div[data-testid="stPopoverBody"] button * {
-            color: #1a0a2e !important;
-            font-weight: 400 !important; 
-            font-size: 14px !important;
-        }
-        
-        /* Menu Item Hover */
-        div[data-testid="stPopoverBody"] button:hover {
-            background-color: #f0f2f6 !important;
-        }
-
-        /* Highlight the currently selected item (light grey) */
-        div[data-testid="stPopoverBody"] button[kind="primary"] {
-            background-color: #f0f2f6 !important;
-        }
-        div[data-testid="stPopoverBody"] button[kind="primary"] * {
-            font-weight: 600 !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # 3. The Popover Button (Displays "📍 Region")
-        with st.popover("📍 Region", use_container_width=True, key="region_popover"):
-            
-            # 4. The list items
-            if st.button(t("nav_subnational"), use_container_width=True, type="primary" if st.session_state.selected_location == "subnational" else "secondary"):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-                
-            if st.button(t("nav_national"), use_container_width=True, type="primary" if st.session_state.selected_location == "national" else "secondary"):
-                st.session_state.selected_location = "national"
+        # 4. The Native Selectbox
+        selected_label = st.selectbox(
+            "Region", 
+            options=raw_options,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
+
+        # 5. Handle the selection and prevent the user from actually selecting "📍 Region"
+        if selected_label == "📍 Region":
+            # If they clicked the title, just rerun to reset it to the current selection
+            st.rerun()
+        else:
+            new_location = "subnational" if selected_label == t("nav_subnational") else "national"
+            if new_location != st.session_state.selected_location:
+                st.session_state.selected_location = new_location
                 st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
