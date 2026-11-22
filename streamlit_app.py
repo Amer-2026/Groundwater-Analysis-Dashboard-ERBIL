@@ -2327,63 +2327,49 @@ def main():
         if "selected_location" not in st.session_state:
             st.session_state.selected_location = "subnational"
 
-        # 1. The options list. The first item acts as the button title.
-        raw_options = ["📍 Region", t("nav_subnational"), t("nav_national")]
-        
-        # 2. Find which one is currently selected
-        current_label = t("nav_subnational") if st.session_state.selected_location == "subnational" else t("nav_national")
-        
-        # If nothing is selected yet, default to the title
-        if st.session_state.selected_location not in ["subnational", "national"]:
-            current_index = 0
-        else:
-            current_index = raw_options.index(current_label)
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
+        current_index = loc_options.index(st.session_state.selected_location)
 
-        # 3. CSS to make the button purple and center the text
+        # Inject CSS to place the "📍 Region" title INSIDE the purple box, but keep the native dropdown menu
         st.markdown("""
         <style>
-        /* Center the text in the button */
+        /* 1. Center the text inside the purple button */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
             justify-content: center !important;
         }
-        /* Bold white text */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] * {
-            font-weight: 700 !important;
+        
+        /* 2. Hide the default selected text (e.g., Sub-National) when the button is closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] input {
+            color: transparent !important;
+        }
+        
+        /* 3. Overlay the "📍 Region" title using CSS pseudo-element */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div::before {
+            content: "📍 Region";
             color: #ffffff !important;
+            font-weight: 700 !important;
             font-size: 14px !important;
-        }
-        /* Force Purple Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
-        }
-        /* Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover {
-            background-color: #9a22d9 !important;
-            border-color: #9a22d9 !important;
+            position: absolute;
+            pointer-events: none; /* Allows clicking through to the dropdown */
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # 4. The Native Selectbox
+        # The Native Selectbox (acts exactly like your image)
         selected_label = st.selectbox(
             "Region", 
-            options=raw_options,
+            options=loc_labels,
             index=current_index,
             key="region_selector",
             label_visibility="collapsed"
         )
 
-        # 5. Handle the selection and prevent the user from actually selecting "📍 Region"
-        if selected_label == "📍 Region":
-            # If they clicked the title, just rerun to reset it to the current selection
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
             st.rerun()
-        else:
-            new_location = "subnational" if selected_label == t("nav_subnational") else "national"
-            if new_location != st.session_state.selected_location:
-                st.session_state.selected_location = new_location
-                st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
