@@ -2322,36 +2322,62 @@ def main():
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
-# --- Column 1: Region Dropdown ---
+    # --- Column 1: Region Dropdown ---
+    with nav_col1:
+        if "selected_location" not in st.session_state:
+            st.session_state.selected_location = "subnational"
 
-    # --- Column 2: Abstraction Dropdown ---
-    with nav_col2:
-        # Options for the dropdown
-        abs_options = ["abstraction_mm", "abstraction_m3"]
-        abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
+        current_index = loc_options.index(st.session_state.selected_location)
+
+        # Inject CSS to center the text and place a fake "📍 Region" title inside
+        st.markdown("""
+        <style>
+        /* 1. Center the text inside the purple button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div {
+            justify-content: center !important;
+        }
+
+        /* 2. Hide the actual selected text (e.g., "Sub-National") visually */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] input {
+            color: transparent !important;
+            opacity: 0 !important;
+        }
         
-        # Get current state
-        current_abs = st.session_state.selected_parameter
-        if current_abs not in abs_options:
-            current_abs = "abstraction_mm" # Default if something else was selected
-            st.session_state.selected_parameter = current_abs
-            
-        current_abs_idx = abs_options.index(current_abs)
+        /* 3. Create the permanent "📍 Region" title ON TOP of the hidden text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] > div::before {
+            content: "📍 Region";
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            position: absolute;
+            pointer-events: none; /* Allows clicking through to open the dropdown */
+            z-index: 10;
+        }
+        
+        /* 4. Ensure the arrow icon stays on the right side so the layout doesn't break */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) [data-baseweb="select"] svg {
+            position: absolute !important;
+            right: 15px !important;
+            fill: #ffffff !important;
+            color: #ffffff !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-        # Create the selectbox
-        selected_abs_label = st.selectbox(
-            "Abstraction", 
-            options=abs_labels,
-            index=current_abs_idx,
-            key="abs_selector",
+        # The native selectbox
+        selected_label = st.selectbox(
+            "Region", 
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
             label_visibility="collapsed"
         )
 
-        # Update session state if changed
-        new_abs = abs_options[abs_labels.index(selected_abs_label)]
-        if new_abs != current_abs:
-            st.session_state.selected_parameter = new_abs
-            st.session_state.map_generated = False
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
             st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
