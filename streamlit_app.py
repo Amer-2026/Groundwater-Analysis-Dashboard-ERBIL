@@ -2331,27 +2331,45 @@ def main():
         loc_labels = [t("nav_subnational"), t("nav_national")]
         current_index = loc_options.index(st.session_state.selected_location)
 
-        # Isolated CSS to pull the label up and keep the button aligned with the others
+        # Inject CSS to center the text and keep it purple
         st.markdown("""
         <style>
-        .region-col-label {
-            color: #ffffff !important;
+        /* 1. Center the text and icon horizontally inside the Region button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] > div {
+            justify-content: center !important;
+        }
+        
+        /* 2. Ensure the text inside remains bold and white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) [data-baseweb="select"] * {
             font-weight: 700 !important;
+            color: #ffffff !important;
             font-size: 14px !important;
-            margin-bottom: -18px !important; /* Pulls the purple button up tight */
-            margin-top: -12px !important;    /* Pushes the text up to align with the other buttons */
-            display: block !important;
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+        }
+        
+        /* 3. Force the purple background since the label name changed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important;
+        }
+        
+        /* 4. Fix hover/focus states so it doesn't flash green */
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="📍 Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
         }
         </style>
         """, unsafe_allow_html=True)
 
-        # The white bold text
-        st.markdown(f'<div class="region-col-label">{t("nav_region")}</div>', unsafe_allow_html=True)
-        
-        # The original dropdown (This will trigger your original purple CSS!)
+        # The dropdown with the title INSIDE the label
         selected_label = st.selectbox(
-            "Region", 
+            "📍 REGION", 
             options=loc_labels,
             index=current_index,
             key="region_selector",
