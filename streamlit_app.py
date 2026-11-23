@@ -124,10 +124,10 @@ For support or more information, please contact the development team.""",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
-        "btn_info": "ℹ️ Info",
-        "btn_reset": "🔄 Reset",
         "download_data": "Download Data",
         "download_report": "Download Report",
+        "btn_info": "ℹ️ Info",
+        "btn_reset": "🔄 Reset",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -223,10 +223,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
-        "btn_info": "ℹ️ معلومات",
-        "btn_reset": "🔄 إعادة تعيين",
+        "nav_download": "تنزيل",
         "download_data": "تنزيل البيانات",
         "download_report": "تنزيل التقرير",
+        "btn_info": "ℹ️ معلومات",
+        "btn_reset": "🔄 إعادة تعيين",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -321,10 +322,11 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
-        "btn_info": "ℹ️ زانیاری",
-        "btn_reset": "🔄 ڕیسێت",
+        "nav_download": "دابەزاندن",
         "download_data": "دابەزاندنی داتا",
         "download_report": "دابەزاندنی ڕاپۆرت",
+        "btn_info": "ℹ️ زانیاری",
+        "btn_reset": "🔄 ڕیسێت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1428,7 +1430,8 @@ def main():
         }
 
         /* Hide Streamlit's default download button (now embedded in chart) */
-        .stDownloadButton {
+        /* But keep it visible inside the Info modal */
+        .stDownloadButton:not(div[data-testid="stDialog"] .stDownloadButton) {
             display: none !important;
         }
 
@@ -2557,53 +2560,40 @@ def main():
             st.session_state.active_cal = "end"
             st.rerun()
 
-    # Info Popup Dialog (Restored with PDF button)
-    @st.dialog("ℹ️ Dashboard Guide & Definitions", width="large")
+    # Info Popup Dialog (Opens PDF in a new tab)
+    @st.dialog("📄 Dashboard Guide", width="large")
     def show_info_modal():
-        # Create tabs for organized reading
-        tab1, tab2, tab3 = st.tabs(["📊 Parameters", "📈 Analysis", "📄 PDF Guide"])
+        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
+        st.write("Click the button below to open it in a new tab.")
         
-        with tab1:
-            st.markdown(f"**{t('nav_abstraction_mm')}**")
-            st.write(t("info_abstraction"))
-            st.divider()
-            st.markdown(f"**{t('nav_recharge_mm')}**")
-            st.write(t("info_recharge"))
-            
-        with tab2:
-            st.markdown(f"**{t('nav_wsi')}**")
-            st.write(t("info_wsi"))
-            st.divider()
-            st.markdown(f"**{t('nav_water_balance')}**")
-            st.write(t("info_water_balance"))
-            st.divider()
-            st.markdown(f"**{t('nav_climate_et')}**")
-            st.write("Climate and Evapotranspiration data from WaPOR v3, including AETI, PET, Precipitation, and PWL.")
-            
-        with tab3:
-            st.markdown(t("about_text"))
-            st.divider()
-            # Add the PDF button here
-            st.markdown("### 📄 Dashboard User Guide")
-            st.write("Click the button below to open the PDF guide, which explains every indicator and feature.")
-            
-            try:
-                with open("dashboard_guide.pdf", "rb") as pdf_file:
-                    PDFbyte = pdf_file.read()
-
-                st.download_button(
-                    label="📥 Download PDF Guide",
-                    data=PDFbyte,
-                    file_name="dashboard_guide.pdf",
-                    mime="application/pdf",
-                    type="primary",
-                    use_container_width=True
-                )
-            except FileNotFoundError:
-                st.warning("The PDF file 'dashboard_guide.pdf' was not found. Please upload it to the app folder.")
-            
+        # The raw link to your PDF on GitHub
+        # (Make sure this matches your exact repository and file name)
+        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
+        
+        # A styled HTML link that looks like a button and opens in a new tab
+        st.markdown(
+            f'''
+            <a href="{pdf_url}" target="_blank" style="
+                display: block;
+                width: 100%;
+                padding: 10px;
+                background-color: #a8f368;
+                color: #1a0a2e;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 16px;
+                margin-bottom: 10px;
+            ">
+                📄 Open Dashboard Guide (PDF)
+            </a>
+            ''',
+            unsafe_allow_html=True
+        )
+        
         # Close button
-        if st.button("Close", type="primary", use_container_width=True):
+        if st.button("Close", use_container_width=True):
             st.session_state.show_info_modal = False
             st.rerun()
 
