@@ -5,7 +5,7 @@ A single, configurable Streamlit app serving all country deployments
 (Jordan, Iraq, Palestine, ...). Country settings live in config/*.json —
 to add a new country you only add a config file and the GEE assets.
 
-Data: monthly abstraction (mm, m3) and rech arge images stored as
+Data: monthly abstraction (mm, m3) and recharge images stored as
 Google Earth Engine assets named  <parameter>_<YYYY>_<MM>.
 
 Authentication: a GEE service-account key stored in Streamlit secrets
@@ -99,10 +99,10 @@ For support or more information, please contact the development team.""",
         "error_parse_date": "Error parsing date from asset",
         "value_label": "Value",
         "download_csv": "📥 Download as CSV",
-        "al_summary": "al Monthly Summary",
-        "compute_summary": "Compute al summary",
+        "regional_summary": "Regional Monthly Summary",
+        "compute_summary": "Compute regional summary",
         "summary_help": "Average value over the whole study area for every month (may take up to a minute)",
-        "summary_title": "al mean {parameter} per month",
+        "summary_title": "Regional mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
@@ -199,7 +199,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
         "download_csv": "📥 تنزيل بصيغة CSV",
-        "al_summary": "الملخص الشهري الإقليمي",
+        "regional_summary": "الملخص الشهري الإقليمي",
         "compute_summary": "حساب الملخص الإقليمي",
         "summary_help": "متوسط القيمة على كامل منطقة الدراسة لكل شهر (قد يستغرق دقيقة)",
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
@@ -223,11 +223,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
-        "nav_download": "تنزيل",
-        "download_data": "تنزيل البيانات",
-        "download_report": "تنزيل التقرير",
-        "btn_info": "ℹ️ معلومات",
-        "btn_reset": "🔄 إعادة تعيين",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -298,7 +293,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
         "download_csv": "📥 دابەزاندن وەک CSV",
-        "al_summary": "پوختەی مانگانەی ناوچەیی",
+        "regional_summary": "پوختەی مانگانەی ناوچەیی",
         "compute_summary": "ژماردنی پوختەی ناوچەیی",
         "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
         "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
@@ -322,11 +317,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
-        "nav_download": "دابەزاندن",
-        "download_data": "دابەزاندنی داتا",
-        "download_report": "دابەزاندنی ڕاپۆرت",
-        "btn_info": "ℹ️ زانیاری",
-        "btn_reset": "🔄 ڕیسێت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -355,13 +345,7 @@ CONFIG_DIR = APP_DIR / "config"
 
 @st.cache_data
 def load_country_configs():
-    """Load all country config files.
-
-    Looks first in a `config/` folder, then falls back to any *.json file
-    sitting next to the app (a common setup mistake). Only files that look
-    like a country config — i.e. contain a "key" and an "asset_path" — are
-    accepted, so package files like requirements never get mistaken for one.
-    """
+    """Load all country config files."""
     configs = {}
     search_dirs = [CONFIG_DIR, APP_DIR] if CONFIG_DIR.is_dir() else [APP_DIR]
     for folder in search_dirs:
@@ -372,7 +356,7 @@ def load_country_configs():
                 continue
             if isinstance(cfg, dict) and "key" in cfg and "asset_path" in cfg:
                 configs.setdefault(cfg["key"], cfg)
-        if configs:  # stop at the first folder that yielded configs
+        if configs:
             break
     return configs
 
@@ -391,15 +375,11 @@ def initialize_ee():
                 credentials_dict["client_email"],
                 key_data=json.dumps(credentials_dict),
             )
-            # Pass the Cloud project explicitly. Without it the newer
-            # earthengine-api installed on Streamlit Cloud falls back to the
-            # "earthengine-legacy" project and mangles cloud asset paths
-            # (e.g. projects/earthengine-legacy/assets/projects/<id>/...).
             project_id = credentials_dict.get("project_id")
             ee.Initialize(credentials, project=project_id)
         else:
             ee.Initialize()
-        ee.Number(1).getInfo()  # verify the connection actually works
+        ee.Number(1).getInfo()
         return True
     except Exception as e:
         st.error(f"{t('ee_init_error')}: {e}")
@@ -435,7 +415,6 @@ def create_base_map(center_lat, center_lon, zoom):
     m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom,
                    control_scale=True, tiles=None)
 
-    # 1) Satellite — DEFAULT (first added shows on load)
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         attr="Esri",
@@ -444,7 +423,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 2) Streets (OpenStreetMap)
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         attr="OpenStreetMap",
@@ -453,7 +431,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 3) Terrain / topographic
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
         attr="Esri",
@@ -462,7 +439,6 @@ def create_base_map(center_lat, center_lon, zoom):
         control=True,
     ).add_to(m)
 
-    # 4) Humanitarian (borders + labels — good for reports)
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
         attr="Humanitarian OSM",
@@ -472,47 +448,17 @@ def create_base_map(center_lat, center_lon, zoom):
     ).add_to(m)
 
     Fullscreen(position="topleft", force_separate_button=True).add_to(m)
-    # Drawing tools: Marker, Circle, Rectangle, Polygon, Polyline + Hand pan
     Draw(
         export=False,
         position="topleft",
         draw_options={
-            "polyline": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "weight": 3,
-                }
-            },
-            "polygon": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
-            "rectangle": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
-            "circle": {
-                "shapeOptions": {
-                    "color": "#e81cff",
-                    "fillColor": "#e81cff",
-                    "fillOpacity": 0.2,
-                    "weight": 3,
-                }
-            },
+            "polyline": {"shapeOptions": {"color": "#e81cff", "weight": 3}},
+            "polygon": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
+            "rectangle": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
+            "circle": {"shapeOptions": {"color": "#e81cff", "fillColor": "#e81cff", "fillOpacity": 0.2, "weight": 3}},
             "marker": {},
         },
-        edit_options={
-            "edit": True,
-            "remove": True,
-        },
+        edit_options={"edit": True, "remove": True},
     ).add_to(m)
 
     formatter = "function(num) {return L.Util.formatNum(num, 4) + '°';};"
@@ -525,96 +471,28 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
-    # ===== Inject border CSS INSIDE the map (bypasses iframe restriction) =====
     border_css = """
     <style>
-    .folium-map {
-        border: 4px solid #e81cff !important;
-        border-radius: 12px !important;
-        box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
-    }
-
-    /* ===== Draw toolbar — clean light buttons (native look) ===== */
-    .leaflet-draw-toolbar a {
-        border-radius: 6px !important;
-        margin-bottom: 3px !important;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
-    }
-    .leaflet-draw-toolbar a:hover {
-        box-shadow: 0 0 10px rgba(232, 28, 255, 0.7) !important;
-    }
-    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled {
-        box-shadow: 0 0 12px rgba(232, 28, 255, 0.9) !important;
-        outline: 2px solid #e81cff !important;
-    }
-
-    /* ===== Colored icons — override Folium's default sprites ===== */
-
-    /* Marker tool — RED */
-    a.leaflet-draw-draw-marker {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1515e'><path d='M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Circle tool — PINK */
-    a.leaflet-draw-draw-circle {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B9D' stroke-width='2.5'><circle cx='12' cy='12' r='8'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Rectangle tool — DARK GREY */
-    a.leaflet-draw-draw-rectangle {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b2b2b'><rect x='4' y='6' width='16' height='12'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Polygon tool — BLUE */
-    a.leaflet-draw-draw-polygon {
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234263EB'><polygon points='12,3 21,9 17,20 7,20 3,9'/></svg>") !important;
-        background-size: 22px 22px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        background-color: #ffffff !important;
-    }
-
-    /* Map cursor — hand (grab) style */
-    .leaflet-container {
-        cursor: grab !important;
-    }
-    .leaflet-container.leaflet-dragging {
-        cursor: grabbing !important;
-    }
-    .leaflet-container.leaflet-grab {
-        cursor: grab !important;
-    }
-    .leaflet-container.leaflet-grabbing {
-        cursor: grabbing !important;
-     /* Delete / Edit tool — use default arrow cursor over shapes */
-    .leaflet-container.leaflet-crosshair,
-    .leaflet-container.leaflet-crosshair .leaflet-interactive,
-    .leaflet-touch .leaflet-bar a,
-    .leaflet-draw-edit-remove + .leaflet-draw-toolbar a,
-    .leaflet-container.leaflet-draw-edit-remove-active,
-    .leaflet-container.leaflet-draw-edit-edit-active,
-    .leaflet-container.leaflet-draw-edit-remove-active .leaflet-interactive,
-    .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive {
-        cursor: default !important;
-    }
-    
+    .folium-map { border: 4px solid #e81cff !important; border-radius: 12px !important; box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important; }
+    .leaflet-draw-toolbar a { border-radius: 6px !important; margin-bottom: 3px !important; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important; }
+    .leaflet-draw-toolbar a:hover { box-shadow: 0 0 10px rgba(232, 28, 255, 0.7) !important; }
+    .leaflet-draw-toolbar a.leaflet-draw-toolbar-button-enabled { box-shadow: 0 0 12px rgba(232, 28, 255, 0.9) !important; outline: 2px solid #e81cff !important; }
+    a.leaflet-draw-draw-marker { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f1515e'><path d='M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-circle { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6B9D' stroke-width='2.5'><circle cx='12' cy='12' r='8'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-rectangle { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232b2b2b'><rect x='4' y='6' width='16' height='12'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    a.leaflet-draw-draw-polygon { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234263EB'><polygon points='12,3 21,9 17,20 7,20 3,9'/></svg>") !important; background-size: 22px 22px !important; background-position: center !important; background-repeat: no-repeat !important; background-color: #ffffff !important; }
+    .leaflet-container { cursor: grab !important; }
+    .leaflet-container.leaflet-dragging { cursor: grabbing !important; }
+    .leaflet-container.leaflet-grab { cursor: grab !important; }
+    .leaflet-container.leaflet-grabbing { cursor: grabbing !important; }
+    .leaflet-container.leaflet-crosshair, .leaflet-container.leaflet-crosshair .leaflet-interactive, .leaflet-touch .leaflet-bar a, .leaflet-draw-edit-remove + .leaflet-draw-toolbar a, .leaflet-container.leaflet-draw-edit-remove-active, .leaflet-container.leaflet-draw-edit-edit-active, .leaflet-container.leaflet-draw-edit-remove-active .leaflet-interactive, .leaflet-container.leaflet-draw-edit-edit-active .leaflet-interactive { cursor: default !important; }
+    </style>
     """
     m.get_root().html.add_child(folium.Element(border_css))
 
-
     return m
+
+
 def add_ee_layer(map_obj, ee_image, vis_params, name):
     """Add an Earth Engine image as a tile layer on a folium map"""
     map_id_dict = ee_image.getMapId(vis_params)
@@ -656,37 +534,25 @@ UNITS = {
 def get_image_min_max(asset_id):
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    
-    # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
     valid_img = img.updateMask(img.neq(0))
-    
-    minmax = valid_img.reduce(
+    minmax = valid_img.reduceRegion(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
         maxPixels=1e9,
         bestEffort=True
     ).getInfo()
-    
     min_key = next((key for key in minmax if key.endswith("_min")), None)
     max_key = next((key for key in minmax if key.endswith("_max")), None)
-    
     min_val = minmax.get(min_key) if min_key else None
     max_val = minmax.get(max_key) if max_key else None
-    
-    # Fallback to a default range if everything is masked or min==max
     if min_val is None or max_val is None or min_val == max_val:
-        return 0, 100  #  usually falls between 0 and 100 mm
-        
+        return 0, 100
     return min_val, max_val
 
 
 def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
-    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry.
-
-    Uses `mean` reducer so it works for Point, LineString, Polygon, etc.
-    Larger `scale` (100 m) keeps it fast for areas/lines.
-    """
+    """Monthly mean of `parameter` over an arbitrary Earth Engine geometry."""
     images = _collection_with_dates(assets, parameter)
 
     def compute_mean(img):
@@ -694,7 +560,7 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduce(
+                "value": img.reduceRegion(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -704,7 +570,6 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
         )
 
     results = images.map(compute_mean).getInfo()
-
     processed = []
     for feature in results["features"]:
         props = feature["properties"]
@@ -716,140 +581,98 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
                 }
             )
     processed.sort(key=lambda x: x["date"])
-    return processed 
-    
-def get_image_min_max(asset_id):
+    return processed
 
-    
-    """Min/max of an image asset (cached — one server call per asset)"""
-    img = ee.Image(asset_id)
-    minmax = img.reduce(
-        reducer=ee.Reducer.minMax(),
-        geometry=img.geometry(),
-        scale=1000,
-        maxPixels=1e9,
-    ).getInfo()
-    min_key = next(key for key in minmax if key.endswith("_min"))
-    max_key = next(key for key in minmax if key.endswith("_max"))
-    return minmax[min_key], minmax[max_key]
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_regional_summary(parameter, assets, scale):
+    """Mean value of `parameter` over the whole study area, for every month"""
+    images = _collection_with_dates(assets, parameter)
+
+    def region_mean(img):
+        mean = img.reduceRegion(
+            reducer=ee.Reducer.mean(),
+            geometry=img.geometry(),
+            scale=1000,
+            maxPixels=1e12,
+            bestEffort=True
+        ).values().get(0)
+        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
+
+    results = images.map(region_mean).getInfo()
+    rows = []
+    for feature in results["features"]:
+        props = feature["properties"]
+        if props.get("mean") is not None:
+            rows.append(
+                {
+                    "date": datetime.fromtimestamp(props["date"] / 1000),
+                    "mean": float(props["mean"]),
+                }
+            )
+    rows.sort(key=lambda x: x["date"])
+    return rows
 
 
 def get_vis_params(parameter, asset_id):
-    # 1. Get the palette
-    palette = PALETTES.get(parameter, PALETTES[""])
-    
-    # 2. FORCE the visual range for 
-    if parameter == "":
-        #  is usually small numbers (0 to 100 mm/month)
-        # Forcing the min to 0 and max to 100 gives a beautiful, visible gradient
+    palette = PALETTES.get(parameter, PALETTES["abstraction_mm"])
+    if parameter == "recharge_mm":
         return {"min": 0, "max": 100, "palette": palette}
-        
-    # 3. For Abstraction (mm & m3), let it calculate dynamically
     min_val, max_val = get_image_min_max(asset_id)
     return {"min": min_val, "max": max_val, "palette": palette}
+
 
 def selection_to_ee_geometry(selection):
     """Convert a stored drawing (session state) to an Earth Engine Geometry."""
     if not selection:
         return None
-
     geom_type = selection.get("type")
     coords = selection.get("coordinates")
     if not geom_type or not coords:
         return None
-
     try:
         if geom_type == "Point":
             lng, lat = coords[0], coords[1]
             return ee.Geometry.Point([lng, lat]).buffer(100).bounds()
-
         if geom_type == "LineString":
             return ee.Geometry.LineString(coords).buffer(50).bounds()
-
         if geom_type == "Polygon":
             return ee.Geometry.Polygon(coords)
-
         if geom_type == "Rectangle":
             return ee.Geometry.Polygon(coords)
-
         if geom_type == "Circle":
             return ee.Geometry.Polygon(coords)
-
     except Exception as e:
         st.warning(f"Could not convert selection to geometry: {e}")
         return None
-
     return None
 
 
 def add_colormap(m, vis_params, parameter):
-
     """Render a custom HTML legend with title on top, units, and clean styling."""
     unit = UNITS.get(parameter, "")
     title = f"{t(parameter)}" + (f" ({unit})" if unit else "")
-
     palette = vis_params["palette"]
     vmin = vis_params["min"]
     vmax = vis_params["max"]
-
-    # Build a linear-gradient across the palette for the color bar
     n = len(palette)
     stops = ", ".join(
         f"{color} {int(i * 100 / (n - 1))}%"
         for i, color in enumerate(palette)
     )
-
-    # Tick labels: vmin → vmax, evenly spaced
     num_ticks = 5
     tick_values = [vmin + (vmax - vmin) * i / (num_ticks - 1) for i in range(num_ticks)]
     tick_labels = "".join(
         f'<span style="flex:1; text-align:center;">{v:,.0f}</span>'
         for v in tick_values
     )
-
     legend_html = f"""
-    <div style="
-        position: absolute;
-        bottom: 30px;
-        right: 20px;
-        background: rgba(14, 17, 23, 0.98);
-        border: 2px solid rgba(180, 41, 249, 0.8);
-        border-radius: 10px;
-        padding: 12px 16px;
-        min-width: 260px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-        z-index: 999;
-        font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-    ">
-        <div style="
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 10px;
-            text-align: left;
-            letter-spacing: 0.2px;
-        ">{title}</div>
-        <div style="
-            height: 14px;
-            border-radius: 3px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: linear-gradient(to right, {stops});
-            margin-bottom: 6px;
-        "></div>
-        <div style="
-            display: flex;
-            justify-content: space-between;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.1px;
-        ">{tick_labels}</div>
+    <div style="position: absolute; bottom: 30px; right: 20px; background: rgba(14, 17, 23, 0.98); border: 2px solid rgba(180, 41, 249, 0.8); border-radius: 10px; padding: 12px 16px; min-width: 260px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); z-index: 999; font-family: 'Source Sans Pro', 'Segoe UI', Arial, sans-serif;">
+        <div style="color: #ffffff; font-weight: 700; font-size: 14px; margin-bottom: 10px; text-align: left;">{title}</div>
+        <div style="height: 14px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.2); background: linear-gradient(to right, {stops}); margin-bottom: 6px;"></div>
+        <div style="display: flex; justify-content: space-between; color: #ffffff; font-size: 11px; font-weight: 600;">{tick_labels}</div>
     </div>
     """
-
     m.get_root().html.add_child(folium.Element(legend_html))
 
 
@@ -870,78 +693,14 @@ def _collection_with_dates(assets, parameter):
 
 @st.cache_data(ttl=3600)
 def get_time_series_data(point, parameter, assets):
-    """Monthly values of `parameter` at a clicked point. point = [lat, lon]
-
-    Kept for backwards compatibility with Point selections.
-    """
+    """Monthly values of `parameter` at a clicked point. point = [lat, lon]"""
     ee_geom = ee.Geometry.Point([point[1], point[0]])
     return _time_series_for_geometry(ee_geom, parameter, assets, scale=30)
-
-
-    def compute_mean(img):
-        return ee.Feature(
-            None,
-            {
-                "date": img.get("system:time_start"),
-                "value": img.reduce(
-                    reducer=ee.Reducer.mean(),
-                    geometry=ee_geom,
-                    scale=scale,
-                    maxPixels=1e9,
-                ).values().get(0),
-            },
-        )
-
-    results = images.map(compute_mean).getInfo()
-
-    processed = []
-    for feature in results["features"]:
-        props = feature["properties"]
-        if props["value"] is not None:
-            processed.append(
-                {
-                    "date": datetime.fromtimestamp(props["date"] / 1000),
-                    "value": float(props["value"]),
-                }
-            )
-    processed.sort(key=lambda x: x["date"])
-    return processed
-
-
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_al_summary(parameter, assets, scale):
-    """Mean value of `parameter` over the whole study area, for every month"""
-    images = _collection_with_dates(assets, parameter)
-
-    def _mean(img):
-        mean = img.reduce(
-            reducer=ee.Reducer.mean(),
-            geometry=img.geometry(),
-            scale=max(scale, 100),  # coarse scale keeps this fast
-            maxPixels=1e9,
-        ).values().get(0)
-        return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
-
-    results = images.map(_mean).getInfo()
-    rows = []
-    for feature in results["features"]:
-        props = feature["properties"]
-        if props.get("mean") is not None:
-            rows.append(
-                {
-                    "date": datetime.fromtimestamp(props["date"] / 1000),
-                    "mean": float(props["mean"]),
-                }
-            )
-    rows.sort(key=lambda x: x["date"])
-    return rows
 
 
 def create_empty_time_series_plot(parameter, lat, lon):
     """Create an empty time series plot with a message to click on the map"""
     fig = go.Figure()
-
-    # Add a trace with no data to show the chart
     fig.add_trace(
         go.Scatter(
             x=[],
@@ -951,8 +710,6 @@ def create_empty_time_series_plot(parameter, lat, lon):
             marker=dict(size=8, color="#B429F9"),
         )
     )
-
-    # Create a message annotation in the center
     fig.add_annotation(
         x=0.5,
         y=0.5,
@@ -963,7 +720,6 @@ def create_empty_time_series_plot(parameter, lat, lon):
         font=dict(size=16, color="#888888"),
         align="center",
     )
-
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -985,15 +741,12 @@ def create_empty_time_series_plot(parameter, lat, lon):
 def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
     """Create time series plot with optional download button as annotation"""
     import base64
-
     df = pd.DataFrame(time_series_data)
     if df.empty:
         return create_empty_time_series_plot(parameter, lat, lon)
-
     df = df.sort_values("date")
     months = [d.strftime("%Y-%m") for d in df["date"]]
     x_numeric = list(range(len(months)))
-
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
@@ -1006,12 +759,9 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             text=months,
         )
     )
-
-    # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">📥 Download as CSV</a>'
-
         fig.add_annotation(
             x=0.98,
             y=0.98,
@@ -1025,7 +775,6 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             xanchor="right",
             yanchor="top",
         )
-
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -1044,10 +793,8 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     return fig
 
 
-def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
-    """Create al summary bar chart with optional download button as annotation"""
-
-
+def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+    """Create regional summary bar chart with optional download button as annotation"""
     df = pd.DataFrame(summary_data)
     if df.empty:
         fig = go.Figure()
@@ -1058,18 +805,13 @@ def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None
             height=263,
         )
         return fig
-
     months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-
     fig = go.Figure(
         go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
     )
-
-    # Create download button as HTML annotation (overlay on chart)
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
-
         fig.add_annotation(
             x=0.98,
             y=0.93,
@@ -1083,7 +825,6 @@ def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None
             xanchor="right",
             yanchor="top",
         )
-
     fig.update_layout(
         title=t("summary_title", parameter=t(parameter)),
         xaxis=dict(tickangle=45),
@@ -1099,7 +840,6 @@ def to_csv_bytes(rows, value_col="value"):
     if not df.empty:
         df["date"] = df["date"].dt.strftime("%Y-%m")
     return df.to_csv(index=False).encode("utf-8")
-
 
 
 # ==================== Main app ====================
@@ -1135,10 +875,6 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-
-
-
-
     # ============================================================
     # ✅ FIX: Initialize Earth Engine FIRST — before any widget that
     # calls get_ee_assets(). Previously this was further down inside
@@ -1157,22 +893,11 @@ def main():
     # ---- DARK THEME CSS ----
     css_content = """
         <style>
-        /* Hide Streamlit Cloud top bar buttons */
-        .stApp > header button {
-            display: none !important;
-        }
-        header button {
-            display: none !important;
-        }
-        header div:has(button) {
-            display: none !important;
-        }
-        header [data-testid="stHeader"] [data-testid="stToolbar"] {
-            display: none !important;
-        }
-        .st-emotion-cache-1h9usn1 {
-            display: none !important;
-        }
+        .stApp > header button { display: none !important; }
+        header button { display: none !important; }
+        header div:has(button) { display: none !important; }
+        header [data-testid="stHeader"] [data-testid="stToolbar"] { display: none !important; }
+        .st-emotion-cache-1h9usn1 { display: none !important; }
         .stApp > header {
             background: transparent !important;
             box-shadow: none !important;
@@ -1180,41 +905,14 @@ def main():
             min-height: 0px !important;
             padding: 0px !important;
         }
-        .stApp {
-            margin-top: 0 !important;
-        }
+        .stApp { margin-top: 0 !important; }
+        .stApp { background-color: #0e1117 !important; }
+        .main .block-container { padding-top: 0rem !important; padding-bottom: 1rem !important; }
+        div[data-testid="stVerticalBlock"] { background-color: #0e1117 !important; }
 
-        /* Dark background for the entire app */
-        .stApp {
-            background-color: #0e1117 !important;
-        }
-
-        /* Remove default padding at the top */
-        .main .block-container {
-            padding-top: 0rem !important;
-            padding-bottom: 1rem !important;
-        }
-
-        /* Dark background for all containers */
-        div[data-testid="stVerticalBlock"] {
-            background-color: #0e1117 !important;
-        }
-
-        /* COSMIC BLOOM BANNER - Static vibrant gradient */
+        /* COSMIC BLOOM BANNER */
         .banner {
-            background: linear-gradient(135deg, 
-                #4a1a8a 0%,
-                #7B2FBE 10%,
-                #26C5F3 20%,
-                #FF9A9E 30%,
-                #FF6B9D 40%,
-                #B429F9 50%,
-                #7b2fbe 60%,
-                #4a1a8a 70%,
-                #2d1b69 80%,
-                #1a0533 90%,
-                #0a0a2e 100%
-            );
+            background: linear-gradient(135deg, #4a1a8a 0%, #7B2FBE 10%, #26C5F3 20%, #FF9A9E 30%, #FF6B9D 40%, #B429F9 50%, #7b2fbe 60%, #4a1a8a 70%, #2d1b69 80%, #1a0533 90%, #0a0a2e 100%);
             padding: 1rem 3rem 1rem 3rem;
             margin: 0 !important;
             color: white;
@@ -1226,60 +924,26 @@ def main():
             border-radius: 0;
             display: block;
         }
-
-        /* Simple sparkle overlay - static */
         .banner::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 15% 25%, rgba(180, 41, 249, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 75%, rgba(255, 107, 157, 0.08) 0%, transparent 35%),
-                radial-gradient(circle at 45% 50%, rgba(38, 197, 243, 0.06) 0%, transparent 50%);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 15% 25%, rgba(180, 41, 249, 0.12) 0%, transparent 40%), radial-gradient(circle at 85% 75%, rgba(255, 107, 157, 0.08) 0%, transparent 35%), radial-gradient(circle at 45% 50%, rgba(38, 197, 243, 0.06) 0%, transparent 50%);
             pointer-events: none;
         }
-
         .banner-inner {
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Pushes everything to the left */
+            justify-content: flex-start;
             flex-wrap: wrap;
             gap: 2rem;
             position: relative;
             z-index: 1;
-       /* max-width: 1200px;  <-- Remove or comment out this line */
-       /* margin: 0 auto;     <-- Remove or comment out this line */
-       margin-left: 20px; /* Optional: adds a little padding on the left */
-   }
-
-        /* Title aligned to LEFT */
-        .banner-title {
-            flex: 1;
-            min-width: 200px;
-            text-align: left;
+            margin-left: 20px;
         }
-
-        .banner-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0;
-            padding: 0;
-            color: white;
-            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
-            text-align: left;
-        }
-
-        .banner-title .subtitle {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.85);
-            margin: 0.25rem 0 0 0;
-            padding: 0;
-            text-align: left;
-        }
-
+        .banner-title { flex: 1; min-width: 200px; text-align: left; }
+        .banner-title h1 { font-size: 2rem; font-weight: 700; margin: 0; padding: 0; color: white; text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5); text-align: left; }
+        .banner-title .subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.85); margin: 0.25rem 0 0 0; padding: 0; text-align: left; }
         .banner-title .welcome {
             font-size: 0.95rem;
             font-weight: 600;
@@ -1287,7 +951,6 @@ def main():
             background: rgba(241, 81, 94, 0.85);
             border: 1px solid rgba(241, 81, 94, 1);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             padding: 0.4rem 0.8rem;
             border-radius: 8px;
             margin: 0.6rem 0 0 0;
@@ -1299,69 +962,12 @@ def main():
             text-align: left;
         }
 
-        /* Language selector in banner - right side */
-        .banner-language {
-            flex-shrink: 0;
-            min-width: 130px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 10px;
-            padding: 0.2rem 0.2rem;
-            border: 1px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-        }
+        /* Text and Headers */
+        h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText { color: #e0e0e0 !important; }
+        h3 { font-size: 22px !important; }
+        .click-message { font-size: 16px !important; color: #26C5F3 !important; font-weight: 400 !important; }
 
-        .banner-language .stSelectbox > div > div {
-            background: transparent !important;
-            border: none !important;
-            color: white !important;
-            border-radius: 8px !important;
-            padding: 0.3rem 1rem !important;
-            min-height: 34px !important;
-            height: 34px !important;
-            font-size: 0.9rem !important;
-            box-shadow: none !important;
-        }
-
-        .banner-language .stSelectbox > div > div:hover {
-            background: rgba(255,255,255,0.1) !important;
-        }
-
-        .banner-language .stSelectbox > div > div > div {
-            color: white !important;
-        }
-
-        .banner-language .stSelectbox svg {
-            fill: white !important;
-            color: white !important;
-        }
-
-        .banner-language .stSelectbox > label {
-            display: none !important;
-        }
-
-        /* Dark background for all containers */
-        div[data-testid="stVerticalBlock"] {
-            background-color: #0e1117 !important;
-        }
-
-        /* Light text for headers and labels */
-        h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText {
-            color: #e0e0e0 !important;
-        }
-
-        /* Set h3 headers to 22px */
-        h3 {
-            font-size: 22px !important;
-        }
-
-        /* Set click message to 16px with metric label color (#26C5F3) */
-        .click-message {
-            font-size: 16px !important;
-            color: #26C5F3 !important;
-            font-weight: 400 !important;
-        }
-
-        /* Parameter buttons - color #a8f368 (GREEN) */
+        /* Buttons */
         .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -1380,25 +986,10 @@ def main():
             height: 38px !important;
             line-height: 1.2 !important;
         }
+        .stButton > button:not([kind="primary"]):hover { background-color: #8fd154 !important; color: #1a0a2e !important; border: none !important; box-shadow: 0 2px 15px rgba(168, 243, 104, 0.4) !important; transform: translateY(-1px) !important; }
+        .stButton > button:not([kind="primary"]):active { transform: translateY(0px) !important; }
+        .stButton { display: block !important; width: 100% !important; }
 
-        .stButton > button:not([kind="primary"]):hover {
-            background-color: #8fd154 !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            box-shadow: 0 2px 15px rgba(168, 243, 104, 0.4) !important;
-            transform: translateY(-1px) !important;
-        }
-
-        .stButton > button:not([kind="primary"]):active {
-            transform: translateY(0px) !important;
-        }
-
-        .stButton {
-            display: block !important;
-            width: 100% !important;
-        }
-
-        /* Generate Analysis buttons - color #696eff (PURPLE/BLUE) */
         .stButton > button[kind="primary"] {
             background-color: #696eff !important;
             color: white !important;
@@ -1417,257 +1008,38 @@ def main():
             height: 38px !important;
             line-height: 1.2 !important;
         }
+        .stButton > button[kind="primary"]:hover { background-color: #4f54d4 !important; color: white !important; box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important; transform: translateY(-1px) !important; }
+        .stButton > button[kind="primary"]:active { transform: translateY(0px) !important; }
+        .stDownloadButton:not(div[data-testid="stDialog"] .stDownloadButton) { display: none !important; }
 
-        .stButton > button[kind="primary"]:hover {
-            background-color: #4f54d4 !important;
-            color: white !important;
-            box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
-            transform: translateY(-1px) !important;
-        }
+        /* Spacing */
+        .stats-section { margin-top: 0 !important; }
+        .stats-section h3 { margin-top: 0 !important; padding-top: 4px !important; margin-bottom: 10px !important; }
+        .time-series-section h3 { margin-top: 25px !important; margin-bottom: 10px !important; }
 
-        .stButton > button[kind="primary"]:active {
-            transform: translateY(0px) !important;
-        }
-
-        /* Hide Streamlit's default download button (now embedded in chart) */
-        /* But keep it visible inside the Info modal */
-        .stDownloadButton:not(div[data-testid="stDialog"] .stDownloadButton) {
-            display: none !important;
-        }
-
-        /* Add spacing between sections - using h3 tags inside divs */
-        .stats-section {
-            margin-top: 0 !important;
-        }
-
-        .stats-section h3 {
-            margin-top: 0 !important;
-            padding-top: 4px !important;
-            margin-bottom: 10px !important;
-        }
-
-        .time-series-section h3 {
-            margin-top: 25px !important;
-            margin-bottom: 10px !important;
-        }
-
-        .al-summary-section h3 {
-            margin-top: 25px !important;
-            margin-bottom: 10px !important;
-        }
-
-        /* LANGUAGE SELECTOR - color #a8f368 */
-        .stSelectbox > div > div {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
-            border: none !important;
-            padding: 0.5rem 1rem !important;
-            min-height: 38px !important;
-            height: 38px !important;
-            display: flex !important;
-            align-items: center !important;
-            font-size: 1rem !important;
-            font-weight: 600 !important;
-        }
-
-        .stSelectbox > div > div:hover {
-            background-color: #8fd154 !important;
-        }
-
-        .stSelectbox > div > div > div {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox > div > div > div[data-baseweb="select"] {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox > div > div > div[data-baseweb="select"] > div {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox > div > div > div[data-baseweb="select"] > div > div {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox [data-testid="stMarkdownContainer"] p {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox > label {
-            color: #1a0a2e !important;
-        }
-
-        .stSelectbox svg {
-            fill: #1a0a2e !important;
-            color: #1a0a2e !important;
-        }
-
-        /* Dropdown menu items */
-        .stSelectbox > div > div ul {
-            background-color: #1a0a2e !important;
-        }
-
-        .stSelectbox > div > div ul li {
-            color: white !important;
-        }
-
-        .stSelectbox > div > div ul li:hover {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-        }
-
-        /* Dark background for metric cards */
+        /* Metric Cards */
         div[data-testid="stMetric"] {
             background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             padding: 10px !important;
             border-radius: 8px !important;
             border: 1px solid rgba(180, 41, 249, 0.2) !important;
         }
+        div[data-testid="stMetric"] label { color: #26C5F3 !important; }
+        div[data-testid="stMetric"] div[data-testid="stMetricValue"] { color: #e0e0e0 !important; }
 
-        div[data-testid="stMetric"] label {
-            color: #26C5F3 !important;
-        }
+        /* Alerts & Expanders */
+        .stAlert { background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important; color: #e0e0e0 !important; }
+        .streamlit-expanderHeader { background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important; color: #e0e0e0 !important; }
+        .streamlit-expanderContent { background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important; color: #e0e0e0 !important; }
 
-        div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
-            color: #e0e0e0 !important;
-        }
+        /* Map and Iframes */
+        .leaflet-control-attribution, .folium-map .leaflet-control-attribution { display: none !important; }
+        .stDataFrame { background-color: #1a0a2e !important; }
+        .stSidebar { background-color: #0e1117 !important; }
+        hr { border-color: rgba(180, 41, 249, 0.3) !important; }
+        .stCaption { color: #9ca3af !important; }
 
-        /* Dark background for info boxes */
-        .stAlert {
-            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
-            color: #e0e0e0 !important;
-        }
-
-        /* Dark background for expanders */
-        .streamlit-expanderHeader {
-            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
-            color: #e0e0e0 !important;
-        }
-
-        .streamlit-expanderContent {
-            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
-            color: #e0e0e0 !important;
-        }
-
-        /* Hide map attribution */
-        .leaflet-control-attribution {
-            display: none !important;
-        }
-
-        .folium-map .leaflet-control-attribution {
-            display: none !important;
-        }
-
-        /* Dark background for dataframes */
-        .stDataFrame {
-            background-color: #1a0a2e !important;
-        }
-
-        /* Dark background for sidebar */
-        .stSidebar {
-            background-color: #0e1117 !important;
-        }
-
-        /* Divider color */
-        hr {
-            border-color: rgba(180, 41, 249, 0.3) !important;
-        }
-
-        /* Caption text */
-        .stCaption {
-            color: #9ca3af !important;
-        }
-        
-        /* ========== DATE RANGE PICKER STYLING ========== */
-        div[data-testid="stDateInput"] > div > div {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
-            border: none !important;
-        }
-        div[data-testid="stDateInput"] input {
-            color: #1a0a2e !important;
-            font-weight: 600 !important;
-        }
-        div[data-testid="stDateInput"] svg {
-            fill: #1a0a2e !important;
-        }
-        div[data-testid="stDateInput"] label {
-            color: #e0e0e0 !important;
-        }
-
-        /* Calendar popup dark theme */
-        div[data-baseweb="calendar"] {
-            background-color: #1a0a2e !important;
-            border: 1px solid rgba(180, 41, 249, 0.4) !important;
-        }
-        div[data-baseweb="calendar"] button {
-            color: #e0e0e0 !important;
-        }
-        div[data-baseweb="calendar"] button:hover {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-        }
-        div[data-baseweb="calendar"] [aria-selected="true"] {
-            background-color: #B429F9 !important;
-            color: white !important;
-        }
-        /* ========== SCHEME A: GROUPED CONTROLS ========== */
-        /* Date range picker → LIGHT BLUE */
-        div[data-testid="stDateInput"] > div > div {
-            background-color: #cae9ff !important;
-            color: #0e1117 !important;
-            border-radius: 8px !important;
-            border: none !important;
-        }
-        div[data-testid="stDateInput"] input {
-            color: #0e1117 !important;
-            font-weight: 600 !important;
-        }
-        div[data-testid="stDateInput"] svg {
-            fill: #0e1117 !important;
-        }
-
-        /* ===== Selectbox color overrides (aria-label based) ===== */
-
-        /* View month dropdown → LIGHT BLUE (full width) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [role="combobox"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [role="combobox"] > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) input,
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) [data-baseweb="select"] > div {
-            background-color: #cae9ff !important;
-            color: #0e1117 !important;
-            border-color: #cae9ff !important;
-        }
-        div[data-testid="stSelectbox"]:has(input[aria-label="view_month"]) svg {
-            fill: #0e1117 !important;
-            color: #0e1117 !important;
-        }
-
-        /* Language selector → SOFT PURPLE (full width) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) > div > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [role="combobox"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [role="combobox"] > div,
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) input,
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"],
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) [data-baseweb="select"] > div {
-            background-color: #B429F9 !important;
-            color: #ffffff !important;
-            border-color: #B429F9 !important;
-        }
-        div[data-testid="stSelectbox"]:has(input[aria-label="🌐"]) svg {
-            fill: #ffffff !important;
-            color: #ffffff !important;
-        }
-        /* ===== Parameter button selected/unselected state ===== */
-
-        /* SELECTED — WHITE with blue border (higher specificity than .stButton rule) */
+        /* Parameters */
         div[class*="st-key-param_mm_active"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_active"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param__active"] .stButton > button:not([kind="primary"]) {
@@ -1682,8 +1054,6 @@ def main():
             background-color: #f0f0f0 !important;
             color: #1a0a2e !important;
         }
-
-        /* UNSELECTED — green with dark text */
         div[class*="st-key-param_mm_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param_m3_inactive"] .stButton > button:not([kind="primary"]),
         div[class*="st-key-param__inactive"] .stButton > button:not([kind="primary"]) {
@@ -1696,7 +1066,8 @@ def main():
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
         }
-        /* ===== Header border around "🗺️ Interactive Map" ===== */
+        
+        /* Header Border and Map Border */
         div[data-testid="stMarkdownContainer"]:has(h3:contains("Interactive Map")) {
             border: 4px solid #e81cff !important;
             border-radius: 12px !important;
@@ -1705,8 +1076,6 @@ def main():
             background: rgba(232, 28, 255, 0.12) !important;
             box-shadow: 0 0 20px rgba(232, 28, 255, 0.4) !important;
         }
-
-        /* ===== Purple border on the map (outer wrapper) ===== */
         div.stElementContainer:has(> div > iframe[title="streamlit_folium.st_folium"]) > div,
         div:has(> iframe[title="streamlit_folium.st_folium"]) {
             border: 4px solid #e81cff !important;
@@ -1720,63 +1089,8 @@ def main():
             overflow: hidden !important;
             box-shadow: 0 0 24px rgba(232, 28, 255, 0.35) !important;
         }
-        /* ===== Hide the hidden Specify Location trigger ===== */
-        body div[class*="st-key-hidden_specify_trigger"],
-        body div[class*="st-key-hidden_specify_trigger"] > div,
-        body div[class*="st-key-hidden_specify_trigger"] > div > div,
-        body div.stVerticalBlock[class*="st-key-hidden_specify_trigger"],
-        html body div[class*="st-key-hidden_specify_trigger"],
-        html body div[class*="st-key-hidden_specify_trigger"] > div,
-        html body div[class*="st-key-hidden_specify_trigger"] > div > div > div {
-            display: none !important;
-            height: 0 !important;
-            max-height: 0 !important;
-            overflow: hidden !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            visibility: hidden !important;
-        }
-        
 
-        /* ===== Specify Location button — force light blue like date picker ===== */
-        div[class*="st-key-open_specify_location"] button,
-        div[class*="st-key-open_specify_location"] .stButton > button,
-        html body div[class*="st-key-open_specify_location"] button,
-        html body div[class*="st-key-open_specify_location"] .stButton > button,
-        html body button[key="open_specify_location"] {
-            background-color: #cae9ff !important;
-            background: #cae9ff !important;
-            color: #0e1117 !important;
-            border: none !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            padding: 0 !important;
-            min-height: 38px !important;
-            height: 38px !important;
-            font-size: 14px !important;
-            line-height: 38px !important;
-            box-shadow: none !important;
-            transform: none !important;
-        }
-
-        div[class*="st-key-open_specify_location"] button:hover,
-        html body div[class*="st-key-open_specify_location"] button:hover,
-        html body button[key="open_specify_location"]:hover {
-            background-color: #a8d8f0 !important;
-            background: #a8d8f0 !important;
-            color: #0e1117 !important;
-            box-shadow: 0 2px 15px rgba(168, 216, 240, 0.4) !important;
-            transform: none !important;
-        }
-
-        div[class*="st-key-open_specify_location"] button *,
-        html body div[class*="st-key-open_specify_location"] button * {
-            color: #0e1117 !important;
-            background-color: transparent !important;
-        }
-
-
-         /* ===== Inline Location Form — white card ===== */
+        /* Location Form */
         div[class*="st-key-location_form_wrap"] {
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
@@ -1790,405 +1104,18 @@ def main():
         div[class*="st-key-location_form_wrap"] label,
         div[class*="st-key-location_form_wrap"] p,
         div[class*="st-key-location_form_wrap"] .stMarkdown,
-        div[class*="st-key-location_form_wrap"] .stCaption {
-            color: #1a0a2e !important;
-        }
-        div[class*="st-key-location_form_wrap"] input[type="number"] {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            border: 1px solid #c6c5c1 !important;
-        }
-        div[class*="st-key-location_form_wrap"] div[data-baseweb="input"] {
-            background-color: #ffffff !important;
-        }
-        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]) {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border: 1px solid #c6c5c1 !important;
-            border-radius: 6px !important;
-        }
-        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
-            background-color: #f0f0f0 !important;
-        }
-                div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover {
-            background-color: #f0f0f0 !important;
-        }
+        div[class*="st-key-location_form_wrap"] .stCaption { color: #1a0a2e !important; }
+        div[class*="st-key-location_form_wrap"] input[type="number"] { background-color: #ffffff !important; color: #000000 !important; border: 1px solid #c6c5c1 !important; }
+        div[class*="st-key-location_form_wrap"] div[data-baseweb="input"] { background-color: #ffffff !important; }
+        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]) { background-color: #ffffff !important; color: #1a0a2e !important; border: 1px solid #c6c5c1 !important; border-radius: 6px !important; }
+        div[class*="st-key-location_form_wrap"] button:not([kind="primary"]):hover { background-color: #f0f0f0 !important; }
 
-        /* Pull the metric row up to align with the top of the map */
-        /* Align metric row top with the top of the map */
-        div[class*="st-key-stats_metrics_row"] {
-            margin-top: -50px !important;
-            padding-top: 0 !important;
-        }
-        #div[data-testid="stMetric"] {
-        #    margin-top: -40px !important;
-        #    padding-top: 0 !important;
-        #}
+        /* Stats & Metrics */
+        div[class*="st-key-stats_metrics_row"] { margin-top: -50px !important; padding-top: 0 !important; }
+        div[data-testid="column"]:has(div[data-testid="stMetric"]) { padding-top: 0 !important; margin-top: -20px !important; }
+        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) { padding-top: 0 !important; margin-top: -20px !important; }
 
-        /* Remove padding on the column container holding the metrics */
-        div[data-testid="column"]:has(div[data-testid="stMetric"]) {
-            padding-top: 0 !important;
-            margin-top: -20px !important;
-        }
-
-        /* Also remove padding on the horizontal block that contains the metric columns */
-        div[data-testid="stHorizontalBlock"]:has(div[data-testid="stMetric"]) {
-            padding-top: 0 !important;
-            margin-top: -20px !important;
-        }
-        
-        /* 2. Hide the calendar icon inside the input */
-        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] svg,
-        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] svg {
-            display: none !important;
-        }
-        
-        /* 3. Ensure the input doesn't have unnecessary padding now that the icon is gone */
-        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"] > div > div,
-        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"] > div > div {
-            padding-left: 10px !important;
-            justify-content: center !important;
-        }
-
-        /* 4. Create the fake label INSIDE the input area using CSS */
-        div[class*="st-key-start_date_wrap"] div[data-testid="stDateInput"]::before {
-            content: "START DATE  :  ";
-            color: #0e1117;
-            font-weight: 700;
-            font-size: 14px;
-            margin-right: 5px;
-        }
-
-        div[class*="st-key-end_date_wrap"] div[data-testid="stDateInput"]::before {
-            content: "END DATE  :  ";
-            color: #0e1117;
-            font-weight: 700;
-            font-size: 14px;
-            margin-right: 5px;
-        }
-       /* ===== DOWNLOAD SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-            padding-left: 0px !important; 
-            padding-right: 0px !important; 
-        }
-
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 13px !important;
-        }
-        
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-
-        /* Fix the white box */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-
-        /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "ℹ️ Info" !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important; 
-        }
-
-        /* Hide the black X (clear button) entirely */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
-            display: none !important;
-        }
-        /* Hide the black X (clear button) entirely */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
-            display: none !important;
-        }
-
-        /* 👇 ADD THE NEW INFO CSS HERE 👇 */
-        /* ===== INFO SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-            padding-left: 2px !important; 
-            padding-right: 2px !important; 
-        }
-
-        /* 2. Dark Text */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-
-        /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "ℹ️ Info" !important;
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important; 
-        }
-
-        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
-        /* ... rest of your code ... */
-        
-        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
-        
-        /* 1. The Main Purple Button & Alignment */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; /* Pushes the button down to perfectly align */
-        }
-
-        /* 2. White Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #B429F9  !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        /* Force the placeholder text to be bold and white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            color: #ffffff !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-
-        /* Also force the text directly */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input {
-            color: #ffffff !important;
-        }
-        
-        /* Fix the white box: Make the background transparent, but keep the arrow white */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
-            fill: #ffffff !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Fix the Green Hover Flash */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #9a22d9 !important; 
-            border-color: #9a22d9 !important;
-        }
-
-        /* 4. The Dropdown List (White & Grey Hover) */
-        div[data-baseweb="popover"] ul[role="listbox"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 5px !important;
-            min-width: 180px !important; /* 👈 ADD THIS LINE */
-        }
-
-        /* Force the list items to not wrap and fit the new width */
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            white-space: nowrap !important; /* 👈 ADD THIS LINE */
-        }
-
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border-radius: 6px !important;
-            padding: 8px 12px !important;
-            font-weight: 600 !important;
-            margin-bottom: 2px !important;
-        }
-
-        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
-            background-color: #f0f2f6 !important;
-            color: #1a0a2e !important;
-            cursor: pointer !important;
-        }
-        /* ===== ABSTRACTION SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; /* Keep your 0px alignment trick! */
-        }
-
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        
-        /* Fix the white box: Make the background transparent, but keep the arrow dark */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State (Slightly darker green to avoid flash) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-        /* ===== RECHARGE SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-        }
-
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-        /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        
-        /* Fix the white box: Make the background transparent, but keep the arrow dark */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State (Slightly darker green) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-        /* ===== ANALYSIS SELECTBOX (Green) ===== */
-        
-        /* 1. The Main Green Button */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-            margin-top: 0px !important; 
-        }
-
-        /* 2. Dark Text and Transparent Icon Background */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div * {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
-                /* Force the placeholder text to be bold and black */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        
-        /* Fix the white box: Make the background transparent, but keep the arrow dark */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div svg {
-            fill: #1a0a2e !important;
-            background-color: transparent !important;
-        }
-        
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div div {
-            background-color: transparent !important;
-        }
-
-        /* 3. Hover State (Slightly darker green) */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:hover,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:focus,
-        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
-        }
-        
-        /* ===== STYLE THE TOP DATE BUTTONS ===== */
+        /* Date Buttons */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
             background-color: #cae9ff !important;
@@ -2203,191 +1130,45 @@ def main():
             align-items: center !important;
         }
         div[class*="st-key-btn_start_cal_top"] button:hover,
-        div[class*="st-key-btn_end_cal_top"] button:hover {
-            background-color: #a8d8f0 !important;
-        }
+        div[class*="st-key-btn_end_cal_top"] button:hover { background-color: #a8d8f0 !important; }
 
-        /* ===== TOP RIGHT BUTTONS (Reset, Info, Language) ===== */
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) {
-            flex-wrap: nowrap !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-
-        /* Info Button */
-        div[class*="st-key-info_btn"] button {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            padding: 0 !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        div[class*="st-key-info_btn"] button:hover {
-            background-color: #8fd154 !important;
-        }
-        div[class*="st-key-info_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-
-        /* Reset Button */
-        div[class*="st-key-reset_btn"] button {
-            background-color: #B429F9 !important;
-            color: #1a0a2e !important;
-            border-radius: 8px !important;
-            height: 38px !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-        div[class*="st-key-reset_btn"] button:hover {
-            background-color: #9a22d9 !important;
-        }
-        div[class*="st-key-reset_btn"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
+        /* Top Right Buttons */
+        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-info_btn"]) { flex-wrap: nowrap !important; align-items: center !important; gap: 8px !important; }
+        div[class*="st-key-info_btn"] button { background-color: #a8f368 !important; color: #1a0a2e !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; width: 100% !important; padding: 0 !important; display: flex !important; justify-content: center !important; align-items: center !important; border: none !important; box-shadow: none !important; }
+        div[class*="st-key-info_btn"] button:hover { background-color: #8fd154 !important; }
+        div[class*="st-key-info_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
+        
+        div[class*="st-key-reset_btn"] button { background-color: #B429F9 !important; color: #1a0a2e !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; width: 100% !important; display: flex !important; justify-content: center !important; align-items: center !important; border: none !important; box-shadow: none !important; }
+        div[class*="st-key-reset_btn"] button:hover { background-color: #9a22d9 !important; }
+        div[class*="st-key-reset_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
 
         /* Language Button */
-        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div {
-            background-color: transparent !important;
-            border: none !important;
-            border-radius: 8px !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        /* Force the language text to be bold */
+        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div { background-color: transparent !important; border: none !important; border-radius: 8px !important; padding: 0 !important; margin: 0 !important; }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] input {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
-            border-radius: 8px !important; 
-            height: 38px !important;
-            min-height: 38px !important;
-            box-shadow: none !important;
-        }
-        /* Force the text inside the Language button to be bold and black */
-        div[class*="st-key-lang_wrap"] input::placeholder {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-            opacity: 1 !important;
-        }
-        div[class*="st-key-lang_wrap"] input {
-            color: #1a0a2e !important;
-            font-weight: 700 !important;
-        }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
-            color: #ffffff !important;
-            fill: #ffffff !important;
-        }
-        div[class*="st-key-lang_wrap"] > div {
-            border-radius: 8px !important;
-            overflow: hidden !important;
-        }
+        div[class*="st-key-lang_wrap"] input { font-weight: 700 !important; font-size: 14px !important; color: #ffffff !important; }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { background-color: #B429F9 !important; border: 1px solid #B429F9 !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; box-shadow: none !important; }
+        div[class*="st-key-lang_wrap"] input::placeholder { color: #1a0a2e !important; font-weight: 700 !important; opacity: 1 !important; }
+        div[class*="st-key-lang_wrap"] input { color: #1a0a2e !important; font-weight: 700 !important; }
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * { color: #ffffff !important; fill: #ffffff !important; }
+        div[class*="st-key-lang_wrap"] > div { border-radius: 8px !important; overflow: hidden !important; }
 
-        /* ===== THE ULTIMATE FONT UNIFY (BOLD) ===== */
+        /* Bold Fonts */
         div[class*="st-key-info_btn"] button p,
         div[class*="st-key-reset_btn"] button p,
-        div[class*="st-key-loc_dropdown"] button p,
-        div[class*="st-key-abs_dropdown"] button p,
-        div[class*="st-key-rc_dropdown"] button p,
-        div[class*="st-key-analysis_dropdown"] button p,
         div[class*="st-key-btn_start_cal_top"] button p,
         div[class*="st-key-btn_end_cal_top"] button p,
         div[class*="st-key-top_generate"] button p,
-        .stButton > button p {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-        }
+        .stButton > button p { font-weight: 700 !important; font-size: 14px !important; }
 
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            
-        /* ===== FORCE LANGUAGE BUTTON TEXT TO BE BOLD ===== */
-        div[class*="st-key-lang_wrap"] input {
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
-        /* ===== THE ULTIMATE LANGUAGE BOLD FIX ===== */
-        div[class*="st-key-lang_wrap"] input {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important; /* Forces font family */
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            color: #ffffff !important;
-        }
-
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-
-        div[class*="st-key-lang_wrap"] span {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-               div[class*="st-key-lang_wrap"] span {
-            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
-            font-weight: 700 !important;
-        }
-
-        /* 2. Style the buttons inside the popover to look like plain text items */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button,
-        div[data-baseweb="popover"] button {
-            background-color: transparent !important; /* Removes the green */
-            background: transparent !important;
-            color: #1a0a2e !important;
-            border: none !important;
-            border-radius: 6px !important;
-            padding: 10px 15px !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
-            text-align: left !important;
-            justify-content: flex-start !important; 
-            height: auto !important;
-            min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-        }
-
-        /* 3. Hover effect (Light Grey) */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button:hover,
-        div[data-baseweb="popover"] button:hover {
-            background-color: #f0f2f6 !important;
-            color: #1a0a2e !important;
-        }
-
-        /* 4. Force the text inside the buttons to be dark */
-        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button *,
-        div[data-baseweb="popover"] button * {
-            color: #1a0a2e !important;
-            fill: #1a0a2e !important;
-        }
-        
+        /* Hide Black X on All Selectboxes */
+        div[data-testid="stSelectbox"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
+        div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
+        div[data-testid="stSelectbox"] svg[aria-label="Clear"] { display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0 !important; height: 0 !important; }
+    </style>
     """
     
-    # Render the CSS safely
     st.markdown(css_content, unsafe_allow_html=True)
 
     # ---- TOP BAR: language + country ----
@@ -2461,19 +1242,16 @@ def main():
     
     # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
-        # We use the placeholder trick so the button shows the text instead of "Choose"
         info_labels = ["📄 Indicators Guide"] 
-        
         selected_info = st.selectbox(
             "Info",
             options=info_labels,
-            index=None, # Leaves the button empty (shows placeholder)
-            placeholder="ℹ️ Info", # The text that shows on the button
+            index=None,
+            placeholder="ℹ️ Info",
             key="info_selector",
             label_visibility="collapsed"
         )
         
-        # If the user clicks "Indicators Guide", open the PDF
         if selected_info == "📄 Indicators Guide":
             pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
             st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
@@ -2494,7 +1272,7 @@ def main():
             "Download",
             options=dl_labels,
             index=None, 
-            placeholder=f"📥 {t('nav_download')}", # 👈 THIS uses the translation
+            placeholder=f"📥 {t('nav_download')}",
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2507,13 +1285,12 @@ def main():
             selected_label = st.selectbox(
                 "Language",
                 options=list(lang_options.keys()),
-                index=None, # Empty by default to show placeholder
-                placeholder="🌐 Language", # The text on the button
+                index=None,
+                placeholder="🌐 Language",
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
             
-        # Only trigger if the user actually selects a language
         if selected_label is not None and lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
@@ -2527,19 +1304,34 @@ def main():
     _abs_active = st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3")
     _rc_active = st.session_state.selected_parameter in ("recharge_mm", "recharge_m3")
 
-    # Ensure session state defaults for the new region button
     if "selected_location" not in st.session_state:
         st.session_state.selected_location = "subnational"
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
         if "selected_location" not in st.session_state:
-            st.session_state.selected_location = "subnational"
+            st.session_state.selected_location = "erbil_shamamk"
 
-        loc_options = ["subnational", "national"]
-        loc_labels = [t("nav_subnational"), t("nav_national")]
+        loc_options = [
+            "subnational_header",
+            "erbil_shamamk",
+            "national_header",
+            "duhok", 
+            "hawler", 
+            "sulaimaniy", 
+            "halabja"
+        ]
+        
+        loc_labels = [
+            "▼ Sub-National", 
+            "    Erbil (Shamamk)", 
+            "▼ National", 
+            "    Duhok", 
+            "    Hawler (Erbil)", 
+            "    Sulaimaniy", 
+            "    Halabja"
+        ]
 
-        # We use index=None and a placeholder to show "📍 Region" on the button
         selected_label = st.selectbox(
             "Region", 
             options=loc_labels,
@@ -2550,16 +1342,22 @@ def main():
         )
 
         mapping_loc = {
-            t("nav_subnational"): "subnational",
-            t("nav_national"): "national"
+            "    Erbil (Shamamk)": "erbil_shamamk",
+            "    Duhok": "duhok",
+            "    Hawler (Erbil)": "hawler",
+            "    Sulaimaniy": "sulaimaniy",
+            "    Halabja": "halabja"
         }
 
         if selected_label is not None:
-            new_location = mapping_loc.get(selected_label, "subnational")
-            
-            if new_location != st.session_state.selected_location:
-                st.session_state.selected_location = new_location
-                st.rerun()
+            if selected_label in ["▼ Sub-National", "▼ National"]:
+                pass
+            else:
+                new_location = mapping_loc.get(selected_label, "erbil_shamamk")
+                
+                if new_location != st.session_state.selected_location:
+                    st.session_state.selected_location = new_location
+                    st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
@@ -2569,8 +1367,8 @@ def main():
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=None, # Shows the placeholder
-            placeholder="🔴 Abstraction", # The text on the button
+            index=None, 
+            placeholder="🔴 Abstraction", 
             key="abs_selector",
             label_visibility="collapsed"
         )
@@ -2596,8 +1394,8 @@ def main():
         selected_rc_label = st.selectbox(
             "Recharge", 
             options=rc_labels,
-            index=None, # Shows the placeholder
-            placeholder="⚪ Recharge", # The text on the button
+            index=None, 
+            placeholder="⚪ Recharge", 
             key="rc_selector",
             label_visibility="collapsed"
         )
@@ -2630,11 +1428,10 @@ def main():
             f"    {t('nav_pwl')}"
         ]
 
-        # Display the selectbox with the placeholder
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=None, # Shows the placeholder
+            index=None,
             placeholder="📊 Analysis", 
             key="analysis_selector",
             label_visibility="collapsed"
@@ -2668,21 +1465,16 @@ def main():
             asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
             if asset_dates:
                 min_date, max_date = min(asset_dates), max(asset_dates)
-
-                # Initialize session state if empty
                 if st.session_state.date_range is None:
                     st.session_state.date_range = (min_date.date(), max_date.date())
-                    
     except Exception as e:
         st.warning(f"Could not load dates: {e}")
 
-    # Column 5: START DATE BUTTON
     with nav_col_range:
         if st.button("📅 Start date", key="btn_start_cal_top", use_container_width=True):
             st.session_state.active_cal = "start"
             st.rerun()
 
-    # Column 6: END DATE BUTTON
     with nav_col6:
         if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
@@ -2692,17 +1484,14 @@ def main():
     if st.session_state.get("active_cal"):
         active = st.session_state.get("active_cal")
         
-        # Use the exact same column widths as the main navigation bar
         col1, col2, col3, col4, col5, col6, col7 = st.columns([1, 1, 1, 1, 1.2, 1.2, 1.1])
         
-        # Determine which column to render the form in
         if active == "start":
             form_col = col5
         else:
             form_col = col6
         
         with form_col:
-            # Inject CSS directly to make this form white and clean
             st.markdown("""
             <style>
             div[class*="st-key-date_form_wrap"] {
@@ -2723,8 +1512,6 @@ def main():
             div[class*="st-key-date_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
             }
-            
-            /* Make the title smaller and hide the anchor link icon */
             div[class*="st-key-date_form_wrap"] h3 {
                 font-size: 16px !important; 
                 margin-bottom: 5px !important;
@@ -2734,7 +1521,6 @@ def main():
             div[class*="st-key-date_form_wrap"] h3 a {
                 display: none !important;
             }
-            
             div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
                 background-color: #f0f2f6 !important;
                 border: 1px solid #e0e0e0 !important;
@@ -2744,8 +1530,6 @@ def main():
                 color: #1a0a2e !important;
                 fill: #1a0a2e !important;
             }
-            
-            /* Style for the Cancel/Select buttons */
             div[class*="st-key-date_form_wrap"] button:not([kind="primary"]) {
                 background-color: #ffffff !important;
                 color: #1a0a2e !important;
@@ -2772,7 +1556,6 @@ def main():
             """, unsafe_allow_html=True)
 
             with st.container(key="date_form_wrap"):
-                # We use ### here, and the CSS above targets the <a> link to hide it
                 st.markdown(f"### {active.upper()} DATE", unsafe_allow_html=True)
                 
                 st.write(f"Current date: **{st.session_state.date_range[0].strftime('%Y / %m / %d') if active == 'start' else st.session_state.date_range[1].strftime('%Y / %m / %d')}**")
@@ -2799,11 +1582,9 @@ def main():
                         st.session_state.active_cal = None
                         st.rerun()
 
-    # Get the dates for the map generation
     start_date = st.session_state.date_range[0]
     end_date = st.session_state.date_range[1]
                         
-    # Filter assets based on the chosen dates
     start_ym = start_date.strftime("%Y_%m")
     end_ym = end_date.strftime("%Y_%m")
     assets = [
@@ -2811,17 +1592,13 @@ def main():
         if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
     ]
 
-    # Save the available months for the map dropdown
     ranged_months = sorted({"_".join(a.split("_")[-2:]) for a in assets})
     st.session_state.ranged_months_disp = [m.replace("_", "-") for m in ranged_months]
 
-    # Generate Analysis button - type="primary" so it gets the purple/blue color
     with nav_col7:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
-            
-            # Set the map to display the START DATE month
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
@@ -2830,12 +1607,9 @@ def main():
     if st.session_state.get("date_range"):
         start_dt = st.session_state.date_range[0]
         end_dt = st.session_state.date_range[1]
-        
-        # Format the dates to look like the screenshot (e.g., "01 JAN 2020")
         start_str = start_dt.strftime("%d %b %Y").upper()
         end_str = end_dt.strftime("%d %b %Y").upper()
         
-    # HTML and CSS for the custom timeline bar
     timeline_html = (
         '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
@@ -2862,12 +1636,14 @@ def main():
         "time_series_data": None,
         "current_country": selected_country,
         "regional_summary_data": None,
+        "stats_abstraction": None,
+        "stats_recharge": None,
+        "stats_analysis": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = default
 
-    # Reset map when the country changes
     if st.session_state.current_country != selected_country:
         st.session_state.current_country = selected_country
         st.session_state.map_generated = False
@@ -2875,7 +1651,6 @@ def main():
         st.session_state.time_series_data = None
         st.session_state.regional_summary_data = None
 
-    # ---- If no date is selected, set to latest available ----
     if st.session_state.selected_date_str is None:
         try:
             asset_path = cfg["asset_path"]
@@ -2892,6 +1667,8 @@ def main():
     with st.container():
         if not st.session_state.map_generated:
             st.markdown(f"### 📊 {t('statistics')}")
+            
+            st.markdown(f"**{t('nav_abstraction_mm')}**")
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(t('minimum'), "—")
@@ -2899,15 +1676,36 @@ def main():
                 st.metric(t('maximum'), "—")
             with col3:
                 st.metric(t('mean'), "—")
+                
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            st.markdown(f"**{t('nav_recharge_mm')}**")
+            col4, col5, col6 = st.columns(3)
+            with col4:
+                st.metric(t('minimum'), "—")
+            with col5:
+                st.metric(t('maximum'), "—")
+            with col6:
+                st.metric(t('mean'), "—")
+                
+            st.markdown("<br>", unsafe_allow_html=True)
+            
+            st.markdown(f"**{t('nav_analysis')}**")
+            col7, col8, col9 = st.columns(3)
+            with col7:
+                st.metric(t('minimum'), "—")
+            with col8:
+                st.metric(t('maximum'), "—")
+            with col9:
+                st.metric(t('mean'), "—")
+                
         else:
             try:
-                # 50% / 50% split
                 with st.container(key="map_stats_row"):
                     map_col, stats_col = st.columns([1, 1])
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # Map header row: title on left, Specify Location button on right
                     _h_col1, _h_col2 = st.columns([5, 1.2])
                     
                     with _h_col1:
@@ -2921,7 +1719,6 @@ def main():
                             st.session_state.show_location_form = not st.session_state.get("show_location_form", False)
                             st.rerun()
 
-                    # ===== Inline Location Form =====
                     if st.session_state.get("show_location_form", False):
                         with st.container(key="location_form_wrap"):
                             st.markdown("### 📍 Specify Location")
@@ -2962,18 +1759,15 @@ def main():
                                     st.session_state.show_location_form = False
                                     st.rerun()
 
-                    # ---- Build the map ----
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
 
-                    # Map the parameter name to the actual asset name in Earth Engine
                     search_param = st.session_state.current_parameter
 
-                    # Look for the correct asset name based on the selected parameter
                     if search_param == "recharge_mm":
                         search_param = "recharge"  
                     elif search_param == "aeti":
-                        search_param = "aeti"  # Make sure this matches your GEE asset name
+                        search_param = "aeti" 
                     elif search_param == "pet":
                         search_param = "pet"
                     elif search_param == "precip":
@@ -2990,14 +1784,6 @@ def main():
                         None,
                     )
                     
-                    selected_asset = next(
-                        (
-                            a
-                            for a in assets
-                            if search_param in a and selected_year_month in a
-                        ),
-                        None,
-                    )
                     if not selected_asset:
                         st.error(t("no_data_month"))
                         return
@@ -3006,7 +1792,6 @@ def main():
                     center_lon = float(cfg["center_lon"])
                     zoom = int(cfg["zoom"])
 
-                    # If the user searched for a location, override the center
                     if st.session_state.get("search_pending"):
                         _search_lat = st.session_state.get("search_lat", center_lat)
                         _search_lng = st.session_state.get("search_lng", center_lon)
@@ -3029,7 +1814,6 @@ def main():
                     )
                     add_colormap(m, vis_params, st.session_state.current_parameter)
 
-                    # If the user searched, place a red marker at the location
                     if st.session_state.get("search_pending"):
                         folium.Marker(
                             location=[
@@ -3043,7 +1827,6 @@ def main():
                     st.session_state["search_pending"] = False
                     folium.LayerControl().add_to(m)
 
-                    # Read all drawings from the map
                     map_data = st_folium(
                         m,
                         width=None,
@@ -3051,10 +1834,9 @@ def main():
                         returned_objects=["all_drawings"],
                     )
 
-                    # Process the most recent drawing
                     drawings = map_data.get("all_drawings") or []
                     latest = None
-                    for d in reversed(drawings):  # newest first
+                    for d in reversed(drawings):
                         geom = (d or {}).get("geometry") or {}
                         if geom.get("type") in ("Point", "LineString", "Polygon"):
                             latest = d
@@ -3065,7 +1847,6 @@ def main():
                         geom_type = geom["type"]
                         coords = geom["coordinates"]
 
-                        # Build a stable signature from the full coordinates
                         import hashlib as _hashlib
                         _sig_input = f"{geom_type}:{coords}"
                         signature = _hashlib.md5(_sig_input.encode("utf-8")).hexdigest()
@@ -3111,14 +1892,13 @@ def main():
                                         first = coords[0]
                                     st.session_state.last_clicked = {"lat": first[1], "lng": first[0]}
 
-                # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
+                # ---- RIGHT COLUMN: STATISTICS ----
                 with stats_col:
                     st.markdown(
                         f'<div class="stats-section" style="margin-top:-25px;"><h3 style="margin-top:-25px; padding-top:0;">📊 {t("statistics")}</h3></div>',
                         unsafe_allow_html=True,
                     )
                     try:
-                        # Use the drawn shape if there is one; otherwise the whole image
                         selection_geom = selection_to_ee_geometry(
                             st.session_state.get("current_selection")
                         )
@@ -3130,41 +1910,58 @@ def main():
                             scale=1000,
                             maxPixels=1e9,
                         ).getInfo()
+                        
                         prefix = next(
                             (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
                         )
+                        
+                        calculated_stats = {
+                            "min": stats.get(f"{prefix}_min"),
+                            "max": stats.get(f"{prefix}_max"),
+                            "mean": stats.get(f"{prefix}_mean")
+                        }
 
-                        min_val = stats.get(f"{prefix}_min")
-                        max_val = stats.get(f"{prefix}_max")
-                        mean_val = stats.get(f"{prefix}_mean")
+                        current_p = st.session_state.current_parameter
+                        if "abstraction" in current_p:
+                            st.session_state.stats_abstraction = calculated_stats
+                        elif "recharge" in current_p:
+                            st.session_state.stats_recharge = calculated_stats
+                        elif current_p in ["wsi", "water_balance", "aeti", "pet", "precip", "pwl", "irrigation"]:
+                            st.session_state.stats_analysis = calculated_stats
 
-                        with st.container(key="stats_metrics_row"):
-                            stat_cols = st.columns(3)
-                        with stat_cols[0]:
-                            st.metric(
-                                t('minimum'),
-                                f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
-                            )
-                        with stat_cols[1]:
-                            st.metric(
-                                t('maximum'),
-                                f"{max_val:.2f}" if isinstance(max_val, (int, float)) else "N/A",
-                            )
-                        with stat_cols[2]:
-                            st.metric(
-                                t('mean'),
-                                f"{mean_val:.2f}" if isinstance(mean_val, (int, float)) else "N/A",
-                            )
+                        st.markdown(f"**{t('nav_abstraction_mm')}**")
+                        abs_stats = st.session_state.stats_abstraction
+                        a_cols = st.columns(3)
+                        a_cols[0].metric(t('minimum'), f"{abs_stats['min']:.2f}" if abs_stats and isinstance(abs_stats['min'], (int, float)) else "—")
+                        a_cols[1].metric(t('maximum'), f"{abs_stats['max']:.2f}" if abs_stats and isinstance(abs_stats['max'], (int, float)) else "—")
+                        a_cols[2].metric(t('mean'), f"{abs_stats['mean']:.2f}" if abs_stats and isinstance(abs_stats['mean'], (int, float)) else "—")
+
+                        st.markdown("<br>", unsafe_allow_html=True)
+
+                        st.markdown(f"**{t('nav_recharge_mm')}**")
+                        rc_stats = st.session_state.stats_recharge
+                        r_cols = st.columns(3)
+                        r_cols[0].metric(t('minimum'), f"{rc_stats['min']:.2f}" if rc_stats and isinstance(rc_stats['min'], (int, float)) else "—")
+                        r_cols[1].metric(t('maximum'), f"{rc_stats['max']:.2f}" if rc_stats and isinstance(rc_stats['max'], (int, float)) else "—")
+                        r_cols[2].metric(t('mean'), f"{rc_stats['mean']:.2f}" if rc_stats and isinstance(rc_stats['mean'], (int, float)) else "—")
+
+                        st.markdown("<br>", unsafe_allow_html=True)
+
+                        st.markdown(f"**{t('nav_analysis')}**")
+                        ana_stats = st.session_state.stats_analysis
+                        an_cols = st.columns(3)
+                        an_cols[0].metric(t('minimum'), f"{ana_stats['min']:.2f}" if ana_stats and isinstance(ana_stats['min'], (int, float)) else "—")
+                        an_cols[1].metric(t('maximum'), f"{ana_stats['max']:.2f}" if ana_stats and isinstance(ana_stats['max'], (int, float)) else "—")
+                        an_cols[2].metric(t('mean'), f"{ana_stats['mean']:.2f}" if ana_stats and isinstance(ana_stats['mean'], (int, float)) else "—")
+
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
 
-                    # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
-                            # Filter assets by the selected date range
                             if st.session_state.date_range:
                                 start_ym = st.session_state.date_range[0].strftime("%Y_%m")
                                 end_ym = st.session_state.date_range[1].strftime("%Y_%m")
@@ -3175,21 +1972,16 @@ def main():
                             else:
                                 ranged_assets = assets
 
-                            try:
-                                summary = get_regional_summary(
-                                    st.session_state.current_parameter,
-                                    tuple(ranged_assets),
-                                    int(cfg.get("native_scale_m", 20)),
-                                )
-                                if summary:
-                                    st.session_state.regional_summary_data = summary
-                                else:
-                                    st.session_state.regional_summary_data = []
-                            except Exception as e:
-                                st.error(f"Error computing regional summary: {e}")
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(ranged_assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                            if summary:
+                                st.session_state.regional_summary_data = summary
+                            else:
                                 st.session_state.regional_summary_data = []
 
-                    # Display the chart if we have data
                     if st.session_state.regional_summary_data:
                         summary = st.session_state.regional_summary_data
                         csv_data = to_csv_bytes(summary, value_col="mean")
@@ -3210,11 +2002,9 @@ def main():
                     # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
 
-                    # Get the current center coordinates for the empty chart
                     center_lat = float(cfg["center_lat"])
                     center_lon = float(cfg["center_lon"])
 
-                    # Always show the time series chart
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
@@ -3236,7 +2026,6 @@ def main():
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
                     else:
-                        # Show empty chart with click message
                         fig = create_empty_time_series_plot(
                             st.session_state.current_parameter,
                             center_lat,
