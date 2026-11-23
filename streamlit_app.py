@@ -1891,29 +1891,29 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
+        /* ===== REGION SELECTBOX (Matches Abstraction/Recharge Green) ===== */
         
-        /* 1. The Main Purple Button & Alignment */
+        /* 1. The Main Green Button */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
-            background-color: #B429F9 !important;
-            border: 1px solid #B429F9 !important;
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
             box-shadow: none !important;
-            margin-top: 0px !important; /* Pushes the button down to perfectly align */
+            margin-top: 0px !important; 
         }
 
-        /* 2. White Text and Transparent Icon Background */
+        /* 2. Dark Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #ffffff !important;
+            color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
         
-        /* Fix the white box: Make the background transparent, but keep the arrow white */
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
-            fill: #ffffff !important;
+            fill: #1a0a2e !important;
             background-color: transparent !important;
         }
         
@@ -1921,34 +1921,12 @@ def main():
             background-color: transparent !important;
         }
 
-        /* 3. Fix the Green Hover Flash */
+        /* 3. Hover State (Slightly darker green) */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #9a22d9 !important; 
-            border-color: #9a22d9 !important;
-        }
-
-        /* 4. The Dropdown List (White & Grey Hover) */
-        div[data-baseweb="popover"] ul[role="listbox"] {
-            background-color: #ffffff !important;
-            border-radius: 8px !important;
-            padding: 5px !important;
-        }
-
-        div[data-baseweb="popover"] ul[role="listbox"] li {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border-radius: 6px !important;
-            padding: 8px 12px !important;
-            font-weight: 600 !important;
-            margin-bottom: 2px !important;
-        }
-
-        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
-            background-color: #f0f2f6 !important;
-            color: #1a0a2e !important;
-            cursor: pointer !important;
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
         }
         /* ===== ABSTRACTION SELECTBOX (Green) ===== */
         
