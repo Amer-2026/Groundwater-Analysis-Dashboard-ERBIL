@@ -1877,15 +1877,15 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
             margin-top: 0px !important; 
-            padding-left: 2px !important; 
-            padding-right: 2px !important; 
+            padding-left: 0px !important; 
+            padding-right: 0px !important; 
         }
 
         /* 2. Dark Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
             color: #1a0a2e !important;
             font-weight: 700 !important;
-            font-size: 14px !important; /* Keeps text bold and readable */
+            font-size: 13px !important;
         }
         
         /* Force the placeholder text to be bold and black */
@@ -1914,8 +1914,8 @@ def main():
         }
 
         /* Inject fake text for the main button when closed */
-        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
-            content: "📥 Download" !important;
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
             color: #1a0a2e !important;
             font-weight: 700 !important;
             font-size: 14px !important; 
@@ -1925,6 +1925,62 @@ def main():
         div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
             display: none !important;
         }
+        /* Hide the black X (clear button) entirely */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
+            display: none !important;
+        }
+
+        /* 👇 ADD THE NEW INFO CSS HERE 👇 */
+        /* ===== INFO SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+            padding-left: 2px !important; 
+            padding-right: 2px !important; 
+        }
+
+        /* 2. Dark Text */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "ℹ️ Info" !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important; 
+        }
+
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
+        /* ... rest of your code ... */
+        
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
         /* 1. The Main Purple Button & Alignment */
@@ -1968,6 +2024,12 @@ def main():
             background-color: #ffffff !important;
             border-radius: 8px !important;
             padding: 5px !important;
+            min-width: 180px !important; /* 👈 ADD THIS LINE */
+        }
+
+        /* Force the list items to not wrap and fit the new width */
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            white-space: nowrap !important; /* 👈 ADD THIS LINE */
         }
 
         div[data-baseweb="popover"] ul[role="listbox"] li {
@@ -2175,6 +2237,14 @@ def main():
             padding: 0 !important;
             margin: 0 !important;
         }
+        /* Force the language text to be bold */
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
+        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
+        div[class*="st-key-lang_wrap"] input {
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            color: #ffffff !important;
+        }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div {
             background-color: #B429F9 !important;
             border: 1px solid #B429F9 !important;
@@ -2347,12 +2417,26 @@ def main():
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
     # Use columns for layout, but force them onto one line with CSS
-    c1, c2, c3, c4, c5, c6 = st.columns([3.5, 1, 0.5, 0.5, 0.5, 0.5])
+    c1, c2, c3, c4, c5, c6 = st.columns([3.2, 0.8, 0.7, 0.7, 0.7, 0.7])
     
-    # Info Button (c3)
+    # Info Dropdown (Matches Abstraction/Recharge)
     with c3:
-        if st.button(t("btn_info"), key="info_btn", use_container_width=True):
-            st.session_state.show_info_modal = True
+        # We use the placeholder trick so the button shows the text instead of "Choose"
+        info_labels = ["📄 Indicators Guide"] 
+        
+        selected_info = st.selectbox(
+            "Info",
+            options=info_labels,
+            index=None, # Leaves the button empty (shows placeholder)
+            placeholder="ℹ️ Info", # The text that shows on the button
+            key="info_selector",
+            label_visibility="collapsed"
+        )
+        
+        # If the user clicks "Indicators Guide", open the PDF
+        if selected_info == "📄 Indicators Guide":
+            pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
+            st.markdown(f'<meta http-equiv="refresh" content="0; url={pdf_url}">', unsafe_allow_html=True)
             
     # Reset Button (c4)
     with c4:
@@ -2363,15 +2447,14 @@ def main():
 
     # NEW Download Button (Copied from Abstraction)
     with c5:
-        # We use a placeholder trick that works perfectly with selectbox
         dl_options = ["download_data", "download_report"]
         dl_labels = [t("download_data"), t("download_report")]
         
         selected_dl_label = st.selectbox(
             "Download",
             options=dl_labels,
-            index=None, # This keeps the button empty by default
-            placeholder=f"📥 {t('nav_download')}", # The text shown on the button
+            index=None, 
+            placeholder=f"📥 {t('nav_download')}", # 👈 THIS uses the translation
             key="download_selector",
             label_visibility="collapsed"
         )
@@ -2559,47 +2642,6 @@ def main():
         if st.button("📅 End date", key="btn_end_cal_top", use_container_width=True):
             st.session_state.active_cal = "end"
             st.rerun()
-
-    # Info Popup Dialog (Opens PDF in a new tab)
-    @st.dialog("📄 Dashboard Guide", width="large")
-    def show_info_modal():
-        st.write("The Dashboard Guide contains detailed explanations of every button, indicator, and feature.")
-        st.write("Click the button below to open it in a new tab.")
-        
-        # The raw link to your PDF on GitHub
-        # (Make sure this matches your exact repository and file name)
-        pdf_url = "https://github.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/blob/main/Dashboard_Guide.pdf"
-        
-        # A styled HTML link that looks like a button and opens in a new tab
-        st.markdown(
-            f'''
-            <a href="{pdf_url}" target="_blank" style="
-                display: block;
-                width: 100%;
-                padding: 10px;
-                background-color: #a8f368;
-                color: #1a0a2e;
-                text-align: center;
-                text-decoration: none;
-                border-radius: 8px;
-                font-weight: bold;
-                font-size: 16px;
-                margin-bottom: 10px;
-            ">
-                📄 Open Dashboard Guide (PDF)
-            </a>
-            ''',
-            unsafe_allow_html=True
-        )
-        
-        # Close button
-        if st.button("Close", use_container_width=True):
-            st.session_state.show_info_modal = False
-            st.rerun()
-
-    # Trigger the Info modal
-    if st.session_state.get("show_info_modal"):
-        show_info_modal()
 
     # ---- INLINE TARGET DATE FORM (Positioned under Start/End Date) ----
     if st.session_state.get("active_cal"):
