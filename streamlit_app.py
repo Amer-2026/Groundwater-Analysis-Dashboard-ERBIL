@@ -5,7 +5,7 @@ A single, configurable Streamlit app serving all country deployments
 (Jordan, Iraq, Palestine, ...). Country settings live in config/*.json —
 to add a new country you only add a config file and the GEE assets.
 
-Data: monthly abstraction (mm, m3) and recharge images stored as
+Data: monthly abstraction (mm, m3) and rech arge images stored as
 Google Earth Engine assets named  <parameter>_<YYYY>_<MM>.
 
 Authentication: a GEE service-account key stored in Streamlit secrets
@@ -75,7 +75,7 @@ TRANSLATIONS = {
 - 🌍 **Interactive Visualization**: View monthly groundwater data on an interactive map
 - 📊 **Statistical Analysis**: Access key statistics for the selected parameter
 - 📈 **Time Series Analysis**: Click any location to view historical trends
-- 📥 **Data Export**: Download time series and regional summaries as CSV
+- 📥 **Data Export**: Download time series and al summaries as CSV
 - 🎨 **Customizable Display**: Adjust visualization parameters to your needs
 
 Data sources: FAO WaPOR v3 (actual evapotranspiration), CHIRPS (rainfall),
@@ -99,10 +99,10 @@ For support or more information, please contact the development team.""",
         "error_parse_date": "Error parsing date from asset",
         "value_label": "Value",
         "download_csv": "📥 Download as CSV",
-        "regional_summary": "Regional Monthly Summary",
-        "compute_summary": "Compute regional summary",
+        "al_summary": "al Monthly Summary",
+        "compute_summary": "Compute al summary",
         "summary_help": "Average value over the whole study area for every month (may take up to a minute)",
-        "summary_title": "Regional mean {parameter} per month",
+        "summary_title": "al mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
         "nav_abstraction_mm": "Abstraction (mm)",
@@ -111,7 +111,7 @@ For support or more information, please contact the development team.""",
         "nav_recharge_m3": "Recharge (m³)",
         "nav__mm": " (mm)",
         "nav__m3": " (m³)",
-        "nav_region": "Region",
+        "nav_": "",
         "nav_subnational": "Sub-National",
         "nav_national": "National",
         "nav_analysis": "Analysis",
@@ -124,8 +124,6 @@ For support or more information, please contact the development team.""",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
-        "download_data": "Data (CSV)",
-        "download_report": "Report (PDF)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -197,7 +195,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "خطأ في تحليل التاريخ من الأصل",
         "value_label": "القيمة",
         "download_csv": "📥 تنزيل بصيغة CSV",
-        "regional_summary": "الملخص الشهري الإقليمي",
+        "al_summary": "الملخص الشهري الإقليمي",
         "compute_summary": "حساب الملخص الإقليمي",
         "summary_help": "متوسط القيمة على كامل منطقة الدراسة لكل شهر (قد يستغرق دقيقة)",
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
@@ -209,7 +207,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "التغذية الجوفية (م³)",
         "nav__mm": "التغذية الجوفية (مم)",
         "nav__m3": "التغذية الجوفية (م³)",
-        "nav_region": "المنطقة",
+        "nav_": "المنطقة",
         "nav_subnational": "دون الوطني",
         "nav_national": "وطني",
         "nav_analysis": "التحليل",
@@ -291,7 +289,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
         "value_label": "نرخ",
         "download_csv": "📥 دابەزاندن وەک CSV",
-        "regional_summary": "پوختەی مانگانەی ناوچەیی",
+        "al_summary": "پوختەی مانگانەی ناوچەیی",
         "compute_summary": "ژماردنی پوختەی ناوچەیی",
         "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
         "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
@@ -303,7 +301,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_recharge_m3": "پڕبوونەوە (م³)",
         "nav__mm": "پڕبوونەوە (مم)",
         "nav__m3": "پڕبوونەوە (م³)",
-        "nav_region": "ناوچە",
+        "nav_": "ناوچە",
         "nav_subnational": "ناوچەیی",
         "nav_national": "نیشتمانی",
         "nav_analysis": "شیکردنەوە",
@@ -648,7 +646,7 @@ def get_image_min_max(asset_id):
     # IGNORE ZEROS: Update mask to remove 0s so they don't ruin the min/max calculation
     valid_img = img.updateMask(img.neq(0))
     
-    minmax = valid_img.reduceRegion(
+    minmax = valid_img.reduce(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
@@ -682,7 +680,7 @@ def _time_series_for_geometry(ee_geom, parameter, assets, scale=100):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduceRegion(
+                "value": img.reduce(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -711,7 +709,7 @@ def get_image_min_max(asset_id):
     
     """Min/max of an image asset (cached — one server call per asset)"""
     img = ee.Image(asset_id)
-    minmax = img.reduceRegion(
+    minmax = img.reduce(
         reducer=ee.Reducer.minMax(),
         geometry=img.geometry(),
         scale=1000,
@@ -871,7 +869,7 @@ def get_time_series_data(point, parameter, assets):
             None,
             {
                 "date": img.get("system:time_start"),
-                "value": img.reduceRegion(
+                "value": img.reduce(
                     reducer=ee.Reducer.mean(),
                     geometry=ee_geom,
                     scale=scale,
@@ -897,12 +895,12 @@ def get_time_series_data(point, parameter, assets):
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
-def get_regional_summary(parameter, assets, scale):
+def get_al_summary(parameter, assets, scale):
     """Mean value of `parameter` over the whole study area, for every month"""
     images = _collection_with_dates(assets, parameter)
 
-    def region_mean(img):
-        mean = img.reduceRegion(
+    def _mean(img):
+        mean = img.reduce(
             reducer=ee.Reducer.mean(),
             geometry=img.geometry(),
             scale=max(scale, 100),  # coarse scale keeps this fast
@@ -910,7 +908,7 @@ def get_regional_summary(parameter, assets, scale):
         ).values().get(0)
         return ee.Feature(None, {"date": img.get("system:time_start"), "mean": mean})
 
-    results = images.map(region_mean).getInfo()
+    results = images.map(_mean).getInfo()
     rows = []
     for feature in results["features"]:
         props = feature["properties"]
@@ -1032,8 +1030,8 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     return fig
 
 
-def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
-    """Create regional summary bar chart with optional download button as annotation"""
+def create_al_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+    """Create al summary bar chart with optional download button as annotation"""
 
 
     df = pd.DataFrame(summary_data)
@@ -1438,7 +1436,7 @@ def main():
             margin-bottom: 10px !important;
         }
 
-        .regional-summary-section h3 {
+        .al-summary-section h3 {
             margin-top: 25px !important;
             margin-bottom: 10px !important;
         }
@@ -1567,7 +1565,7 @@ def main():
             color: #9ca3af !important;
         }
         
-               /* ========== DATE RANGE PICKER STYLING ========== */
+        /* ========== DATE RANGE PICKER STYLING ========== */
         div[data-testid="stDateInput"] > div > div {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -1763,7 +1761,7 @@ def main():
         }
 
 
-            /* ===== Inline Location Form — white card ===== */
+         /* ===== Inline Location Form — white card ===== */
         div[class*="st-key-location_form_wrap"] {
             background-color: #ffffff !important;
             border: 2px solid #c6c5c1 !important;
@@ -1890,72 +1888,177 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== ULTIMATE PURPLE REGION BUTTON ===== */
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
-        /* Target the exact button inside the popover container */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
+        /* 1. The Main Purple Button & Alignment */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
             background-color: #B429F9 !important;
-            background: #B429F9 !important;
-            color: #ffffff !important;
             border: 1px solid #B429F9 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
             box-shadow: none !important;
-            outline: none !important;
+            margin-top: 0px !important; /* Pushes the button down to perfectly align */
         }
 
-        /* Force text to be white */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] * {
+        /* 2. White Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
             color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow white */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
             fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div div {
+            background-color: transparent !important;
         }
 
-        /* Hover state */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:hover,
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:focus,
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]:active {
-            background-color: #9a22d9 !important;
-            background: #9a22d9 !important;
+        /* 3. Fix the Green Hover Flash */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
+        }
+
+        /* 4. The Dropdown List (White & Grey Hover) */
+        div[data-baseweb="popover"] ul[role="listbox"] {
+            background-color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 5px !important;
+        }
+
+        div[data-baseweb="popover"] ul[role="listbox"] li {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 2px !important;
+        }
+
+        div[data-baseweb="popover"] ul[role="listbox"] li:hover {
+            background-color: #f0f2f6 !important;
+            color: #1a0a2e !important;
+            cursor: pointer !important;
+        }
+        /* ===== ABSTRACTION SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
             box-shadow: none !important;
-            outline: none !important;
-        }
-        /* ===== CUSTOM REGION BUTTON ICON ===== */
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"] {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-        div[class*="st-key-loc_dropdown"] button[data-testid="stPopoverButton"]::before {
-            content: "" !important;
-            display: inline-block !important;
-            width: 20px !important;
-            height: 20px !important;
-            background-image: url('https://raw.githubusercontent.com/Amer-2026/Groundwater-Analysis-Dashboard-ERBIL/main/region_icon.png') !important;
-            background-size: contain !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
+            margin-top: 0px !important; /* Keep your 0px alignment trick! */
         }
 
-        /* ===== FORCE TOP BAR TO ONE ROW ===== */
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) {
-            flex-wrap: nowrap !important;
-            gap: 0.3rem !important; 
-            align-items: center !important;
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
         }
-        div[data-testid="stHorizontalBlock"]:has(div[class*="st-key-loc_dropdown"]) > div[data-testid="column"] {
-            min-width: 0 !important;
-            width: 100% !important;
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div div {
+            background-color: transparent !important;
         }
 
+        /* 3. Hover State (Slightly darker green to avoid flash) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+        /* ===== RECHARGE SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State (Slightly darker green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+        /* ===== ANALYSIS SELECTBOX (Green) ===== */
+        
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div div {
+            background-color: transparent !important;
+        }
+
+        /* 3. Hover State (Slightly darker green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
+        
         /* ===== STYLE THE TOP DATE BUTTONS ===== */
         div[class*="st-key-btn_start_cal_top"] button,
         div[class*="st-key-btn_end_cal_top"] button {
@@ -2162,7 +2265,7 @@ def main():
     )
 
     st.markdown(banner_html, unsafe_allow_html=True)
-
+    
     # Create a flex container for the top-right buttons
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
@@ -2218,117 +2321,130 @@ def main():
 
     # --- Column 1: Region Dropdown ---
     with nav_col1:
-        loc_label = f"{t('nav_region')}"
-            
-        with st.popover(loc_label, use_container_width=True, key="loc_dropdown"):
-            if st.button(t("nav_subnational"), key="nav_sub", use_container_width=True):
-                st.session_state.selected_location = "subnational"
-                st.rerun()
-            if st.button(t("nav_national"), key="nav_nat", use_container_width=True):
-                st.session_state.selected_location = "national"
-                st.rerun()
+        if "selected_location" not in st.session_state:
+            st.session_state.selected_location = "subnational"
+
+        loc_options = ["subnational", "national"]
+        loc_labels = [t("nav_subnational"), t("nav_national")]
+        current_index = loc_options.index(st.session_state.selected_location)
+
+        # Use the exact same widget as the language button
+        selected_label = st.selectbox(
+            "Region", 
+            options=loc_labels,
+            index=current_index,
+            key="region_selector",
+            label_visibility="collapsed"
+        )
+
+        new_location = loc_options[loc_labels.index(selected_label)]
+        if new_location != st.session_state.selected_location:
+            st.session_state.selected_location = new_location
+            st.rerun()
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        # Always show just "Abstraction" on the main button
-        abs_label = "🔴 Abstraction" if st.session_state.selected_parameter in ("abstraction_mm", "abstraction_m3") else "⚪ Abstraction"
+        # Options for the dropdown
+        abs_options = ["abstraction_mm", "abstraction_m3"]
+        abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        
+        # Get current state
+        current_abs = st.session_state.selected_parameter
+        if current_abs not in abs_options:
+            current_abs = "abstraction_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_abs
             
-        with st.popover(abs_label, use_container_width=True, key="abs_dropdown"):
-            if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_mm"
-                st.session_state.map_generated = False
-                st.rerun()
-            if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
-                st.session_state.selected_parameter = "abstraction_m3"
-                st.session_state.map_generated = False
-                st.rerun()
+        current_abs_idx = abs_options.index(current_abs)
+
+        # Create the selectbox
+        selected_abs_label = st.selectbox(
+            "Abstraction", 
+            options=abs_labels,
+            index=current_abs_idx,
+            key="abs_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        new_abs = abs_options[abs_labels.index(selected_abs_label)]
+        if new_abs != current_abs:
+            st.session_state.selected_parameter = new_abs
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        if st.session_state.selected_parameter == "recharge_mm":
-            rc_label = f"🔴 {t('nav_recharge_mm')}"
-        elif st.session_state.selected_parameter == "recharge_m3":
-            rc_label = f"🔴 {t('nav_recharge_m3')}"
-        else:
-            rc_label = "⚪ Recharge"
-            
-        with st.popover(rc_label, use_container_width=True, key="rc_dropdown"):
-            if st.button(t("nav_recharge_mm"), key="nav_recharge_mm", use_container_width=True):
-                st.session_state.selected_parameter = "recharge_mm"
-                st.session_state.map_generated = False
-                st.rerun()
-            if st.button(t("nav_recharge_m3"), key="nav_recharge_m3", use_container_width=True):
-                st.session_state.selected_parameter = "recharge_m3"
-                st.session_state.map_generated = False
-                st.rerun()
-
-    # --- Column 4: Analysis Dropdown ---
-    with nav_col_month:
-        if st.session_state.get("selected_analysis") == "wsi":
-            ana_label = f"🌵 {t('nav_wsi')}"
-        elif st.session_state.get("selected_analysis") == "water_balance":
-            ana_label = f"⚖️ {t('nav_water_balance')}"
-        elif st.session_state.get("selected_analysis") == "climate_et":
-            ana_label = f"🌧️ {t('nav_climate_et')}"
-        elif st.session_state.get("selected_analysis") == "irrigation":
-            ana_label = f"🚜 {t('nav_irrigation')}"
-
+        # Options for the dropdown
+        rc_options = ["recharge_mm", "recharge_m3"]
+        rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
         
-        elif st.session_state.get("selected_analysis") == "aeti":
-            ana_label = f"🌧️ {t('nav_aeti')}"
-        elif st.session_state.get("selected_analysis") == "pet":
-            ana_label = f"🌧️ {t('nav_pet')}"
-        elif st.session_state.get("selected_analysis") == "precip":
-            ana_label = f"🌧️ {t('nav_precip')}"
-        elif st.session_state.get("selected_analysis") == "pwl":
-            ana_label = f"🌧️ {t('nav_pwl')}"
-        else:
-            ana_label = f"📊 {t('nav_analysis')}"
+        # Get current state
+        current_rc = st.session_state.selected_parameter
+        if current_rc not in rc_options:
+            current_rc = "recharge_mm" # Default if something else was selected
+            st.session_state.selected_parameter = current_rc
             
-        # This is the popover (the dropdown menu)
-        with st.popover(ana_label, use_container_width=True, key="analysis_dropdown"):
+        current_rc_idx = rc_options.index(current_rc)
+
+        # Create the selectbox
+        selected_rc_label = st.selectbox(
+            "Recharge", 
+            options=rc_labels,
+            index=current_rc_idx,
+            key="rc_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        new_rc = rc_options[rc_labels.index(selected_rc_label)]
+        if new_rc != current_rc:
+            st.session_state.selected_parameter = new_rc
+            st.session_state.map_generated = False
+            st.rerun()
+
+    # --- Column 4: Analysis Dropdown (Native Selectbox) ---
+    with nav_col_month:
+        # Swapped Irrigation to be before the Climate header
+        ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
+        
+        ana_labels = [
+            t("nav_wsi"),
+            t("nav_water_balance"),
+            t("nav_irrigation"),
+            f"▼ {t('nav_climate_et')}", # Header
+            f"    {t('nav_aeti')}",
+            f"    {t('nav_pet')}",
+            f"    {t('nav_precip')}",
+            f"    {t('nav_pwl')}"
+        ]
+
+        # Find current index (default to WSI)
+        current_ana = st.session_state.get("selected_analysis", "wsi")
+        if current_ana not in ana_options:
+            current_ana = "wsi"
+            st.session_state.selected_analysis = current_ana
             
-            # These are the options INSIDE the dropdown
-            if st.button(f"🌵 {t('nav_wsi')}", key="nav_wsi_btn", use_container_width=True):
-                st.session_state.selected_analysis = "wsi"
-                st.session_state.selected_parameter = "wsi" 
-                st.session_state.map_generated = False
-                st.rerun()
-                
-            if st.button(f"⚖️ {t('nav_water_balance')}", key="nav_wb_btn", use_container_width=True):
-                st.session_state.selected_analysis = "water_balance"
-                st.session_state.selected_parameter = "water_balance"
-                st.session_state.map_generated = False
-                st.rerun()
-                
-            # Create a nested popover for Climate / ET
-            with st.popover(f"🌧️ {t('nav_climate_et')}", use_container_width=True):
-                if st.button(t("nav_aeti"), key="nav_aeti_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "aeti"
-                    st.session_state.selected_parameter = "aeti" 
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pet"), key="nav_pet_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pet"
-                    st.session_state.selected_parameter = "pet"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_precip"), key="nav_precip_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "precip"
-                    st.session_state.selected_parameter = "precip"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                if st.button(t("nav_pwl"), key="nav_pwl_btn", use_container_width=True):
-                    st.session_state.selected_analysis = "pwl"
-                    st.session_state.selected_parameter = "pwl"
-                    st.session_state.map_generated = False
-                    st.rerun()
-                
-            if st.button(f"🚜 {t('nav_irrigation')}", key="nav_irrigation_btn", use_container_width=True):
-                st.session_state.selected_analysis = "irrigation"
-                st.session_state.selected_parameter = "irrigation"
-                st.session_state.map_generated = False
-                st.rerun()
+        current_ana_idx = ana_options.index(current_ana)
+
+        # Create the selectbox
+        selected_ana_label = st.selectbox(
+            "Analysis", 
+            options=ana_labels,
+            index=current_ana_idx,
+            key="analysis_selector",
+            label_visibility="collapsed"
+        )
+
+        # Update session state if changed
+        selected_idx = ana_labels.index(selected_ana_label)
+        new_ana = ana_options[selected_idx]
+        
+        # If they click the header, do nothing. Otherwise, update.
+        if new_ana != "climate_header" and new_ana != current_ana:
+            st.session_state.selected_analysis = new_ana
+            st.session_state.selected_parameter = new_ana
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- START DATE & END DATE ---
     try:
@@ -2470,7 +2586,7 @@ def main():
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
             '</div>'
-            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">' 
+            '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">'
                 '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
                 '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
             '</div>'
