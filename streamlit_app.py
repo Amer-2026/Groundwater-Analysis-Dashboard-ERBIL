@@ -1891,12 +1891,12 @@ def main():
             box-shadow: none !important;
             outline: none !important;
         }
-        /* ===== REGION SELECTBOX (Matches Abstraction/Recharge Green) ===== */
+        /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
-        /* 1. The Main Green Button */
+        /* 1. The Main Purple Button & Alignment */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
-            background-color: #a8f368 !important;
-            border: 1px solid #a8f368 !important;
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
             border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
@@ -1904,16 +1904,16 @@ def main():
             margin-top: 0px !important; 
         }
 
-        /* 2. Dark Text and Transparent Icon Background */
+        /* 2. White Text and Transparent Icon Background */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
-            color: #1a0a2e !important;
+            color: #ffffff !important;
             font-weight: 700 !important;
             font-size: 14px !important;
         }
         
-        /* Fix the white box: Make the background transparent, but keep the arrow dark */
+        /* Fix the white box: Make the background transparent, but keep the arrow white */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
-            fill: #1a0a2e !important;
+            fill: #ffffff !important;
             background-color: transparent !important;
         }
         
@@ -1921,12 +1921,12 @@ def main():
             background-color: transparent !important;
         }
 
-        /* 3. Hover State (Slightly darker green) */
+        /* 3. Fix the Green Hover Flash */
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
         div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
-            background-color: #8fd154 !important; 
-            border-color: #8fd154 !important;
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
         }
         /* ===== ABSTRACTION SELECTBOX (Green) ===== */
         
