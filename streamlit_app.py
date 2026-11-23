@@ -2495,16 +2495,24 @@ def main():
                 border: 2px solid #c6c5c1 !important;
                 border-radius: 12px !important;
                 padding: 15px 20px !important;
-                width: 100% !important; /* Take full width of the column */
-                margin-top: 12px !important;
-                margin-bottom: 16px !important;
+                width: 100% !important;
+                max-width: 260px !important; /* 👈 ADD THIS LINE HERE */
+                margin-top: 1px !important;
+                margin-bottom: 1px !important;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             }
             div[class*="st-key-date_form_wrap"] h3,
+            div[class*="st-key-date_form_wrap"] h4,
             div[class*="st-key-date_form_wrap"] label,
             div[class*="st-key-date_form_wrap"] p,
             div[class*="st-key-date_form_wrap"] .stMarkdown {
                 color: #1a0a2e !important;
+            }
+            /* Make the title smaller */
+            div[class*="st-key-date_form_wrap"] h4 {
+                font-size: 16px !important; 
+                margin-bottom: 5px !important;
+                margin-top: 0px !important;
             }
             div[class*="st-key-date_form_wrap"] div[data-baseweb="select"] > div {
                 background-color: #f0f2f6 !important;
