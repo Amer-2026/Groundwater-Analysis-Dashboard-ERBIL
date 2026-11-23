@@ -2253,6 +2253,16 @@ def main():
             min-height: 38px !important;
             box-shadow: none !important;
         }
+        /* Force the text inside the Language button to be bold and black */
+        div[class*="st-key-lang_wrap"] input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        div[class*="st-key-lang_wrap"] input {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+        }
         div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
@@ -2462,16 +2472,19 @@ def main():
     # Language Selector (c6)
     with c6:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
-        current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
+        
         with st.container(key="lang_wrap"):
             selected_label = st.selectbox(
-                "🌐",
+                "Language",
                 options=list(lang_options.keys()),
-                index=list(lang_options.keys()).index(current_label),
+                index=None, # Empty by default to show placeholder
+                placeholder="🌐 Language", # The text on the button
                 key="lang_selector_banner",
                 label_visibility="collapsed",
             )
-        if lang_options[selected_label] != st.session_state.lang:
+            
+        # Only trigger if the user actually selects a language
+        if selected_label is not None and lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
             
