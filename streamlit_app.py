@@ -124,8 +124,6 @@ For support or more information, please contact the development team.""",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
-        "download_data": "Data (CSV)",
-        "download_report": "Report (PDF)",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -2162,7 +2160,7 @@ def main():
     )
 
     st.markdown(banner_html, unsafe_allow_html=True)
-
+    
     # Create a flex container for the top-right buttons
     st.markdown('<div class="top-right-container">', unsafe_allow_html=True)
     
