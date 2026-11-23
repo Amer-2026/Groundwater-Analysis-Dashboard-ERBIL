@@ -1142,16 +1142,39 @@ def main():
         div[class*="st-key-reset_btn"] button:hover { background-color: #9a22d9 !important; }
         div[class*="st-key-reset_btn"] button * { color: #1a0a2e !important; fill: #1a0a2e !important; }
 
-        /* Language Button */
-        div[class*="st-key-lang_wrap"] div[data-testid="stSelectbox"] > div { background-color: transparent !important; border: none !important; border-radius: 8px !important; padding: 0 !important; margin: 0 !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] span,
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] div,
-        div[class*="st-key-lang_wrap"] input { font-weight: 700 !important; font-size: 14px !important; color: #ffffff !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] > div { background-color: #B429F9 !important; border: 1px solid #B429F9 !important; border-radius: 8px !important; height: 38px !important; min-height: 38px !important; box-shadow: none !important; }
-        div[class*="st-key-lang_wrap"] input::placeholder { color: #1a0a2e !important; font-weight: 700 !important; opacity: 1 !important; }
-        div[class*="st-key-lang_wrap"] input { color: #1a0a2e !important; font-weight: 700 !important; }
-        div[class*="st-key-lang_wrap"] div[data-baseweb="select"] * { color: #ffffff !important; fill: #ffffff !important; }
-        div[class*="st-key-lang_wrap"] > div { border-radius: 8px !important; overflow: hidden !important; }
+        /* Language Button (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div svg {
+            fill: #1a0a2e !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Language"]) > div > div:active {
+            background-color: #8fd154 !important; 
+            border-color: #8fd154 !important;
+        }
 
         /* Bold Fonts */
         div[class*="st-key-info_btn"] button p,
@@ -1166,6 +1189,127 @@ def main():
         div[data-testid="stSelectbox"] [data-baseweb="select"] button[aria-label="Clear all"],
         div[data-testid="stSelectbox"] [data-baseweb="select"] div[role="button"],
         div[data-testid="stSelectbox"] svg[aria-label="Clear"] { display: none !important; visibility: hidden !important; opacity: 0 !important; width: 0 !important; height: 0 !important; }
+                /* ===== RESTORE BUTTON COLORS & BOLD TEXT ===== */
+        
+        /* 1. Abstraction (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Abstraction"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* 2. Recharge (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Recharge"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* 3. Analysis (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important; 
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Analysis"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+
+        /* 4. Info & Download (Green) */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
+            background-color: #a8f368 !important;
+            border: 1px solid #a8f368 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) > div > div *,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        div[data-testid="stSelectbox"]:has(input[aria-label="Info"]) input::placeholder,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) input::placeholder {
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        /* ===== REGION SELECTBOX (Purple & Bold) ===== */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div {
+            background-color: #B429F9 !important;
+            border: 1px solid #B429F9 !important;
+            border-radius: 8px !important; 
+            height: 38px !important;
+            min-height: 38px !important;
+            box-shadow: none !important;
+            margin-top: 0px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div * {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) input::placeholder {
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div svg {
+            fill: #ffffff !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Region"]) > div > div:active {
+            background-color: #9a22d9 !important; 
+            border-color: #9a22d9 !important;
+        }
     </style>
     """
     
