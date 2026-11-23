@@ -124,6 +124,10 @@ For support or more information, please contact the development team.""",
         "nav_precip": "Precipitation",
         "nav_pwl": "Potential Water Loss (PWL)",
         "nav_download": "Download",
+        "btn_info": "ℹ️ Info",
+        "btn_reset": "🔄 Reset",
+        "download_data": "Download Data",
+        "download_report": "Download Report",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
@@ -219,6 +223,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "التبخر-النتح المحتمل (PET)",
         "nav_precip": "هطول الأمطار",
         "nav_pwl": "فقدان المياه المحتمل (PWL)",
+        "btn_info": "ℹ️ معلومات",
+        "btn_reset": "🔄 إعادة تعيين",
+        "download_data": "تنزيل البيانات",
+        "download_report": "تنزيل التقرير",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
@@ -313,6 +321,10 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_pet": "هەڵمبوونی پێشبینیکراو (PET)",
         "nav_precip": "بارانبارین",
         "nav_pwl": "لەدەستدانی ئاوی پێشبینیکراو (PWL)",
+        "btn_info": "ℹ️ زانیاری",
+        "btn_reset": "🔄 ڕیسێت",
+        "download_data": "دابەزاندنی داتا",
+        "download_report": "دابەزاندنی ڕاپۆرت",
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
@@ -1851,42 +1863,57 @@ def main():
             font-size: 14px;
             margin-right: 5px;
         }
-        /* ===== ULTIMATE FIX FOR POPOVER BUTTONS ===== */
+        /* ===== DOWNLOAD SELECTBOX (Green) ===== */
         
-        /* 1. Force the background to be exactly #a8f368 */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] {
+        /* 1. The Main Green Button */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div {
             background-color: #a8f368 !important;
-            background: #a8f368 !important;
             border: 1px solid #a8f368 !important;
-            border-radius: 8px !important;
+            border-radius: 8px !important; 
             height: 38px !important;
             min-height: 38px !important;
-            width: 100% !important;
-            padding: 0 10px !important;
             box-shadow: none !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            margin-top: 0px !important; 
+            padding-left: 2px !important; 
+            padding-right: 2px !important; 
         }
 
-        /* 2. Force all text and icons inside to be black */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] *,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"] span {
+        /* 2. Dark Text and Transparent Icon Background */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div * {
             color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 12px !important; 
+        }
+        
+        /* Fix the white box */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div svg {
             fill: #1a0a2e !important;
-            font-weight: 600 !important;
-            font-size: 14px !important;
+            background-color: transparent !important;
+        }
+        
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div div {
+            background-color: transparent !important;
         }
 
-        /* 3. Hover, Focus, Active states (to prevent the black flash) */
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:hover,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:focus,
-        div[data-testid="stPopover"] button[data-testid="stPopoverButton"]:active {
-            background-color: #8fd154 !important;
-            background: #8fd154 !important;
+        /* 3. Hover State */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:hover,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:focus,
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) > div > div:active {
+            background-color: #8fd154 !important; 
             border-color: #8fd154 !important;
-            box-shadow: none !important;
-            outline: none !important;
+        }
+
+        /* Inject fake text for the main button when closed */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) div[data-baseweb="select"] div[aria-live="polite"]::before {
+            content: "📥 Download" !important;
+            color: #1a0a2e !important;
+            font-weight: 700 !important;
+            font-size: 12px !important; 
+        }
+
+        /* Hide the black X (clear button) entirely */
+        div[data-testid="stSelectbox"]:has(input[aria-label="Download"]) button[aria-label="Clear all"] {
+            display: none !important;
         }
         /* ===== REGION SELECTBOX (Matches Language Button) ===== */
         
@@ -2198,6 +2225,46 @@ def main():
             font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
             font-weight: 700 !important;
         }
+               div[class*="st-key-lang_wrap"] span {
+            font-family: "Source Sans Pro", "Segoe UI", sans-serif !important;
+            font-weight: 700 !important;
+        }
+
+        /* 2. Style the buttons inside the popover to look like plain text items */
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button,
+        div[data-baseweb="popover"] button {
+            background-color: transparent !important; /* Removes the green */
+            background: transparent !important;
+            color: #1a0a2e !important;
+            border: none !important;
+            border-radius: 6px !important;
+            padding: 10px 15px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-align: left !important;
+            justify-content: flex-start !important; 
+            height: auto !important;
+            min-height: 38px !important;
+            width: 100% !important;
+            display: flex !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+        }
+
+        /* 3. Hover effect (Light Grey) */
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button:hover,
+        div[data-baseweb="popover"] button:hover {
+            background-color: #f0f2f6 !important;
+            color: #1a0a2e !important;
+        }
+
+        /* 4. Force the text inside the buttons to be dark */
+        div[data-testid="stPopoverBody"] div[data-testid="stButton"] > button *,
+        div[data-baseweb="popover"] button * {
+            color: #1a0a2e !important;
+            fill: #1a0a2e !important;
+        }
+        
     """
     
     # Render the CSS safely
@@ -2274,21 +2341,51 @@ def main():
     
     # Info Button (c3)
     with c3:
-        if st.button("ℹ️ Info", key="info_btn", use_container_width=True):
+        if st.button(t("btn_info"), key="info_btn", use_container_width=True):
             st.session_state.show_info_modal = True
             
     # Reset Button (c4)
     with c4:
-        if st.button("🔄 Reset", key="reset_btn", use_container_width=True):
+        if st.button(t("btn_reset"), key="reset_btn", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
 
-    # NEW Download Button (c5)
+    # NEW Download Button (Copied from Abstraction)
     with c5:
-        with st.popover(f"📥 {t('nav_download')}", use_container_width=True, key="download_dropdown"):
-            st.button(t("download_data"), key="dl_data", disabled=True, use_container_width=True)
-            st.button(t("download_report"), key="dl_report", disabled=True, use_container_width=True)
+        # We add a dummy empty string at the start to act as the "default" state
+        dl_options = ["", "download_data", "download_report"]
+        dl_labels = [
+            "", # Empty default state
+            t("download_data"), 
+            t("download_report")
+        ]
+        
+    # NEW Download Button (Copied from Abstraction)
+    with c5:
+        # We use a placeholder trick that works perfectly with selectbox
+        dl_options = ["download_data", "download_report"]
+        dl_labels = [t("download_data"), t("download_report")]
+        
+        selected_dl_label = st.selectbox(
+            "Download",
+            options=dl_labels,
+            index=None, # This keeps the button empty by default
+            placeholder=f"📥 {t('nav_download')}", # The text shown on the button
+            key="download_selector",
+            label_visibility="collapsed"
+        )
+
+        # Trigger the action if the user selects an option
+        if selected_dl_label == t("download_data"):
+            st.toast("Download Data triggered! (Add your logic here)")
+            st.session_state.download_selector = None # Reset
+            st.rerun()
+            
+        elif selected_dl_label == t("download_report"):
+            st.toast("Download Report triggered! (Add your logic here)")
+            st.session_state.download_selector = None # Reset
+            st.rerun()
             
     # Language Selector (c6)
     with c6:
