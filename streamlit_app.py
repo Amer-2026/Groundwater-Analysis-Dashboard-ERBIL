@@ -1735,7 +1735,17 @@ def main():
     with nav_col7:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
-            st.session_state.current_parameter = st.session_state.selected_parameter
+            
+            # Pick the first active parameter for the map
+            if st.session_state.sel_abs != "Off":
+                st.session_state.current_parameter = st.session_state.sel_abs
+            elif st.session_state.sel_rc != "Off":
+                st.session_state.current_parameter = st.session_state.sel_rc
+            elif st.session_state.sel_ana != "Off":
+                st.session_state.current_parameter = st.session_state.sel_ana
+            else:
+                st.session_state.current_parameter = "abstraction_mm"
+                
             st.session_state.current_date = st.session_state.date_range[0].strftime("%Y-%m")
             st.session_state.regional_summary_data = None
             st.rerun()
