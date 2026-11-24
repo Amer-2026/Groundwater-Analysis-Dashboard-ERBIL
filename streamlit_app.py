@@ -2109,6 +2109,7 @@ def main():
                     if st.session_state.sel_ana != "Off":
                         ana_label = t(f"nav_{st.session_state.sel_ana}")
                         render_stats_for_parameter(st.session_state.sel_ana, ana_label)
+                        
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
 
