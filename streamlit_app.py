@@ -868,6 +868,15 @@ def main():
     if "show_location_form" not in st.session_state:
         st.session_state.show_location_form = False
 
+    # --- ADD THESE THREE LINES HERE ---
+    if "sel_abs" not in st.session_state:
+        st.session_state.sel_abs = "abstraction_mm"
+    if "sel_rc" not in st.session_state:
+        st.session_state.sel_rc = "Off"
+    if "sel_ana" not in st.session_state:
+        st.session_state.sel_ana = "Off"
+    # ----------------------------------
+
     st.set_page_config(
         page_title=t("page_title"),
         page_icon="💧",
