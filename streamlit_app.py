@@ -2112,44 +2112,54 @@ def main():
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
 
-                    if st.session_state.regional_summary_data is None:
-                        with st.spinner(t("computing")):
-                            if st.session_state.date_range:
-                                start_ym = st.session_state.date_range[0].strftime("%Y_%m")
-                                end_ym = st.session_state.date_range[1].strftime("%Y_%m")
-                                ranged_assets = [
-                                    a for a in assets
-                                    if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
-                                ]
-                            else:
-                                ranged_assets = assets
+                    def render_regional_summary(param_key):
+                        if param_key == "Off":
+                            return
+                            
+                        # Get the data for this parameter
+                        if st.session_state.date_range:
+                            start_ym = st.session_state.date_range[0].strftime("%Y_%m")
+                            end_ym = st.session_state.date_range[1].strftime("%Y_%m")
+                            ranged_assets = [
+                                a for a in assets
+                                if start_ym <= "_".join(a.split("_")[-2:]) <= end_ym
+                            ]
+                        else:
+                            ranged_assets = assets
 
+                        with st.spinner(t("computing")):
                             summary = get_regional_summary(
-                                st.session_state.current_parameter,
+                                param_key,
                                 tuple(ranged_assets),
                                 int(cfg.get("native_scale_m", 20)),
                             )
-                            if summary:
-                                st.session_state.regional_summary_data = summary
-                            else:
-                                st.session_state.regional_summary_data = []
+                            
+                        if summary:
+                            csv_data = to_csv_bytes(summary, value_col="mean")
+                            filename = f"{cfg['key']}_{param_key}_regional_summary.csv"
 
-                    if st.session_state.regional_summary_data:
-                        summary = st.session_state.regional_summary_data
-                        csv_data = to_csv_bytes(summary, value_col="mean")
-                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+                            fig = create_regional_summary_plot(
+                                summary,
+                                param_key,
+                                csv_data=csv_data,
+                                filename=filename,
+                                button_text="📥 Download as CSV",
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
 
-                        fig = create_regional_summary_plot(
-                            summary,
-                            st.session_state.current_parameter,
-                            csv_data=csv_data,
-                            filename=filename,
-                            button_text="📥 Download as CSV",
-                        )
-                        st.plotly_chart(fig, use_container_width=True)
+                            with st.expander(t("raw_data")):
+                                st.dataframe(pd.DataFrame(summary))
+                        else:
+                            st.info(f"No regional summary data available for {t(f'nav_{param_key}') if param_key in ['wsi', 'water_balance', 'irrigation', 'aeti', 'pet', 'precip', 'pwl'] else param_key}")
 
-                        with st.expander(t("raw_data")):
-                            st.dataframe(pd.DataFrame(summary))
+                    # Render for Abstraction
+                    render_regional_summary(st.session_state.sel_abs)
+                    
+                    # Render for Recharge
+                    render_regional_summary(st.session_state.sel_rc)
+                    
+                    # Render for Analysis
+                    render_regional_summary(st.session_state.sel_ana)
 
                     # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
