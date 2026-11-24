@@ -1505,101 +1505,85 @@ def main():
 
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
-        abs_options = ["abstraction_mm", "abstraction_m3"]
-        abs_labels = [t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        abs_options = ["Off", "abstraction_mm", "abstraction_m3"]
+        abs_labels = ["🔴 Abstraction (Off)", t("nav_abstraction_mm"), t("nav_abstraction_m3")]
+        
+        # Use session state to remember the selection
+        current_abs = st.session_state.get("sel_abs", "abstraction_mm")
+        current_abs_idx = abs_options.index(current_abs) if current_abs in abs_options else 1
 
         selected_abs_label = st.selectbox(
             "Abstraction", 
             options=abs_labels,
-            index=None, 
-            placeholder="🔴 Abstraction", 
+            index=current_abs_idx,
             key="abs_selector",
             label_visibility="collapsed"
         )
-
-        mapping_abs = {
-            t("nav_abstraction_mm"): "abstraction_mm",
-            t("nav_abstraction_m3"): "abstraction_m3"
-        }
-
-        if selected_abs_label is not None:
-            new_abs = mapping_abs.get(selected_abs_label, "abstraction_mm")
-            
-            if new_abs != st.session_state.get("selected_parameter"):
-                st.session_state.selected_parameter = new_abs
-                st.session_state.map_generated = False
-                st.rerun()
+        
+        new_abs = abs_options[abs_labels.index(selected_abs_label)]
+        if new_abs != current_abs:
+            st.session_state.sel_abs = new_abs
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
-        rc_options = ["recharge_mm", "recharge_m3"]
-        rc_labels = [t("nav_recharge_mm"), t("nav_recharge_m3")]
+        rc_options = ["Off", "recharge_mm", "recharge_m3"]
+        rc_labels = ["🔴 Recharge (Off)", t("nav_recharge_mm"), t("nav_recharge_m3")]
+        
+        # Use session state to remember the selection (default to Off)
+        current_rc = st.session_state.get("sel_rc", "Off")
+        current_rc_idx = rc_options.index(current_rc) if current_rc in rc_options else 0
 
         selected_rc_label = st.selectbox(
             "Recharge", 
             options=rc_labels,
-            index=None, 
-            placeholder="⚪ Recharge", 
+            index=current_rc_idx,
             key="rc_selector",
             label_visibility="collapsed"
         )
-
-        mapping_rc = {
-            t("nav_recharge_mm"): "recharge_mm",
-            t("nav_recharge_m3"): "recharge_m3"
-        }
-
-        if selected_rc_label is not None:
-            new_rc = mapping_rc.get(selected_rc_label, "recharge_mm")
-            
-            if new_rc != st.session_state.get("selected_parameter"):
-                st.session_state.selected_parameter = new_rc
-                st.session_state.map_generated = False
-                st.rerun()
+        
+        new_rc = rc_options[rc_labels.index(selected_rc_label)]
+        if new_rc != current_rc:
+            st.session_state.sel_rc = new_rc
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- Column 4: Analysis Dropdown (Native Selectbox) ---
     with nav_col_month:
-        ana_options = ["wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
+        ana_options = ["Off", "wsi", "water_balance", "irrigation", "climate_header", "aeti", "pet", "precip", "pwl"]
         
         ana_labels = [
+            "🔴 Analysis (Off)",
             t("nav_wsi"),
             t("nav_water_balance"),
             t("nav_irrigation"),
-            f"▼ {t('nav_climate_et')}", 
+            f"▼ {t('nav_climate_et')}",
             f"    {t('nav_aeti')}",
             f"    {t('nav_pet')}",
             f"    {t('nav_precip')}",
             f"    {t('nav_pwl')}"
         ]
 
+        current_ana = st.session_state.get("sel_ana", "Off")
+        current_ana_idx = ana_options.index(current_ana) if current_ana in ana_options else 0
+
         selected_ana_label = st.selectbox(
             "Analysis", 
             options=ana_labels,
-            index=None,
-            placeholder="📊 Analysis", 
+            index=current_ana_idx,
             key="analysis_selector",
             label_visibility="collapsed"
         )
 
-        mapping = {
-            t("nav_wsi"): "wsi",
-            t("nav_water_balance"): "water_balance",
-            t("nav_irrigation"): "irrigation",
-            f"▼ {t('nav_climate_et')}": "climate_header",
-            f"    {t('nav_aeti')}": "aeti",
-            f"    {t('nav_pet')}": "pet",
-            f"    {t('nav_precip')}": "precip",
-            f"    {t('nav_pwl')}": "pwl"
-        }
-
-        if selected_ana_label is not None:
-            new_ana = mapping.get(selected_ana_label, "wsi")
-            
-            if new_ana != "climate_header" and new_ana != st.session_state.get("selected_analysis"):
-                st.session_state.selected_analysis = new_ana
-                st.session_state.selected_parameter = new_ana
-                st.session_state.map_generated = False
-                st.rerun()
+        selected_idx = ana_labels.index(selected_ana_label)
+        new_ana = ana_options[selected_idx]
+        
+        # If they click the header, do nothing. Otherwise, update.
+        if new_ana != "climate_header" and new_ana != current_ana:
+            st.session_state.sel_ana = new_ana
+            st.session_state.map_generated = False
+            st.rerun()
 
     # --- START DATE & END DATE ---
     try:
