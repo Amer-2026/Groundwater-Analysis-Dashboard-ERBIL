@@ -847,26 +847,6 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
         )
     )
 
-    # Create download button as HTML annotation
-    if csv_data and filename:
-        b64 = base64.b64encode(csv_data).decode()
-        download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
-
-        fig.add_annotation(
-            x=0.98,
-            y=1.15,
-            xref="paper",
-            yref="paper",
-            text=download_link,
-            showarrow=False,
-            font=dict(size=13),
-            bgcolor="rgba(0,0,0,0)",
-            borderpad=0,
-            borderwidth=0,  # <--- Added to remove the outline/box
-            xanchor="right",
-            yanchor="top",
-        )
-
     # Update layout to match the requested dark/dual-axis style
     fig.update_layout(
         title=None, # <--- ITEM 1: This removes the chart title
