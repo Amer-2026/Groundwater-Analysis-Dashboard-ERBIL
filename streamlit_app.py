@@ -794,7 +794,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
 
 
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
-    """Create regional summary bar chart with optional download button as annotation"""
+    """Create a dual-axis bar chart with a moving average trend line."""
     df = pd.DataFrame(summary_data)
     if df.empty:
         fig = go.Figure()
@@ -802,19 +802,53 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
-            height=263,
+            height=300,
         )
         return fig
+
+    # Sort by date just in case
+    df = df.sort_values("date")
+    
+    # Format dates for the X-axis
     months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-    fig = go.Figure(
-        go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
+    
+    # Calculate a 12-month moving average for the trend line
+    # (min_periods=1 ensures it calculates even if there is less than 12 months of data)
+    df["trend"] = df["mean"].rolling(window=12, min_periods=1).mean()
+
+    fig = go.Figure()
+
+    # 1. The Main Bars (Cyan)
+    fig.add_trace(
+        go.Bar(
+            x=months_lbl, 
+            y=df["mean"],
+            name=t(parameter),
+            marker_color="#26C5F3", # Cyan color
+            opacity=0.8,
+        )
     )
+
+    # 2. The Trend Line (Pink) on a secondary y-axis
+    fig.add_trace(
+        go.Scatter(
+            x=months_lbl,
+            y=df["trend"],
+            name="12-Month Trend",
+            mode="lines",
+            line=dict(color="#FF6B9D", width=3), # Pink color
+            yaxis="y2"
+        )
+    )
+
+    # Create download button as HTML annotation
     if csv_data and filename:
         b64 = base64.b64encode(csv_data).decode()
         download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
+
         fig.add_annotation(
             x=0.98,
-            y=0.93,
+            y=1.15,
             xref="paper",
             yref="paper",
             text=download_link,
@@ -825,21 +859,51 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             xanchor="right",
             yanchor="top",
         )
+
+    # Update layout to match the requested dark/dual-axis style
     fig.update_layout(
-        title=t("summary_title", parameter=t(parameter)),
-        xaxis=dict(tickangle=45),
-        template="plotly_white",
-        height=263,
-        margin=dict(t=50, b=80, l=50, r=50),
+        title=dict(
+            text=t("summary_title", parameter=t(parameter)),
+            font=dict(color="#e0e0e0", size=16)
+        ),
+        template="plotly_dark", # Dark background
+        height=350,
+        margin=dict(t=60, b=60, l=50, r=50),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        
+        # Left Y-axis (Bars)
+        yaxis=dict(
+            title=t(parameter),
+            showgrid=True,
+            gridcolor="rgba(255,255,255,0.1)",
+            zeroline=False
+        ),
+        
+        # Right Y-axis (Trend Line)
+        yaxis2=dict(
+            title="Trend",
+            overlaying="y",
+            side="right",
+            showgrid=False, # Hide grid to avoid clutter
+            zeroline=False
+        ),
+        
+        # Legend at the bottom
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        
+        xaxis=dict(
+            tickangle=45,
+            showgrid=False
+        )
     )
     return fig
-
-
-def to_csv_bytes(rows, value_col="value"):
-    df = pd.DataFrame(rows)
-    if not df.empty:
-        df["date"] = df["date"].dt.strftime("%Y-%m")
-    return df.to_csv(index=False).encode("utf-8")
 
 
 # ==================== Main app ====================
