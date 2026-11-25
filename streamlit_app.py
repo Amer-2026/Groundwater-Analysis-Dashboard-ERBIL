@@ -1395,6 +1395,16 @@ def main():
             background-color: #9a22d9 !important; 
             border-color: #9a22d9 !important;
         }
+        
+        /* ===== Fix Expander Text Color ===== */
+        div[data-testid="stExpander"] summary {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+        div[data-testid="stExpander"] summary svg {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+        }
     </style>
     """
     
