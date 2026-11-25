@@ -1824,12 +1824,12 @@ def main():
         end_str = end_dt.strftime("%d %b %Y").upper()
         
     timeline_html = (
-        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 780px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
+        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 700px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
             '</div>'
             '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">'
-                '<div style="position: absolute; top: -8px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
+                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
                 '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
             '</div>'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
