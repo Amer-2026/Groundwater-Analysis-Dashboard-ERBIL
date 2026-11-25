@@ -792,6 +792,12 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     )
     return fig
 
+def to_csv_bytes(rows, value_col="value"):
+    df = pd.DataFrame(rows)
+    if not df.empty:
+        df["date"] = df["date"].dt.strftime("%Y-%m")
+    return df.to_csv(index=False).encode("utf-8")
+
 
 def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
     """Create a dual-axis bar chart with a moving average trend line."""
