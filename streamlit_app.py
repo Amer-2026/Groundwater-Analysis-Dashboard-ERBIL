@@ -862,6 +862,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             font=dict(size=13),
             bgcolor="rgba(0,0,0,0)",
             borderpad=0,
+            borderwidth=0,  # <--- Added to remove the outline/box
             xanchor="right",
             yanchor="top",
         )
