@@ -870,43 +870,49 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
     fig.update_layout(
         title=dict(
             text=t("summary_title", parameter=t(parameter)),
-            font=dict(color="#e0e0e0", size=16)
+            font=dict(color="#e0e0e0", size=16, weight="bold") # Made title bold
         ),
-        template="plotly_dark", # Dark background
+        template="plotly_dark", 
         height=350,
-        margin=dict(t=60, b=60, l=50, r=50),
+        # INCREASED top margin to 80 to make room for the legend!
+        margin=dict(t=80, b=60, l=60, r=60), 
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         
         # Left Y-axis (Bars)
         yaxis=dict(
-            title=t(parameter),
+            title=dict(text=t(parameter), font=dict(weight="bold")), # Made axis title bold
             showgrid=True,
             gridcolor="rgba(255,255,255,0.1)",
-            zeroline=False
+            zeroline=False,
+            tickfont=dict(weight="bold") # Made tick labels bold
         ),
         
         # Right Y-axis (Trend Line)
         yaxis2=dict(
-            title="Trend",
+            title=dict(text="Trend", font=dict(weight="bold")), # Made axis title bold
             overlaying="y",
             side="right",
-            showgrid=False, # Hide grid to avoid clutter
-            zeroline=False
+            showgrid=False, 
+            zeroline=False,
+            tickfont=dict(weight="bold")
         ),
         
-        # Legend at the bottom
+        # Legend settings
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
+            y=1.05,          # Pushed the legend slightly up
+            xanchor="center", # Centered it
+            x=0.5,            # Centered it
+            font=dict(color="#ffffff", weight="bold"),
+            bgcolor="rgba(0,0,0,0)"
         ),
         
         xaxis=dict(
             tickangle=45,
-            showgrid=False
+            showgrid=False,
+            tickfont=dict(weight="bold") # Made X-axis labels bold
         )
     )
     return fig
