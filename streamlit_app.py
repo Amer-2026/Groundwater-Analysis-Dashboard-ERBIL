@@ -1829,7 +1829,7 @@ def main():
                 '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
             '</div>'
             '<div style="flex-grow: 1; height: 4px; background: linear-gradient(90deg, #F1515E, #F1515E); margin: 0 20px; border-radius: 2px; position: relative;">'
-                '<div style="position: absolute; top: -4px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
+                '<div style="position: absolute; top: -8px; left: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
                 '<div style="position: absolute; top: -4px; right: 0; width: 12px; height: 12px; background: #F1515E; border-radius: 50%;"></div>'
             '</div>'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
