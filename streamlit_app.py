@@ -868,25 +868,23 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
 
     # Update layout to match the requested dark/dual-axis style
     fig.update_layout(
-        title=dict(
-            text=t("summary_title", parameter=t(parameter)),
-            font=dict(color="#e0e0e0", size=16, weight="bold") # Made title bold
-        ),
+        title=None, # <--- ITEM 1: This removes the chart title
         template="plotly_dark", 
         height=350,
-        # INCREASED top margin to 80 to make room for the legend!
         margin=dict(t=80, b=60, l=60, r=60), 
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         
         # Left Y-axis (Bars)
         yaxis=dict(
-            title=dict(text=t(parameter), font=dict(weight="bold")), # Made axis title bold
+            title=dict(text=f"Mean {t(parameter)}", font=dict(weight="bold")), # <--- ITEM 2: Added "Mean" word
             showgrid=True,
             gridcolor="rgba(255,255,255,0.1)",
             zeroline=False,
-            tickfont=dict(weight="bold") # Made tick labels bold
+            tickfont=dict(weight="bold")
         ),
+        
+        # ... (keep the rest of the layout code exactly the same) ...
         
         # Right Y-axis (Trend Line)
         yaxis2=dict(
