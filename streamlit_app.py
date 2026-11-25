@@ -1515,9 +1515,10 @@ def main():
     # --- Column 2: Abstraction Dropdown ---
     with nav_col2:
         abs_options = ["Off", "abstraction_mm", "abstraction_m3"]
-        abs_labels = ["🔴 Abstraction (Off)", t("nav_abstraction_mm"), t("nav_abstraction_m3")]
         
-        # Use session state to remember the selection
+        # The first item is always red. The others are green.
+        abs_labels = ["🔴 Abstraction (Off)", f"🟢 {t('nav_abstraction_mm')}", f"🟢 {t('nav_abstraction_m3')}"]
+        
         current_abs = st.session_state.get("sel_abs", "abstraction_mm")
         current_abs_idx = abs_options.index(current_abs) if current_abs in abs_options else 1
 
@@ -1538,9 +1539,10 @@ def main():
     # --- Column 3: Recharge Dropdown ---
     with nav_col3:
         rc_options = ["Off", "recharge_mm", "recharge_m3"]
-        rc_labels = ["🔴 Recharge (Off)", t("nav_recharge_mm"), t("nav_recharge_m3")]
         
-        # Use session state to remember the selection (default to Off)
+        # The first item is always red. The others are green.
+        rc_labels = ["🔴 Recharge (Off)", f"🟢 {t('nav_recharge_mm')}", f"🟢 {t('nav_recharge_m3')}"]
+        
         current_rc = st.session_state.get("sel_rc", "Off")
         current_rc_idx = rc_options.index(current_rc) if current_rc in rc_options else 0
 
@@ -1564,14 +1566,14 @@ def main():
         
         ana_labels = [
             "🔴 Analysis (Off)",
-            t("nav_wsi"),
-            t("nav_water_balance"),
-            t("nav_irrigation"),
+            f"🟢 {t('nav_wsi')}",
+            f"🟢 {t('nav_water_balance')}",
+            f"🟢 {t('nav_irrigation')}",
             f"▼ {t('nav_climate_et')}",
-            f"    {t('nav_aeti')}",
-            f"    {t('nav_pet')}",
-            f"    {t('nav_precip')}",
-            f"    {t('nav_pwl')}"
+            f"    🟢 {t('nav_aeti')}",
+            f"    🟢 {t('nav_pet')}",
+            f"    🟢 {t('nav_precip')}",
+            f"    🟢 {t('nav_pwl')}"
         ]
 
         current_ana = st.session_state.get("sel_ana", "Off")
@@ -1588,7 +1590,6 @@ def main():
         selected_idx = ana_labels.index(selected_ana_label)
         new_ana = ana_options[selected_idx]
         
-        # If they click the header, do nothing. Otherwise, update.
         if new_ana != "climate_header" and new_ana != current_ana:
             st.session_state.sel_ana = new_ana
             st.session_state.map_generated = False
