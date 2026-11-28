@@ -1824,7 +1824,7 @@ def main():
         end_str = end_dt.strftime("%d %b %Y").upper()
         
     timeline_html = (
-        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 900px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
+        '<div style="display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; border: 1px solid #444; border-radius: 20px; padding: 10px 20px; margin: 0px 0px 20px 920px; max-width: 600px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">'
             '<div style="background: #555; color: white; padding: 2px 15px; border-radius: 15px; font-weight: bold; font-size: 12px;">'
                 '<span style="margin-right: 5px;">&#128197;</span> ' + start_str +
             '</div>'
