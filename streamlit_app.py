@@ -2213,7 +2213,7 @@ def main():
 
                         with st.spinner(t("computing")):
                             summary = get_regional_summary(
-                                param_key,
+                                search_key,   # <--- CHANGED TO search_key
                                 tuple(ranged_assets),
                                 int(cfg.get("native_scale_m", 20)),
                             )
