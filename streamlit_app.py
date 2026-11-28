@@ -2236,17 +2236,10 @@ def main():
                         else:
                             st.info(f"No regional summary data available for {t(f'nav_{param_key}') if param_key in ['wsi', 'water_balance', 'irrigation', 'aeti', 'pet', 'precip', 'pwl'] else param_key}")
 
-                    # Always Render Abstraction Chart (Default to mm if Off)
-                    abs_target = st.session_state.sel_abs if st.session_state.sel_abs != "Off" else "abstraction_mm"
-                    render_regional_summary(abs_target)
-                    
-                    # Always Render Recharge Chart (Default to mm if Off)
-                    rc_target = st.session_state.sel_rc if st.session_state.sel_rc != "Off" else "recharge_mm"
-                    render_regional_summary(rc_target)
-                    
-                    # Always Render Analysis Chart (Default to wsi if Off)
-                    ana_target = st.session_state.sel_ana if st.session_state.sel_ana != "Off" else "wsi"
-                    render_regional_summary(ana_target)
+                    # Render only the charts that are currently ON
+                    render_regional_summary(st.session_state.sel_abs)
+                    render_regional_summary(st.session_state.sel_rc)
+                    render_regional_summary(st.session_state.sel_ana)
 
                     # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
