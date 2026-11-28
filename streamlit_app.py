@@ -2182,6 +2182,23 @@ def main():
                     def render_regional_summary(param_key):
                         if param_key == "Off":
                             return
+                        # --- ADD THIS BLOCK ---
+                        # Translate the dropdown name to the Earth Engine asset name
+                        search_key = param_key
+                        if param_key in ["recharge_mm", "recharge_m3"]:
+                            search_key = "recharge"
+                        elif param_key in ["wsi", "water_balance", "irrigation", "aeti", "pet", "precip", "pwl"]:
+                            search_key = param_key # (Assuming your assets are named exactly like this)
+                        # ----------------------
+                        
+                        # --- ADD THIS BLOCK ---
+                        # Translate the dropdown name to the Earth Engine asset name
+                        search_key = param_key
+                        if param_key in ["recharge_mm", "recharge_m3"]:
+                            search_key = "recharge"
+                        elif param_key in ["wsi", "water_balance", "irrigation", "aeti", "pet", "precip", "pwl"]:
+                            search_key = param_key # (Assuming your assets are named exactly like this)
+                        # ----------------------
                             
                         # Get the data for this parameter
                         if st.session_state.date_range:
