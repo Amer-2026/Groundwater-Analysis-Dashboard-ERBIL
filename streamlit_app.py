@@ -2212,8 +2212,9 @@ def main():
                             ranged_assets = assets
 
                         with st.spinner(t("computing")):
+                            # FETCH using search_key (e.g., "recharge")
                             summary = get_regional_summary(
-                                search_key,   # <--- CHANGED TO search_key
+                                search_key, 
                                 tuple(ranged_assets),
                                 int(cfg.get("native_scale_m", 20)),
                             )
@@ -2222,11 +2223,10 @@ def main():
                             csv_data = to_csv_bytes(summary, value_col="mean")
                             filename = f"{cfg['key']}_{param_key}_regional_summary.csv"
 
+                            # PLOT using param_key (e.g., "recharge_mm") so the labels look nice
                             fig = create_regional_summary_plot(
                                 summary,
-                                param_key,
-                                csv_data=csv_data,
-                                filename=filename,
+                                param_key, 
                                 button_text="📥 Download as CSV",
                             )
                             st.plotly_chart(fig, use_container_width=True)
